@@ -10,6 +10,9 @@ Griefing is defined as:
 * Cheating
 * Blocking entrances to anothers castle
 
+# Official Guide
+https://github.com/StunlockStudios/vrising-dedicated-server-instructions
+
 # Setup
 We will assume that you want to install the server in `C:\servers\v_rising` if you do not, change the path in the following commands.
 
