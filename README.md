@@ -62,6 +62,33 @@ These ports are configured in the ServerHostSettings.json file
 "QueryPort": 9877,
 ```
 
+**NOTE** If your server is not listed on the server browser, check the SteamAPI by replacing the IP (1.2.3.4) with your IP, if it showing up, you will have to wait for Steam to pickup the update.
+```
+https://api.steampowered.com/ISteamApps/GetServersAtAddress/v0001?addr=1.2.3.4
+```
+
+```json
+{
+  "response": {
+    "success": true,
+    "servers": [
+      {
+        "addr": "1.2.3.4:9877",
+        "gmsindex": -1,
+        "steamid": "90159453801734145",
+        "appid": 1604030,
+        "gamedir": "V Rising",
+        "region": -1,
+        "secure": true,
+        "lan": false,
+        "gameport": 9876,
+        "specport": 0
+      }
+    ]
+  }
+}
+```
+
 # Adding yourself to the adminlist.txt file
 * You will add your SteamID which can be found using this resource(https://steamdb.info/calculator/), or, after you connect in the server logs.
 * In the general settings of the game, you should enable the console
