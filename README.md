@@ -26,7 +26,7 @@ VRisingServer.exe -persistentDataPath .\save-data -serverName "My Cool Server" -
 
 # Server Settings Files
 1. Create the directory `<server_directory>\save-data\Settings`
-2. Copy and paste the settings files from `<server_directory>/VRisingServer_Data/StreamingAssets/Settings/` (`ServerHostSettings.json`, `ServerGameSettings.json`, `adminlist.txt` and `banlist.txt`) into the directory you created in step 1
+2. Copy and paste `ServerHostSettings.json` and `ServerGameSettings.json` files from `<server_directory>/VRisingServer_Data/StreamingAssets/Settings/` into the directory you created in step 1
 
 You can see the effects of all the settings in this PDF: https://cdn.stunlock.com/blog/2022/05/25083113/Game-Server-Settings.pdf
 
@@ -107,6 +107,15 @@ https://api.steampowered.com/ISteamApps/GetServersAtAddress/v0001?addr=1.2.3.4
 ```
 
 # Adding yourself to the adminlist.txt file
-* You will add your SteamID which can be found using this resource(https://steamdb.info/calculator/), or, after you connect in the server logs.
-* In the general settings of the game, you should enable the console (Options -> General -> Console Enabled)
+In the logs, you should see the `adminlist.txt` and `banlist.txt` lists loaded, and thier path is <server_directory>\VRisingServer_Data\StreamingAssets\Settings\
+**NOTE:** This is the only valid place for these entires!
+
+Example:
+```
+Loaded FileUserList from: C:\servers\v_rising\VRisingServer_Data\StreamingAssets\Settings\banlist.txt. Content:
+Loaded FileUse@winrList from: C:\servers\v_rising\VRisingServer_Data\StreamingAssets\Settings\adminlist.txt. Content:
+```
+
+* You will need to add your 64-bit SteamID which can be found using this resource(https://steamdb.info/calculator/), or, after you connect in the server logs.
+* In the general settings of the game, you must enable the console (Options -> General -> Console Enabled)
 * Once you connect type `adminauth` to enable admin access
