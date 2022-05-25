@@ -131,3 +131,4 @@ Loaded FileUse@winrList from: C:\servers\v_rising\VRisingServer_Data\StreamingAs
 * You will need to add your 64-bit SteamID which can be found using this resource(https://steamdb.info/calculator/), or, after you connect in the server logs.
 * In the general settings of the game, you must enable the console (Options -> General -> Console Enabled)
 * Once you connect type `adminauth` to enable admin access
+* You will need to restart the server to reload any changes to these files
