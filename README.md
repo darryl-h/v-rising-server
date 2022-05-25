@@ -42,7 +42,8 @@ VRisingServer.exe -persistentDataPath .\save-data -serverName "My Cool Server" -
 
 You can see the effects of all the settings in this PDF: https://cdn.stunlock.com/blog/2022/05/25083113/Game-Server-Settings.pdf
 
-**NOTE: **If you elect to directly modify the configuration files in `<server_directory>/VRisingServer_Data/StreamingAssets/Settings/` you may loose your configuration changes with new updates, so you may want to consider backing them up.
+**NOTE:** Within the `ServerHostSettings.json` file, in `Description` field, you can use line breaks using `\n`
+**NOTE:** If you elect to directly modify the configuration files in `<server_directory>/VRisingServer_Data/StreamingAssets/Settings/` you may loose your configuration changes with new updates, so you may want to consider backing them up.
 
 # Server updates
 We can use the exact same command we used to install the game, to update it
