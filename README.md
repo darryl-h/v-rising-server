@@ -1,5 +1,10 @@
 # Global Banlist
-The `banlist.txt` file in this repository will contain a list of Steam IDs who have griefed. If your ID is on this list, it will not be removed. As a server opreator, you may elect to add these IDs to your server, or not. If you wish to add to it, add the evidence (screen shot of the grief, and the steam ID) in a new issue, and they will be added.
+The `banlist.txt` file in this repository will contain a list of Steam IDs who have griefed.  
+If your ID is on this list, it will not be removed and **there is no arbitration**.  
+As a server opreator, you may elect to add these IDs to your server, or not.  
+If you wish to add to this list:
+* Create a new issue
+* Add the evidence (screen shot of the grief, and the steam ID)
 
 Griefing is defined as:
 * Cheating
