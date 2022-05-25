@@ -1,3 +1,10 @@
+# Global Banlist
+The `banlist.txt` file in this repository will contain a list of Steam IDs who have griefed. If your ID is on this list, it will not be removed. As a server opreator, you may elect to add these IDs to your server, or not. If you wish to add to it, add the evidence (screen shot of the grief, and the steam ID) and they will be added.
+
+Griefing is defined as:
+* Cheating
+* Blocking entrances to anothers castle
+
 # Setup
 We will assume that you want to install the server in `C:\servers\v_rising` if you do not, change the path in the following commands.
 
