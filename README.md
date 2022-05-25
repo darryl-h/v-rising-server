@@ -108,5 +108,5 @@ https://api.steampowered.com/ISteamApps/GetServersAtAddress/v0001?addr=1.2.3.4
 
 # Adding yourself to the adminlist.txt file
 * You will add your SteamID which can be found using this resource(https://steamdb.info/calculator/), or, after you connect in the server logs.
-* In the general settings of the game, you should enable the console
+* In the general settings of the game, you should enable the console (Options -> General -> Console Enabled)
 * Once you connect type `adminauth` to enable admin access
