@@ -140,10 +140,10 @@ Loaded FileUse@winrList from: C:\servers\v_rising\VRisingServer_Data\StreamingAs
 # Troubleshooting
 You should review the logs of the server to begin any troubleshooting session.
 
-# Dedciated Server
+## Dedciated Server
 If you are hosting the game as a dedicated server, and you are using the batch file to start the game (as recommended) the logs should exist in <server_directory>\v_rising\logs\VRisingServer.log
 
-# Autosaves
+### Autosaves
 ```
 Triggering AutoSave 292!
 UnityEngine.Logger:Log(LogType, Object)
@@ -177,7 +177,7 @@ Unity.Entities.ExecuteJobFunction:Invoke(JobChunkWrapper`1&, IntPtr, IntPtr, Job
 
 
 
-# Private Server
+## Private Server
 If you elect to host the server from the game as a private server, then the server will place the logs in \steamapps\common\VRising\VRising_Server\logs
 
 
