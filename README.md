@@ -17,6 +17,9 @@
   - [Log Variables](#log-variables)
   - [Specific Troubleshooting Instructions](#specific-troubleshooting-instructions)
     - [Server isn't visible on server browser](#server-isnt-visible-on-server-browser)
+    - [Incorrect Password](#incorrect-password)
+    - [Closed Connection](#closed-connection)
+    - [User Login](#user-login)
     - [Loading adminlist](#loading-adminlist)
     - [Loading Banlist](#loading-banlist)
     - [Update Master Server](#update-master-server)
@@ -233,6 +236,93 @@ Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
       "EnableConsole": false
     },
   ```
+
+### Incorrect Password
+```
+NetConnection '{Steam 1945998476}' connection was denied. Message: 'Incorrect Password!' Version: 1 PlatformId: <VAR_PLAYER_STEAM_ID>
+```
+
+### Closed Connection
+```
+SteamLog [SDR k_ESteamNetworkingSocketsDebugOutputType_Msg] [#1945998476 UDP steamid:<VAR_PLAYER_STEAM_ID>@24.226.110.253:57886] closed by app, entering linger state (1017) Application closed connection
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+Stunlock.Network.Steam.Wrapper.SteamSocketNetworkingLogs:OnLog(LogSource, ESteamNetworkingSocketsDebugOutputType, IntPtr)
+Steamworks.NativeMethods:ISteamNetworkingSockets_CloseConnection(IntPtr, HSteamNetConnection, Int32, UTF8StringHandle, Boolean)
+Steamworks.SteamGameServerNetworkingSockets:CloseConnection(HSteamNetConnection, Int32, String, Boolean)
+Stunlock.Network.Steam.ServerSteamTransportLayer:CloseConnection(ConnectionData, ConnectionStatusChangeReason, Boolean, String)
+Stunlock.Network.Steam.ServerSteamTransportLayer:Disconnect(NetConnectionId, ConnectionStatusChangeReason, String)
+Stunlock.Network.ServerNetworkLayer:Deny(NetConnectionId, ConnectionStatusChangeReason, String)
+ProjectM.ServerBootstrapSystem:OnConnectionApproval(NetBufferIn&, NetConnectionId)
+ProjectM.Scripting.OnDeathDelegate:Invoke(ServerGameManager&, SelfServer&)
+Stunlock.Network.ServerNetworkLayer:OnDataReceived(NetBufferIn&, NetConnectionId)
+ProjectM.Scripting.OnDeathDelegate:Invoke(ServerGameManager&, SelfServer&)
+Stunlock.Network.Steam.ServerSteamTransportLayer:ProcessNewMessages()
+Stunlock.Network.Steam.ServerSteamTransportLayer:Update(Double)
+ProjectM.ServerBootstrapSystem:OnUpdate()
+Unity.Entities.SystemBase:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+ProjectM.ServerSimulationSystemGroup:OnUpdate()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
+```
+
+### User Login
+
+
+Relogin
+```
+SteamPlatformSystem - BeginAuthSession for SteamID: <VAR_PLAYER_STEAM_ID> Result: k_EBeginAuthSessionResultOK
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+ProjectM.Auth.SteamPlatformSystem:BeginAuthSession(Byte[], UInt16, UInt64)
+ProjectM.ServerBootstrapSystem:OnConnectionApproval(NetBufferIn&, NetConnectionId)
+ProjectM.Scripting.OnDeathDelegate:Invoke(ServerGameManager&, SelfServer&)
+Stunlock.Network.ServerNetworkLayer:OnDataReceived(NetBufferIn&, NetConnectionId)
+ProjectM.Scripting.OnDeathDelegate:Invoke(ServerGameManager&, SelfServer&)
+Stunlock.Network.Steam.ServerSteamTransportLayer:ProcessNewMessages()
+Stunlock.Network.Steam.ServerSteamTransportLayer:Update(Double)
+ProjectM.ServerBootstrapSystem:OnUpdate()
+Unity.Entities.SystemBase:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+ProjectM.ServerSimulationSystemGroup:OnUpdate()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
+
+NetEndPoint '{Steam 2013751116}' reconnect was approved. approvedUserIndex: 0 HasLocalCharacter: True Hail Message Size: 339 Version: 1 PlatformId: <VAR_PLAYER_STEAM_ID> UserIndex: 30 ShouldCreateCharacter: False IsAdmin: False Length: 339
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+ProjectM.ServerBootstrapSystem:ApproveClient(NetConnectionId, Int32, UInt64, Boolean, Boolean, User&, Entity, ConnectAddress, ConnectAddress)
+ProjectM.ServerBootstrapSystem:TryAuthenticate(NetConnectionId, Int32, UInt64)
+ProjectM.ServerBootstrapSystem:OnConnectionApproval(NetBufferIn&, NetConnectionId)
+ProjectM.Scripting.OnDeathDelegate:Invoke(ServerGameManager&, SelfServer&)
+Stunlock.Network.ServerNetworkLayer:ApproveWaitingClients()
+Stunlock.Network.ServerNetworkLayer:Update(Double)
+ProjectM.ServerBootstrapSystem:OnUpdate()
+Unity.Entities.SystemBase:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+ProjectM.ServerSimulationSystemGroup:OnUpdate()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
+```
 
 ### Loading adminlist
 ```
