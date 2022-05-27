@@ -136,3 +136,48 @@ Loaded FileUse@winrList from: C:\servers\v_rising\VRisingServer_Data\StreamingAs
 * In the general settings of the game, you must enable the console (Options -> General -> Console Enabled)
 * Once you connect type `adminauth` to enable admin access
 * You will need to restart the server to reload any changes to these files
+
+# Troubleshooting
+You should review the logs of the server to begin any troubleshooting session.
+
+# Dedciated Server
+If you are hosting the game as a dedicated server, and you are using the batch file to start the game (as recommended) the logs should exist in <server_directory>\v_rising\logs\VRisingServer.log
+
+# Autosaves
+```
+Triggering AutoSave 292!
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+ProjectM.TriggerPersistenceSaveSystem:OnUpdate()
+Unity.Entities.SystemBase:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+ProjectM.ServerSimulationSystemGroup:OnUpdate()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
+
+Internal: JobTempAlloc has allocations that are more than 4 frames old - this is not allowed and likely a leak
+PersistenceV2 - Finished Saving to '.\save-data\Saves\v1\clever1\AutoSave_292'
+Total Persistent ChunkCount 8256. Total Save Size: 66380201 Bytes.
+
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Unity.Entities.ExecuteJobFunction:Invoke(JobChunkWrapper`1&, IntPtr, IntPtr, JobRanges&, Int32)
+
+[ line 1280309096]
+```
+
+
+
+
+# Private Server
+If you elect to host the server from the game as a private server, then the server will place the logs in \steamapps\common\VRising\VRising_Server\logs
+
+
