@@ -140,6 +140,25 @@ Loaded FileUse@winrList from: C:\servers\v_rising\VRisingServer_Data\StreamingAs
 # Steam Server list
 You can check tools like this that should query the UDP ports to retrieve data https://southnode.net/steamquery.php
 
+# You should be able to check your server on the offical list here: 
+https://vrising-client.s3.eu-central-1.amazonaws.com/vrising/live-adcd966f-655a-4dfa-af15-a3069cc6b221/official.txt
+
+This is seen in the logs like this in the `OfficialServersURL` field.
+```
+Loaded ClientSettings:
+{
+  "General": {
+    "ServerPath": "VRising.exe",
+    "PlatformNotificationPosition": 2,
+    "NewsURL": "",
+    "OfficialServersURL": "https://vrising-client.s3.eu-central-1.amazonaws.com/vrising/live-adcd966f-655a-4dfa-af15-a3069cc6b221/official.txt",
+    "ServerPartnerURL": "https://www.g-portal.com/vrising",
+    "ServerInstuctionsURL": "https://github.com/StunlockStudios/vrising-dedicated-server-instructions",
+    "BranchOverride": "",
+    "EnableConsole": false
+  },
+  ```
+
 # Troubleshooting
 You should review the logs of the server to begin any troubleshooting session.
 
@@ -151,6 +170,36 @@ If you are hosting the game as a dedicated server, and you are using the batch f
 If you elect to host the server from the game as a private server, then the server will place the main server engine logs in `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-server.log` (the previous run will be stored in `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-prev.log` and some supplimentry logs in \steamapps\common\VRising\VRising_Server\logs
 
 ## Log Types
+
+### Update Master Server
+
+```
+Loaded Official Servers List: 1042
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+ProjectM.Auth.SteamPlatformSystem:UpdateOfficialServersList()
+ProjectM.Auth.SteamPlatformSystem:OnUpdate()
+Unity.Entities.SystemBase:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
+```
+
+### Broadcasting public IP
+```
+SteamPlatformSystem - OnPolicyResponse - Public IP: <PUBLIC_IP>
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+ProjectM.Auth.SteamPlatformSystem:OnPolicyResponse(GSPolicyResponse_t)
+Steamworks.DispatchDelegate:Invoke(T)
+Steamworks.Callback`1:OnRunCallback(IntPtr)
+Steamworks.CallbackDispatcher:RunFrame(Boolean)
+ProjectM.Auth.SteamPlatformSystem:OnUpdate()
+Unity.Entities.SystemBase:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
+```
 
 ### Autosaves
 ```
@@ -181,4 +230,72 @@ Internal: deleting an allocation that is older than its permitted lifetime of 4 
 Unity.Entities.ExecuteJobFunction:Invoke(JobChunkWrapper`1&, IntPtr, IntPtr, JobRanges&, Int32)
 
 [ line 1280309096]
+```
+
+### Granting admin permissions from the console
+
+```
+Admin Auth request from User: <PLAYER_STEAM_ID>, Character: Raven
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+ProjectM.<>c__DisplayClass_OnUpdate_LambdaJob0:OriginalLambdaBody(Entity, AdminAuthEvent&, FromCharacter&)
+ProjectM.<>c__DisplayClass_OnUpdate_LambdaJob0:PerformLambda(Void*, Void*, Entity)
+Unity.Entities.CodeGeneratedJobForEach.PerformLambdaDelegate:Invoke(Void*, Void*, Entity)
+Unity.Entities.CodeGeneratedJobForEach.StructuralChangeEntityProvider:IterateEntities(Void*, Void*, PerformLambdaDelegate)
+ProjectM.<>c__DisplayClass_OnUpdate_LambdaJob0:Execute(ComponentSystemBase, EntityQuery)
+ProjectM.AdminAuthSystem:OnUpdate()
+Unity.Entities.SystemBase:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+ProjectM.ServerSimulationSystemGroup:OnUpdate()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
+
+Saved FileUserList to: C:\servers\v_rising\VRisingServer_Data\StreamingAssets\Settings\adminlist.txt
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+ProjectM.FileUserList:Save()
+ProjectM.AdminAuthSystem:OnUpdate()
+Unity.Entities.SystemBase:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+ProjectM.ServerSimulationSystemGroup:OnUpdate()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
+```
+
+### Give Item Event
+```
+Got GiveDebugEvent debug event from user: 94090:1 (PlatformId: <PLAYER_STEAM_ID> CharacterName: Raven) Event: Entity(138972:174)  - Entity  - FromCharacter  - GiveDebugEvent  - HandleClientDebugEvent  - NetworkEventType  - ReceiveNetworkEventTag
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+ProjectM.<>c__DisplayClass_NetworkEventLogging:OriginalLambdaBody(Entity, NetworkEventType&, FromCharacter&)
+ProjectM.<>c__DisplayClass_NetworkEventLogging:IterateEntities(ArchetypeChunk&, Runtimes&)
+ProjectM.<>c__DisplayClass_NetworkEventLogging:Execute(ArchetypeChunk, Int32, Int32)
+Unity.Entities.JobChunkExtensions:RunWithoutJobs(T&, ArchetypeChunkIterator&)
+StunMetrics.Collections.RefActionDelegate`2:Invoke(TObj&, T1)
+Unity.Entities.InternalCompilerInterface:RunJobChunk(T&, EntityQuery, JobChunkRunWithoutJobSystemDelegate)
+ProjectM.ServerBootstrapSystem:NetworkEventLogging()
+ProjectM.ServerBootstrapSystem:OnUpdate()
+Unity.Entities.SystemBase:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+ProjectM.ServerSimulationSystemGroup:OnUpdate()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
 ```
