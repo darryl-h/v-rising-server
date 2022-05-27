@@ -172,13 +172,13 @@ If you are hosting the game as a dedicated server, and you are using the batch f
 If you elect to host the server from the game as a private server, then the server will place the main server engine logs in `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-server.log` (the previous run will be stored in `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-prev.log` and some supplimentry logs in \steamapps\common\VRising\VRising_Server\logs
 
 ## Log Types
-<PLAYER_STEAM_ID> - Steam Player ID
-<PUBLIC_IP> - Server Public IP
+<VAR_PLAYER_STEAM_ID> - Steam Player ID  
+<VAR_PUBLIC_IP> - Server Public IP  
 
 
 ### Loading adminlist
 ```
-Loaded FileUserList from: C:\servers\v_rising\VRisingServer_Data\StreamingAssets\Settings\adminlist.txt. Content:<PLAYER_STEAM_ID>
+Loaded FileUserList from: C:\servers\v_rising\VRisingServer_Data\StreamingAssets\Settings\adminlist.txt. Content:<VAR_PLAYER_STEAM_ID>
 76561197961155759
 76561197961821588
 UnityEngine.Logger:Log(LogType, Object)
@@ -197,7 +197,7 @@ ProjectM.GameBootstrap:Start()
 
 ### Loading Banlist
 ```
-Loaded FileUserList from: C:\servers\v_rising\VRisingServer_Data\StreamingAssets\Settings\banlist.txt. Content:
+Loaded FileUserList from: C:\servers\v_rising\VRisingServer_Data\StreamingAssets\Settings\banlist.txt. Content:<VAR_PLAYER_STEAM_ID>
 UnityEngine.Logger:Log(LogType, Object)
 UnityEngine.Debug:Log(Object)
 ProjectM.FileUserList:Refresh()
@@ -228,7 +228,7 @@ Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
 
 ### Broadcasting public IP
 ```
-SteamPlatformSystem - OnPolicyResponse - Public IP: <PUBLIC_IP>
+SteamPlatformSystem - OnPolicyResponse - Public IP: <VAR_PUBLIC_IP>
 UnityEngine.Logger:Log(LogType, Object)
 UnityEngine.Debug:Log(Object)
 ProjectM.Auth.SteamPlatformSystem:OnPolicyResponse(GSPolicyResponse_t)
@@ -276,7 +276,7 @@ Unity.Entities.ExecuteJobFunction:Invoke(JobChunkWrapper`1&, IntPtr, IntPtr, Job
 ### Granting admin permissions from the console
 
 ```
-Admin Auth request from User: <PLAYER_STEAM_ID>, Character: Raven
+Admin Auth request from User: <VAR_PLAYER_STEAM_ID>, Character: Raven
 UnityEngine.Logger:Log(LogType, Object)
 UnityEngine.Debug:Log(Object)
 ProjectM.<>c__DisplayClass_OnUpdate_LambdaJob0:OriginalLambdaBody(Entity, AdminAuthEvent&, FromCharacter&)
@@ -317,7 +317,7 @@ Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
 
 ### Give Item Event
 ```
-Got GiveDebugEvent debug event from user: 94090:1 (PlatformId: <PLAYER_STEAM_ID> CharacterName: Raven) Event: Entity(138972:174)  - Entity  - FromCharacter  - GiveDebugEvent  - HandleClientDebugEvent  - NetworkEventType  - ReceiveNetworkEventTag
+Got GiveDebugEvent debug event from user: 94090:1 (PlatformId: <VAR_PLAYER_STEAM_ID> CharacterName: Raven) Event: Entity(138972:174)  - Entity  - FromCharacter  - GiveDebugEvent  - HandleClientDebugEvent  - NetworkEventType  - ReceiveNetworkEventTag
 UnityEngine.Logger:Log(LogType, Object)
 UnityEngine.Debug:Log(Object)
 ProjectM.<>c__DisplayClass_NetworkEventLogging:OriginalLambdaBody(Entity, NetworkEventType&, FromCharacter&)
