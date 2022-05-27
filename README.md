@@ -14,7 +14,7 @@
 - [Troubleshooting](#troubleshooting)
   - [Dedciated Server](#dedciated-server)
   - [Private Server](#private-server)
-  - [Log Types](#log-types)
+  - [Log Variables](#log-variables)
   - [Specific Troubleshooting Instructions](#specific-troubleshooting-instructions)
     - [Server isn't visible on server browser](#server-isnt-visible-on-server-browser)
     - [Loading adminlist](#loading-adminlist)
@@ -151,11 +151,12 @@ If you are hosting the game as a dedicated server, and you are using the batch f
 ## Private Server
 If you elect to host the server from the game as a private server, then the server will place the main server engine logs in `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-server.log` (the previous run will be stored in `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-prev.log` and some supplimentry logs in `\steamapps\common\VRising\VRising_Server\logs`
 
-## Log Types
+## Log Variables
 <VAR_PLAYER_STEAM_ID> - Steam Player ID  
 <VAR_PUBLIC_IP> - Server Public IP  
-<VAR_VOIP_PROVIDER_USERNAME> - Vivox Username
-<VOIP_PROVIDER_PASSWORD> - Vivox Password
+<VAR_VOIPAPIEndpoint> - The `VOIPAPIEndpoint` from your ServerVoipSettings.json file  
+<VAR_VOIPAppUserId> - The `VOIPAppUserId` from your ServerVoipSettings.json file  
+<VAR_VOIPAppUserPwd> - The `VOIPAppUserPwd` from your ServerVoipSettings.json file  
 
 ## Specific Troubleshooting Instructions
 
@@ -399,7 +400,7 @@ Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
 ### VOIP
 
 ```
-Vivox Request URI https://mt1s.www.vivox.com/api2/viv_signin.php?userid=<VAR_VOIP_PROVIDER_USERNAME>&pwd=<VOIP_PROVIDER_PASSWORD>
+Vivox Request URI <VAR_VOIPAPIEndpoint>/viv_signin.php?userid=<VAR_VOIPAppUserId>&pwd=<VAR_VOIPAppUserPwd>
 UnityEngine.Logger:Log(LogType, Object)
 UnityEngine.Debug:Log(Object)
 ProjectM.VivoxConnectionSystem:OnUpdate()
