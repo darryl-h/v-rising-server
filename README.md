@@ -137,11 +137,20 @@ Loaded FileUse@winrList from: C:\servers\v_rising\VRisingServer_Data\StreamingAs
 * Once you connect type `adminauth` to enable admin access
 * You will need to restart the server to reload any changes to these files
 
+# Steam Server list
+You can check tools like this that should query the UDP ports to retrieve data https://southnode.net/steamquery.php
+
 # Troubleshooting
 You should review the logs of the server to begin any troubleshooting session.
 
 ## Dedciated Server
 If you are hosting the game as a dedicated server, and you are using the batch file to start the game (as recommended) the logs should exist in <server_directory>\v_rising\logs\VRisingServer.log
+
+
+## Private Server
+If you elect to host the server from the game as a private server, then the server will place the main server engine logs in `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-server.log` (the previous run will be stored in `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-prev.log` and some supplimentry logs in \steamapps\common\VRising\VRising_Server\logs
+
+## Log Types
 
 ### Autosaves
 ```
@@ -173,11 +182,3 @@ Unity.Entities.ExecuteJobFunction:Invoke(JobChunkWrapper`1&, IntPtr, IntPtr, Job
 
 [ line 1280309096]
 ```
-
-
-
-
-## Private Server
-If you elect to host the server from the game as a private server, then the server will place the logs in \steamapps\common\VRising\VRising_Server\logs
-
-
