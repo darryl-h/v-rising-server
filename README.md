@@ -141,6 +141,7 @@ Ideally, we should be able to setup a scheudled task to also update the server o
 
 # Intresting Admin Console Commands
 `copyPositionDump` - Will copy your current position to your clipboard (These are not very accurate!)
+`Console.Bind Shift+F1 changehealthofclosesttomouse -5000 Console.` - Bind Shift F1 to destroy a castle
 
 # Troubleshooting
 You should review the logs of the server to begin any troubleshooting session.
@@ -157,6 +158,7 @@ If you elect to host the server from the game as a private server, then the serv
 <VAR_VOIPAPIEndpoint> - The `VOIPAPIEndpoint` from your ServerVoipSettings.json file  
 <VAR_VOIPAppUserId> - The `VOIPAppUserId` from your ServerVoipSettings.json file  
 <VAR_VOIPAppUserPwd> - The `VOIPAppUserPwd` from your ServerVoipSettings.json file  
+<VAR_VOIPVivoxDomain> - The `VOIPVivoxDomain` from your ServerVoipSettings.json file  
 
 ## Specific Troubleshooting Instructions
 
@@ -419,6 +421,60 @@ Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
 
 ```
 Vivox - S2S Requested Auth Token
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+ProjectM.VivoxConnectionSystem:OnUpdate()
+Unity.Entities.SystemBase:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+ProjectM.ServerSimulationSystemGroup:OnUpdate()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
+```
+
+```
+Vivox - Req InProgress
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+ProjectM.VivoxConnectionSystem:OnUpdate()
+Unity.Entities.SystemBase:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+ProjectM.ServerSimulationSystemGroup:OnUpdate()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
+```
+
+```
+Vivox - XML Resp <VAR_VOIPAppUserId>:2345678901:fc12345b67890d123d123fff1234f1c1:10.22.3.233 | <VAR_VOIPAppUserId> | sip:<VAR_VOIPAppUserId>@<VAR_VOIPVivoxDomain> | sip:<VAR_VOIPAppUserId>@<VAR_VOIPVivoxDomain>
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+ProjectM.VivoxConnectionSystem:OnUpdate()
+Unity.Entities.SystemBase:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+ProjectM.ServerSimulationSystemGroup:OnUpdate()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
+```
+
+```
+Vivox - S2S Auth Token OK
 UnityEngine.Logger:Log(LogType, Object)
 UnityEngine.Debug:Log(Object)
 ProjectM.VivoxConnectionSystem:OnUpdate()
