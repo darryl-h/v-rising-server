@@ -24,6 +24,7 @@
     - [Autosaves](#autosaves)
     - [Granting admin permissions from the console](#granting-admin-permissions-from-the-console)
     - [Give Item Event](#give-item-event)
+    - [VOIP](#voip)
 
 # Global Banlist
 The `banlist.txt` file in this repository will contain a list of Steam IDs who have griefed.  
@@ -153,6 +154,8 @@ If you elect to host the server from the game as a private server, then the serv
 ## Log Types
 <VAR_PLAYER_STEAM_ID> - Steam Player ID  
 <VAR_PUBLIC_IP> - Server Public IP  
+<VAR_VOIP_PROVIDER_USERNAME> - Vivox Username
+<VOIP_PROVIDER_PASSWORD> - Vivox Password
 
 ## Specific Troubleshooting Instructions
 
@@ -380,6 +383,44 @@ StunMetrics.Collections.RefActionDelegate`2:Invoke(TObj&, T1)
 Unity.Entities.InternalCompilerInterface:RunJobChunk(T&, EntityQuery, JobChunkRunWithoutJobSystemDelegate)
 ProjectM.ServerBootstrapSystem:NetworkEventLogging()
 ProjectM.ServerBootstrapSystem:OnUpdate()
+Unity.Entities.SystemBase:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+ProjectM.ServerSimulationSystemGroup:OnUpdate()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
+```
+
+### VOIP
+
+```
+Vivox Request URI https://mt1s.www.vivox.com/api2/viv_signin.php?userid=<VAR_VOIP_PROVIDER_USERNAME>&pwd=<VOIP_PROVIDER_PASSWORD>
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+ProjectM.VivoxConnectionSystem:OnUpdate()
+Unity.Entities.SystemBase:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+ProjectM.ServerSimulationSystemGroup:OnUpdate()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
+```
+
+```
+Vivox - S2S Requested Auth Token
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+ProjectM.VivoxConnectionSystem:OnUpdate()
 Unity.Entities.SystemBase:Update()
 Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
 Unity.Entities.ComponentSystem:Update()
