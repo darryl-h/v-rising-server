@@ -140,7 +140,7 @@ Loaded FileUse@winrList from: C:\servers\v_rising\VRisingServer_Data\StreamingAs
 # Steam Server list
 You can check tools like this that should query the UDP ports to retrieve data https://southnode.net/steamquery.php
 
-# You should be able to check your server on the offical list here: 
+## You should be able to check your server on the offical list here: 
 https://vrising-client.s3.eu-central-1.amazonaws.com/vrising/live-adcd966f-655a-4dfa-af15-a3069cc6b221/official.txt
 
 This is seen in the logs like this in the `OfficialServersURL` field.
@@ -159,17 +159,58 @@ Loaded ClientSettings:
   },
   ```
 
+# Intresting Admin Commands
+`copyPositionDump` - Will copy your current position to your clipboard (These are not very accurate!)
+
 # Troubleshooting
 You should review the logs of the server to begin any troubleshooting session.
 
 ## Dedciated Server
 If you are hosting the game as a dedicated server, and you are using the batch file to start the game (as recommended) the logs should exist in <server_directory>\v_rising\logs\VRisingServer.log
 
-
 ## Private Server
 If you elect to host the server from the game as a private server, then the server will place the main server engine logs in `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-server.log` (the previous run will be stored in `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-prev.log` and some supplimentry logs in \steamapps\common\VRising\VRising_Server\logs
 
 ## Log Types
+<PLAYER_STEAM_ID> - Steam Player ID
+<PUBLIC_IP> - Server Public IP
+
+
+### Loading adminlist
+```
+Loaded FileUserList from: C:\servers\v_rising\VRisingServer_Data\StreamingAssets\Settings\adminlist.txt. Content:<PLAYER_STEAM_ID>
+76561197961155759
+76561197961821588
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+ProjectM.FileUserList:Refresh()
+ProjectM.AdminAuthSystem:.ctor()
+System.Reflection.MonoCMethod:InternalInvoke(Object, Object[])
+System.Activator:CreateInstance(Type, Boolean)
+Unity.Entities.World:AllocateSystemInternal(Type)
+Unity.Entities.World:GetOrCreateSystemsAndLogException(IEnumerable`1, Int32)
+ProjectM.CustomWorldSpawning:AddSystemsToWorld(World, WorldType, Type[], Type, Type, Type, CustomWorld)
+ProjectM.CustomWorldSpawning:SetupWorldWithCustomRootGroups(World, World, WorldType, IEnumerable`1, Type, Type, Type)
+ProjectM.ServerWorldManager:BeginCreateServerWorld(ServerRuntimeSettings)
+ProjectM.GameBootstrap:Start()
+```
+
+### Loading Banlist
+```
+Loaded FileUserList from: C:\servers\v_rising\VRisingServer_Data\StreamingAssets\Settings\banlist.txt. Content:
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+ProjectM.FileUserList:Refresh()
+ProjectM.KickBanSystem_Server:.ctor()
+System.Reflection.MonoCMethod:InternalInvoke(Object, Object[])
+System.Activator:CreateInstance(Type, Boolean)
+Unity.Entities.World:AllocateSystemInternal(Type)
+Unity.Entities.World:GetOrCreateSystemsAndLogException(IEnumerable`1, Int32)
+ProjectM.CustomWorldSpawning:AddSystemsToWorld(World, WorldType, Type[], Type, Type, Type, CustomWorld)
+ProjectM.CustomWorldSpawning:SetupWorldWithCustomRootGroups(World, World, WorldType, IEnumerable`1, Type, Type, Type)
+ProjectM.ServerWorldManager:BeginCreateServerWorld(ServerRuntimeSettings)
+ProjectM.GameBootstrap:Start()
+```
 
 ### Update Master Server
 
