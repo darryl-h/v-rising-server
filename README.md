@@ -12,7 +12,7 @@
   - [In Windows Task Scheulder](#in-windows-task-scheulder)
 - [Intresting Admin Console Commands](#intresting-admin-console-commands)
 - [Troubleshooting](#troubleshooting)
-  - [Dedciated Server](#dedciated-server)
+  - [Dedicated Server](#dedicated-server)
   - [Private Server](#private-server)
   - [Log Variables](#log-variables)
   - [Specific Troubleshooting Instructions](#specific-troubleshooting-instructions)
@@ -20,6 +20,8 @@
     - [Incorrect Password](#incorrect-password)
     - [Closed Connection](#closed-connection)
     - [User Login](#user-login)
+    - [Loading ServerHostSettings](#loading-serverhostsettings)
+    - [](#)
     - [Loading adminlist](#loading-adminlist)
     - [Loading Banlist](#loading-banlist)
     - [Update Master Server](#update-master-server)
@@ -149,19 +151,24 @@ Ideally, we should be able to setup a scheudled task to also update the server o
 # Troubleshooting
 You should review the logs of the server to begin any troubleshooting session.
 
-## Dedciated Server
+## Dedicated Server
 If you are hosting the game as a dedicated server, and you are using the batch file to start the game (as recommended) the logs should exist in `<server_directory>\v_rising\logs\VRisingServer.log`
 
 ## Private Server
-If you elect to host the server from the game as a private server, then the server will place the main server engine logs in `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-server.log` (the previous run will be stored in `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-prev.log` and some supplimentry logs in `\steamapps\common\VRising\VRising_Server\logs`
+If you elect to host the server from the game as a private server, then the server will place the main server engine logs in `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-server.log` and some supplimentry logs in `\steamapps\common\VRising\VRising_Server\logs`
+
+There are also user client logs in in `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-prev.log` 
 
 ## Log Variables
+<VAR_Server_Installation_Directory> - The directory where the game is installed
 <VAR_PLAYER_STEAM_ID> - Steam Player ID  
 <VAR_PUBLIC_IP> - Server Public IP  
 <VAR_VOIPAPIEndpoint> - The `VOIPAPIEndpoint` from your ServerVoipSettings.json file  
 <VAR_VOIPAppUserId> - The `VOIPAppUserId` from your ServerVoipSettings.json file  
 <VAR_VOIPAppUserPwd> - The `VOIPAppUserPwd` from your ServerVoipSettings.json file  
 <VAR_VOIPVivoxDomain> - The `VOIPVivoxDomain` from your ServerVoipSettings.json file  
+<VAR_PLAYER_PUBLIC_IP> - The public IP of the player
+
 
 ## Specific Troubleshooting Instructions
 
@@ -244,7 +251,7 @@ NetConnection '{Steam 1945998476}' connection was denied. Message: 'Incorrect Pa
 
 ### Closed Connection
 ```
-SteamLog [SDR k_ESteamNetworkingSocketsDebugOutputType_Msg] [#1945998476 UDP steamid:<VAR_PLAYER_STEAM_ID>@24.226.110.253:57886] closed by app, entering linger state (1017) Application closed connection
+SteamLog [SDR k_ESteamNetworkingSocketsDebugOutputType_Msg] [#1945998476 UDP steamid:<VAR_PLAYER_STEAM_ID>@<VAR_PLAYER_PUBLIC_IP>:57886] closed by app, entering linger state (1017) Application closed connection
 UnityEngine.Logger:Log(LogType, Object)
 UnityEngine.Debug:Log(Object)
 Stunlock.Network.Steam.Wrapper.SteamSocketNetworkingLogs:OnLog(LogSource, ESteamNetworkingSocketsDebugOutputType, IntPtr)
@@ -371,11 +378,246 @@ Unity.Entities.ComponentSystem:Update()
 Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
 ```
 
+### Loading ServerHostSettings
+```
+Loaded ServerHostSettings:
+{
+  "Name": "My Cool Server",
+   <Skipped...>
+   "DiscoveryResponseLevel": 0,
+  "API": {
+    "Enabled": false,
+    <Skipped...>
+    "AccessList": ""
+  },
+  "Rcon": {
+    "Enabled": false,
+     <Skipped...>
+    "MaxConnections": 20
+  }
+}
+```
+
+### 
+<VAR_Server_Installation_Directory>/
+
+```
+Loaded ServerGameSettings:
+{
+  "GameModeType": 0,
+  "CastleDamageMode": 0,
+  "SiegeWeaponHealth": 2,
+  "PlayerDamageMode": 0,
+  "CastleHeartDamageMode": 0,
+  "PvPProtectionMode": 3,
+  "DeathContainerPermission": 1,
+  "RelicSpawnType": 1,
+  "CanLootEnemyContainers": false,
+  "BloodBoundEquipment": true,
+  "TeleportBoundItems": false,
+  "AllowGlobalChat": true,
+  "AllWaypointsUnlocked": false,
+  "FreeCastleClaim": false,
+  "FreeCastleDestroy": true,
+  "InactivityKillEnabled": true,
+  "InactivityKillTimeMin": 3600,
+  "InactivityKillTimeMax": 604800,
+  "InactivityKillSafeTimeAddition": 172800,
+  "InactivityKillTimerMaxItemLevel": 84,
+  "DisableDisconnectedDeadEnabled": true,
+  "DisableDisconnectedDeadTimer": 60,
+  "InventoryStacksModifier": 2.0,
+  "DropTableModifier_General": 2.0,
+  "DropTableModifier_Missions": 2.0,
+  "MaterialYieldModifier_Global": 2.5,
+  "BloodEssenceYieldModifier": 2.0,
+  "JournalVBloodSourceUnitMaxDistance": 25.0,
+  "PvPVampireRespawnModifier": 1.0,
+  "CastleMinimumDistanceInFloors": 2,
+  "ClanSize": 4,
+  "BloodDrainModifier": 1.0,
+  "DurabilityDrainModifier": 1.0,
+  "GarlicAreaStrengthModifier": 1.0,
+  "HolyAreaStrengthModifier": 1.0,
+  "SilverStrengthModifier": 1.0,
+  "SunDamageModifier": 1.0,
+  "CastleDecayRateModifier": 1.0,
+  "CastleBloodEssenceDrainModifier": 1.0,
+  "CastleSiegeTimer": 420.0,
+  "CastleUnderAttackTimer": 60.0,
+  "AnnounceSiegeWeaponSpawn": true,
+  "ShowSiegeWeaponMapIcon": true,
+  "BuildCostModifier": 1.0,
+  "RecipeCostModifier": 1.0,
+  "CraftRateModifier": 1.0,
+  "ResearchCostModifier": 1.0,
+  "RefinementCostModifier": 1.0,
+  "RefinementRateModifier": 1.0,
+  "ResearchTimeModifier": 1.0,
+  "DismantleResourceModifier": 1.0,
+  "ServantConvertRateModifier": 1.0,
+  "RepairCostModifier": 1.0,
+  "Death_DurabilityFactorLoss": 0.25,
+  "Death_DurabilityLossFactorAsResources": 1.0,
+  "StarterEquipmentId": 0,
+  "StarterResourcesId": 0,
+  "VBloodUnitSettings": [],
+  "UnlockedAchievements": [],
+  "UnlockedResearchs": [],
+  "GameTimeModifiers": {
+    "DayDurationInSeconds": 1080.0,
+    "DayStartHour": 9,
+    "DayStartMinute": 0,
+    "DayEndHour": 17,
+    "DayEndMinute": 0,
+    "BloodMoonFrequency_Min": 10,
+    "BloodMoonFrequency_Max": 18,
+    "BloodMoonBuff": 0.2
+  },
+  "VampireStatModifiers": {
+    "MaxHealthModifier": 1.0,
+    "MaxEnergyModifier": 1.0,
+    "PhysicalPowerModifier": 1.0,
+    "SpellPowerModifier": 1.0,
+    "ResourcePowerModifier": 1.0,
+    "SiegePowerModifier": 1.0,
+    "DamageReceivedModifier": 1.0,
+    "ReviveCancelDelay": 5.0
+  },
+  "UnitStatModifiers_Global": {
+    "MaxHealthModifier": 1.0,
+    "PowerModifier": 1.0
+  },
+  "UnitStatModifiers_VBlood": {
+    "MaxHealthModifier": 1.0,
+    "PowerModifier": 1.0
+  },
+  "EquipmentStatModifiers_Global": {
+    "MaxEnergyModifier": 1.0,
+    "MaxHealthModifier": 1.0,
+    "ResourceYieldModifier": 1.0,
+    "PhysicalPowerModifier": 1.0,
+    "SpellPowerModifier": 1.0,
+    "SiegePowerModifier": 1.0,
+    "MovementSpeedModifier": 1.0
+  },
+  "CastleStatModifiers_Global": {
+    "TickPeriod": 5.0,
+    "DamageResistance": 0.0,
+    "SafetyBoxLimit": 1,
+    "TombLimit": 12,
+    "VerminNestLimit": 4,
+    "PylonPenalties": {
+      "Range1": {
+        "Percentage": 0.0,
+        "Lower": 0,
+        "Higher": 2
+      },
+      "Range2": {
+        "Percentage": 0.0,
+        "Lower": 3,
+        "Higher": 3
+      },
+      "Range3": {
+        "Percentage": 0.0,
+        "Lower": 4,
+        "Higher": 4
+      },
+      "Range4": {
+        "Percentage": 0.0,
+        "Lower": 5,
+        "Higher": 5
+      },
+      "Range5": {
+        "Percentage": 0.0,
+        "Lower": 6,
+        "Higher": 254
+      }
+    },
+    "FloorPenalties": {
+      "Range1": {
+        "Percentage": 0.0,
+        "Lower": 0,
+        "Higher": 20
+      },
+      "Range2": {
+        "Percentage": 0.0,
+        "Lower": 21,
+        "Higher": 50
+      },
+      "Range3": {
+        "Percentage": 0.0,
+        "Lower": 51,
+        "Higher": 80
+      },
+      "Range4": {
+        "Percentage": 0.0,
+        "Lower": 81,
+        "Higher": 160
+      },
+      "Range5": {
+        "Percentage": 0.0,
+        "Lower": 161,
+        "Higher": 254
+      }
+    },
+    "HeartLimits": {
+      "Level1": {
+        "Level": 1,
+        "FloorLimit": 30,
+        "ServantLimit": 3
+      },
+      "Level2": {
+        "Level": 2,
+        "FloorLimit": 80,
+        "ServantLimit": 5
+      },
+      "Level3": {
+        "Level": 3,
+        "FloorLimit": 150,
+        "ServantLimit": 7
+      },
+      "Level4": {
+        "Level": 4,
+        "FloorLimit": 250,
+        "ServantLimit": 9
+      }
+    },
+    "CastleLimit": 2
+  },
+  "PlayerInteractionSettings": {
+    "TimeZone": 0,
+    "VSPlayerWeekdayTime": {
+      "StartHour": 17,
+      "StartMinute": 0,
+      "EndHour": 23,
+      "EndMinute": 0
+    },
+    "VSPlayerWeekendTime": {
+      "StartHour": 17,
+      "StartMinute": 0,
+      "EndHour": 23,
+      "EndMinute": 0
+    },
+    "VSCastleWeekdayTime": {
+      "StartHour": 17,
+      "StartMinute": 0,
+      "EndHour": 23,
+      "EndMinute": 0
+    },
+    "VSCastleWeekendTime": {
+      "StartHour": 17,
+      "StartMinute": 0,
+      "EndHour": 23,
+      "EndMinute": 0
+    }
+  }
+}
+```
+
 ### Loading adminlist
 ```
 Loaded FileUserList from: C:\servers\v_rising\VRisingServer_Data\StreamingAssets\Settings\adminlist.txt. Content:<VAR_PLAYER_STEAM_ID>
-76561197961155759
-76561197961821588
 UnityEngine.Logger:Log(LogType, Object)
 UnityEngine.Debug:Log(Object)
 ProjectM.FileUserList:Refresh()
