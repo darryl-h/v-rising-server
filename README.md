@@ -21,7 +21,7 @@
     - [Closed Connection](#closed-connection)
     - [User Login](#user-login)
     - [Loading ServerHostSettings](#loading-serverhostsettings)
-    - [](#)
+    - [Loading ServerGameSettings](#loading-servergamesettings)
     - [Loading adminlist](#loading-adminlist)
     - [Loading Banlist](#loading-banlist)
     - [Update Master Server](#update-master-server)
@@ -47,7 +47,7 @@ Griefing is defined as:
 https://github.com/StunlockStudios/vrising-dedicated-server-instructions
 
 # Installation of the game using PowerShell and SteamPS
-We will assume that you want to install the server in `C:\servers\v_rising` if you do not, change the path in the following commands.
+We will assume that you want to install the server in `C:\servers\v_rising` (This will be <VAR_SERVER_INSTALLATION_DIRECTORY> in the rest of this document) if you do not, change the path in the following commands.
 
 We will install the PowerShell module for SteamCLI to install and update the server.
 ```powershell
@@ -60,8 +60,8 @@ Update-SteamApp -ApplicationName 'V Rising Dedicated Server' -Path 'C:\servers\v
 # Configuration
 
 ## Server StartUp
-* Copy the <server_directory>\start_server_example.bat to a new file (I called mine start_server.bat)
-Inside the file, change the serverName (My Cool Server) and the -saveName (coolServer1)
+* Copy the `<VAR_SERVER_INSTALLATION_DIRECTORY>\start_server_example.bat` to a new file (I called mine `<VAR_SERVER_INSTALLATION_DIRECTORY>\start_server.bat`)
+Inside the file, change the serverName (`My Cool Server`) and the -saveName (`coolServer1`)
 
   ```batch
   @echo off
@@ -74,23 +74,17 @@ Inside the file, change the serverName (My Cool Server) and the -saveName (coolS
   ```
 
 ## Server Settings Files
-1. Create the directory `<server_directory>\save-data\Settings`
-2. Copy and paste `ServerHostSettings.json` and `ServerGameSettings.json` files from `<server_directory>/VRisingServer_Data/StreamingAssets/Settings/` into the directory you created in step 1
+1. Create the directory `<VAR_SERVER_INSTALLATION_DIRECTORY>\save-data\Settings`
+2. Copy and paste `ServerHostSettings.json` and `ServerGameSettings.json` files from `<VAR_SERVER_INSTALLATION_DIRECTORY>/VRisingServer_Data/StreamingAssets/Settings/` into the directory you created in step 1
 
 You can see the effects of all the settings in this PDF: https://cdn.stunlock.com/blog/2022/05/25083113/Game-Server-Settings.pdf
 
-**NOTE:** Within the `ServerHostSettings.json` file, in `Description` field, you can use line breaks using `\n`
-**NOTE:** If you elect to directly modify the configuration files in `<server_directory>/VRisingServer_Data/StreamingAssets/Settings/` you may loose your configuration changes with new updates, so you may want to consider backing them up.
+**NOTE:** Within the `<VAR_SERVER_INSTALLATION_DIRECTORY>\save-data\Settings\ServerHostSettings.json` file, in `Description` field, you can use line breaks using `\n`
+**NOTE:** If you elect to directly modify the configuration files in `<VAR_SERVER_INSTALLATION_DIRECTORY>/VRisingServer_Data/StreamingAssets/Settings/` you may loose your configuration changes with new updates, so you may want to consider backing them up.
 
 ## Adding yourself to the adminlist.txt file
-In the logs, you should see the `adminlist.txt` and `banlist.txt` lists loaded, and thier path is <server_directory>\VRisingServer_Data\StreamingAssets\Settings\
+In the logs, you should see the `adminlist.txt` and `banlist.txt` lists loaded, and thier path is <VAR_SERVER_INSTALLATION_DIRECTORY>\VRisingServer_Data\StreamingAssets\Settings\
 **NOTE:** This is the only valid place for these entires!
-
-Example:
-```
-Loaded FileUserList from: C:\servers\v_rising\VRisingServer_Data\StreamingAssets\Settings\banlist.txt. Content:
-Loaded FileUse@winrList from: C:\servers\v_rising\VRisingServer_Data\StreamingAssets\Settings\adminlist.txt. Content:
-```
 
 * You will need to add your 64-bit SteamID which can be found using this resource(https://steamdb.info/calculator/), or, after you connect in the server logs.
 * In the general settings of the game, you must enable the console (Options -> General -> Console Enabled)
@@ -102,7 +96,7 @@ You may need to allow the executable (VRisingServer.exe) through the windows fir
 
 ## Configure your router to allow UDP ports to the server
 If you wish your server to be listed on the in game server browser, and people to connect from the internet, you will need to open two UDP ports to the server.
-These ports are configured in the `ServerHostSettings.json` file
+These ports are configured in the `<VAR_SERVER_INSTALLATION_DIRECTORY>\save-data\Settings\ServerHostSettings.json` file
 ```json
 "Port": 9876,
 "QueryPort": 9877,
@@ -152,7 +146,7 @@ Ideally, we should be able to setup a scheudled task to also update the server o
 You should review the logs of the server to begin any troubleshooting session.
 
 ## Dedicated Server
-If you are hosting the game as a dedicated server, and you are using the batch file to start the game (as recommended) the logs should exist in `<server_directory>\v_rising\logs\VRisingServer.log`
+If you are hosting the game as a dedicated server, and you are using the batch file to start the game (as recommended) the logs should exist in `<VAR_SERVER_INSTALLATION_DIRECTORY>\logs\VRisingServer.log`
 
 ## Private Server
 If you elect to host the server from the game as a private server, then the server will place the main server engine logs in `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-server.log` and some supplimentry logs in `\steamapps\common\VRising\VRising_Server\logs`
@@ -160,7 +154,7 @@ If you elect to host the server from the game as a private server, then the serv
 There are also user client logs in in `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-prev.log` 
 
 ## Log Variables
-<VAR_Server_Installation_Directory> - The directory where the game is installed
+<VAR_SERVER_INSTALLATION_DIRECTORY> - The directory where the game is installed
 <VAR_PLAYER_STEAM_ID> - Steam Player ID  
 <VAR_PUBLIC_IP> - Server Public IP  
 <VAR_VOIPAPIEndpoint> - The `VOIPAPIEndpoint` from your ServerVoipSettings.json file  
@@ -379,27 +373,68 @@ Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
 ```
 
 ### Loading ServerHostSettings
+This object is loaded from `<VAR_SERVER_INSTALLATION_DIRECTORY>\save-data\Settings\ServerHostSettings.json`
+
 ```
 Loaded ServerHostSettings:
 {
   "Name": "My Cool Server",
-   <Skipped...>
-   "DiscoveryResponseLevel": 0,
+  "Description": "My\nCool\nDescription",
+  "Port": 9876,
+  "QueryPort": 9877,
+  "Address": null,
+  "MaxConnectedUsers": 10,
+  "MaxConnectedAdmins": 4,
+  "MinFreeSlotsNeededForNewUsers": 0,
+  "ServerFps": 30,
+  "AIUpdatesPerFrame": 200,
+  "Password": "",
+  "Secure": true,
+  "ListOnMasterServer": true,
+  "ServerBranch": "",
+  "GameSettingsPreset": "",
+  "SaveName": "world1",
+  "AutoSaveCount": 50,
+  "AutoSaveInterval": 600,
+  "PersistenceDebuggingEnabled": false,
+  "GiveStarterItems": false,
+  "LogAllNetworkEvents": false,
+  "LogAdminEvents": true,
+  "LogDebugEvents": true,
+  "AdminOnlyDebugEvents": true,
+  "EveryoneIsAdmin": false,
+  "DisableDebugEvents": false,
+  "EnableDangerousDebugEvents": false,
+  "TrackArchetypeCreationsOnStartup": false,
+  "ServerStartTimeOffset": 0.0,
+  "NetworkVersionOverride": -1,
+  "PersistenceVersionOverride": -1,
+  "UseTeleportPlayersOutOfCollisionFix": true,
+  "DiscoveryResponseLevel": 0,
   "API": {
     "Enabled": false,
-    <Skipped...>
+    "BindAddress": "*",
+    "BindPort": 9090,
+    "BasePath": "/",
     "AccessList": ""
   },
   "Rcon": {
     "Enabled": false,
-     <Skipped...>
+    "Port": 25575,
+    "Password": null,
+    "TimeoutSeconds": 300,
+    "MaxPasswordTries": 99,
+    "BanMinutes": 0,
+    "SendAuthImmediately": true,
+    "MaxConnectionsPerIp": 20,
     "MaxConnections": 20
   }
 }
 ```
 
-### 
-<VAR_Server_Installation_Directory>/
+### Loading ServerGameSettings
+
+This object is loaded from `<VAR_SERVER_INSTALLATION_DIRECTORY>\save-data\Settings\ServerGameSettings.json`
 
 ```
 Loaded ServerGameSettings:
