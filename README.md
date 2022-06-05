@@ -2,12 +2,13 @@
 - [Official Guide](#official-guide)
 - [Installation of the game using PowerShell and SteamPS](#installation-of-the-game-using-powershell-and-steamps)
 - [Configuration](#configuration)
-  - [Server StartUp](#server-startup)
+  - [Server StartUp Batch File](#server-startup-batch-file)
+  - [Server Startup, and Restarting on Failure](#server-startup-and-restarting-on-failure)
   - [Server Settings Files](#server-settings-files)
+  - [Enabling Console Access](#enabling-console-access)
   - [Adding yourself to the adminlist.txt file](#adding-yourself-to-the-adminlisttxt-file)
   - [Allow the vRising game through the windows firewall](#allow-the-vrising-game-through-the-windows-firewall)
   - [Configure your router to allow UDP ports to the server](#configure-your-router-to-allow-udp-ports-to-the-server)
-  - [Server start with windows](#server-start-with-windows)
 - [Server updates](#server-updates)
   - [In Windows Task Scheulder](#in-windows-task-scheulder)
 - [Intresting Admin Console Commands](#intresting-admin-console-commands)
@@ -17,7 +18,8 @@
   - [Log Variables](#log-variables)
   - [Server Loading](#server-loading)
   - [Specific Troubleshooting Instructions](#specific-troubleshooting-instructions)
-    - [Server isn't visible on server browser](#server-isnt-visible-on-server-browser)
+    - [Troubleshooting Networking In Windows](#troubleshooting-networking-in-windows)
+    - [Server not listed on the server browser](#server-not-listed-on-the-server-browser)
     - [Incorrect Password](#incorrect-password)
     - [Closed Connection](#closed-connection)
     - [User Login](#user-login)
@@ -61,7 +63,7 @@ Update-SteamApp -ApplicationName 'V Rising Dedicated Server' -Path 'C:\servers\v
 
 # Configuration
 
-## Server StartUp
+## Server StartUp Batch File
 * Copy the `<VAR_SERVER_INSTALLATION_DIRECTORY>\start_server_example.bat` to a new file (I called mine `<VAR_SERVER_INSTALLATION_DIRECTORY>\start_server.bat`)
 Inside the file, change the serverName (`My Cool Server`) and the -saveName (`coolServer1`)
 
@@ -75,6 +77,29 @@ Inside the file, change the serverName (`My Cool Server`) and the -saveName (`co
   VRisingServer.exe -persistentDataPath .\save-data -serverName "My Cool Server" -saveName "coolServer1" -logFile ".\logs\VRisingServer.log"
   ```
 
+## Server Startup, and Restarting on Failure
+This will restart the service if crashes, and sets up the server to start the service when the machine starts up.
+
+In this example, we will setup the server with NSSM (Non Sucking Service Manager)
+
+1) Download the NSSM archive from the nssm webpage (https://nssm.cc/download)
+2) Extract the NSSM program, and place `nssm.exe` into a the game directory
+3) Drop to a `cmd` prompt (`Start` -> `Run` -> `cmd`)
+4) Enter the NSSM directory and create the service.
+    ```dos
+    cd <VAR_SERVER_INSTALLATION_DIRECTORY>
+    nssm install VRisingServer
+    ```
+5) Click on `...` beside `Path` and locate to the `.bat` file used to start the server, created previously
+6) Click `Install Service`
+7) Click `OK`
+8) Drop to a `cmd` prompt (`Start` -> `Run` -> `cmd`)
+9) Start the service now
+    ```dos
+    cd <VAR_SERVER_INSTALLATION_DIRECTORY>
+    nssm start VRisingServer
+    ```
+
 ## Server Settings Files
 1. Create the directory `<VAR_SERVER_INSTALLATION_DIRECTORY>\save-data\Settings`
 2. Copy and paste `ServerHostSettings.json` and `ServerGameSettings.json` files from `<VAR_SERVER_INSTALLATION_DIRECTORY>/VRisingServer_Data/StreamingAssets/Settings/` into the directory you created in step 1
@@ -85,14 +110,16 @@ You can see the effects of all the settings in this PDF: https://cdn.stunlock.co
 
 **NOTE:** If you elect to directly modify the configuration files in `<VAR_SERVER_INSTALLATION_DIRECTORY>\VRisingServer_Data\StreamingAssets\Settings\` you may loose your configuration changes with new updates, so you may want to consider backing them up.
 
+## Enabling Console Access
+* To enable the console, go to `Options` -> `General` -> put a check in `Console Enabled`
+* Press the backtick key (\`) or (`§`) depending on your keyboard layout
+* Once you connect type `adminauth` to enable admin access
+
 ## Adding yourself to the adminlist.txt file
 In the logs, you should see the `adminlist.txt` and `banlist.txt` lists loaded, and thier path is `<VAR_SERVER_INSTALLATION_DIRECTORY>\VRisingServer_Data\StreamingAssets\Settings\`  
 **NOTE:** This is the only valid place for these entires!
 
-* You will need to add your 64-bit SteamID which can be found using this resource(https://steamdb.info/calculator/), or, after you connect in the server logs.
-* In the general settings of the game, you must enable the console (Options -> General -> Console Enabled)
-* Once you connect type `adminauth` to enable admin access
-* You will need to restart the server to reload any changes to these files
+* You will need to restart the server to reload any changes to these files (They SHOULD get picked up automatically, but unclear)
 
 ## Allow the vRising game through the windows firewall
 You may need to allow the executable (VRisingServer.exe) through the windows firewall
@@ -105,25 +132,27 @@ These ports are configured in the `<VAR_SERVER_INSTALLATION_DIRECTORY>\save-data
 "QueryPort": 9877,
 ```
 
-## Server start with windows
-* Create a `Basic Task`
-* Name it `Start V-Rising Server on boot`
-* Click `Next`
-* In the `When do you want the task to start` radio box, select `When the computer starts`
-* Click `Next`
-* In the `What action do you want the task to perform` radio box, select `Start a program`
-* Click `Next`
-* Beside the `Program/Script:` field, click `Browse`
-* Select the the `start_server.bat` we created earlier
-* Click `Next`
-* Click `Finish`
-
 # Server updates
-We can use the exact same command we used to install the game, to update the game, however, since we need to enter "Y" to start the update, we will wrap it in a batch file, and place it with the startup batch file in the `<VAR_SERVER_INSTALLATION_DIRECTORY>`
+We can use the exact same command we used to install the game, to update the game, however, since we need to enter "Y" to start the update, we will wrap it in a batch file, and place it with the startup batch file in the `<VAR_SERVER_INSTALLATION_DIRECTORY>`, we will also announce to the players we are doing this with mcrcon (https://github.com/Tiiffi/mcrcon/releases/) which we will place in the server directory as well for ease of access. For the update itself, you can replace the powershell command with steamcmd (assuming you also place it in the server directory) if you wish using `steamcmd.exe +login anonymous +app_update 1829350 validate +quit`  
+
+**NOTE**: In either case, you will need to update the path to the server by replacing any line with `C:\servers\v_rising` with the correct path for your server.
 
 `update.bat`
 ```dos
+@echo off
+echo "Sending message to the server, restart will occur in 10 minutes"
+mcrcon.exe -H 127.0.0.1 -P <RCON_PORT> -p <RCON_PASSWORD> "announcerestart 10"
+timeout 600
+echo "Stopping the VRising server"
+C:\servers\v_rising\nssm.exe stop vrisingserver
+echo "Waiting for 60 seconds for the server to go down"
+timeout 60
+echo "Updating the server (if needed)"
 ECHO Y | powershell Update-SteamApp -ApplicationName 'V Rising Dedicated Server' -Path 'C:\servers\v_rising'
+echo "Waiting for the update to complete (5 minutes)"
+timeout 600
+echo "Starting the server"
+C:\servers\v_rising\nssm.exe start vrisingserver
 ```
 
 ## In Windows Task Scheulder
@@ -132,7 +161,7 @@ ECHO Y | powershell Update-SteamApp -ApplicationName 'V Rising Dedicated Server'
 * Click `Next`
 * In the `When do you want the task to start` radio box, select `Daily`
 * Click `Next`
-* Beside the `Start:` Field, select todays date, and a time when you want the update to happen (Usually a low user time, like 09:00 AM EST))
+* Beside the `Start:` Field, select todays date, and a time when you want the update to happen (Usually a time when users may not be playing, like 09:00 AM EST))
 * Ensure that the `Recur Every` is set to `1`
 * Click `Next`
 * In the `What action do you want the task to perform` radio box, select `Start a program`
@@ -143,10 +172,19 @@ ECHO Y | powershell Update-SteamApp -ApplicationName 'V Rising Dedicated Server'
 * Click `Finish`
 
 # Intresting Admin Console Commands
+Your current binds can be found in: `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\ConsoleProfile\<machine_name.prof>`  
+
+You can bind a command to a function key from the console like this:
+`Console.Bind F1 listusers`
+
+
 `copyPositionDump` - Will copy your current position to your clipboard (These are not very accurate!)  
-`toggleobserve` - Set yourself to observer mode, you will get damage immunity and a speed boost  
 `https://discord.com/channels/803241158054510612/976404273015431168/980326759293673472` - Teleport map  
-`https://discord.com/channels/803241158054510612/976404273015431168/980896456766533743` - VOIP setup  
+`toggleobserve` - Set yourself to observer mode, you will get damage immunity and a speed boost  
+`https://discord.com/channels/803241158054510612/976404273015431168/980896456766533743` - VOIP setup (Also in the pinned messages)  
+`ToggleDebugViewCategory Network` - Turn on network reporting (latency, FPS, users)
+`changehealthclosesttomouse -5000` - Remove palisades or castle that may be blocking passage (You may want to `console.bind` this to a function key for easy access.)
+
 
 # Troubleshooting
 You should review the logs of the server to begin any troubleshooting session.
@@ -168,7 +206,7 @@ There are also user client logs in in `%USERPROFILE%\AppData\LocalLow\Stunlock S
 <VAR_VOIPAppUserId> - The `VOIPAppUserId` from your ServerVoipSettings.json file  
 <VAR_VOIPAppUserPwd> - The `VOIPAppUserPwd` from your ServerVoipSettings.json file  
 <VAR_VOIPVivoxDomain> - The `VOIPVivoxDomain` from your ServerVoipSettings.json file  
-<VAR_PLAYER_PUBLIC_IP> - The public IP of the player
+<VAR_PLAYER_PUBLIC_IP> - The public IP of the player  
 <VAR_RCON_PASSWORD> - The RCON password
 
 ## Server Loading
@@ -281,77 +319,148 @@ Opening SteamSDR socket on virtual port: 0. Socket: 196610
 
 ## Specific Troubleshooting Instructions
 
-### Server isn't visible on server browser
-You should check the logs to ensure that the server is indeed trying to reach out to the master server
+### Troubleshooting Networking In Windows
+1) Find the PID of the `VRisingServer.exe` in `Task Manager` in the `Details` tab
+2) Check your server configuration file `ServerHostSettings.json` we are looking for `Port`, `QueryPort`, and optionally `Rcon/Port`
+3) run `cmd`
+4) type in `netstat -aon | find "<PID>"` where PID is the PID of the server you found in step 1
+5) You should see something like this
+    ```
+      TCP    0.0.0.0:<Rcon/Port>           0.0.0.0:0              LISTENING       <PID>
+      UDP    0.0.0.0:<Port>                *:*                                    <PID>
+      UDP    0.0.0.0:<QueryPort>           *:*                                    <PID>
+    ```
 
-```
-Loaded Official Servers List: 1042
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-ProjectM.Auth.SteamPlatformSystem:UpdateOfficialServersList()
-ProjectM.Auth.SteamPlatformSystem:OnUpdate()
-Unity.Entities.SystemBase:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
-```
+6) Ensure that the game is allowed through the Windows Firewall, if you have added the executable to the windows firewall (rather than just the ports), then you can do this from the command prompt:
 
-If you have more than one public IP (VPN, Dual ISPs etc) you should ensure that the game is reporting the expected public IP `<VAR_PUBLIC_IP>`
+    ```
+    powershell Get-NetFirewallRule -DisplayName VRisingServer
 
-```
-SteamPlatformSystem - OnPolicyResponse - Public IP: <VAR_PUBLIC_IP>
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-ProjectM.Auth.SteamPlatformSystem:OnPolicyResponse(GSPolicyResponse_t)
-Steamworks.DispatchDelegate:Invoke(T)
-Steamworks.Callback`1:OnRunCallback(IntPtr)
-Steamworks.CallbackDispatcher:RunFrame(Boolean)
-ProjectM.Auth.SteamPlatformSystem:OnUpdate()
-Unity.Entities.SystemBase:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
-```
+    Name                          : {45A9AE05-8C9A-4B70-8A16-78A46AE136CB}
+    DisplayName                   : VRisingServer
+    Description                   :
+    DisplayGroup                  :
+    Group                         :
+    Enabled                       : True
+    Profile                       : Public
+    Platform                      : {}
+    Direction                     : Inbound
+    Action                        : Allow
+    EdgeTraversalPolicy           : Block
+    LooseSourceMapping            : False
+    LocalOnlyMapping              : False
+    Owner                         :
+    PrimaryStatus                 : OK
+    Status                        : The rule was parsed successfully from the store. (65536)
+    EnforcementStatus             : NotApplicable
+    PolicyStoreSource             : PersistentStore
+    PolicyStoreSourceType         : Local
+    RemoteDynamicKeywordAddresses : {}
 
-* You can validate your public IP by checking a tool like http://whatismyip.com
-* You can check tools like this that should query the UDP ports to retrieve data https://southnode.net/steamquery.php
-* You can test to see if the SteamAPI is reporting the game data back using this URL (Replace 1.2.3.4 with your public IP) https://api.steampowered.com/ISteamApps/GetServersAtAddress/v0001?addr=1.2.3.4
-  ```json
-  {
-    "response": {
-      "success": true,
-      "servers": [
-        {
-          "addr": "1.2.3.4:9877",
-          "gmsindex": -1,
-          "steamid": "90159453801734145",
-          "appid": 1604030,
-          "gamedir": "V Rising",
-          "region": -1,
-          "secure": true,
-          "lan": false,
-          "gameport": 9876,
-          "specport": 0
-        }
-      ]
-    }
-  }
-  ```
-* You can directly check the official server list by checking this URL: https://vrising-client.s3.eu-central-1.amazonaws.com/vrising/live-adcd966f-655a-4dfa-af15-a3069cc6b221/official.txt (This URL can be found in the logs in the `OfficialServersURL` field)
-  ```
-  Loaded ClientSettings:
-  {
-    "General": {
-      "ServerPath": "VRising.exe",
-      "PlatformNotificationPosition": 2,
-      "NewsURL": "",
-      "OfficialServersURL": "https://vrising-client.s3.eu-central-1.amazonaws.com/vrising/live-adcd966f-655a-4dfa-af15-a3069cc6b221/official.txt",
-      "ServerPartnerURL": "https://www.g-portal.com/vrising",
-      "ServerInstuctionsURL": "https://github.com/StunlockStudios/vrising-dedicated-server-instructions",
-      "BranchOverride": "",
-      "EnableConsole": false
-    },
-  ```
+    Name                          : {3763C3ED-0116-4831-94D7-9496A597A395}
+    DisplayName                   : VRisingServer
+    Description                   :
+    DisplayGroup                  :
+    Group                         :
+    Enabled                       : True
+    Profile                       : Public
+    Platform                      : {}
+    Direction                     : Inbound
+    Action                        : Allow
+    EdgeTraversalPolicy           : Block
+    LooseSourceMapping            : False
+    LocalOnlyMapping              : False
+    Owner                         :
+    PrimaryStatus                 : OK
+    Status                        : The rule was parsed successfully from the store. (65536)
+    EnforcementStatus             : NotApplicable
+    PolicyStoreSource             : PersistentStore
+    PolicyStoreSourceType         : Local
+    RemoteDynamicKeywordAddresses : {}
+
+    Name                          : {1258BCC4-EDA6-4BA7-B14B-20C46AC0B2ED}
+    DisplayName                   : VRisingServer
+    Description                   :
+    DisplayGroup                  :
+    Group                         :
+    Enabled                       : False
+    Profile                       : Domain
+    Platform                      : {}
+    Direction                     : Inbound
+    Action                        : Allow
+    EdgeTraversalPolicy           : Block
+    LooseSourceMapping            : False
+    LocalOnlyMapping              : False
+    Owner                         :
+    PrimaryStatus                 : OK
+    Status                        : The rule was parsed successfully from the store. (65536)
+    EnforcementStatus             : NotApplicable
+    PolicyStoreSource             : PersistentStore
+    PolicyStoreSourceType         : Local
+    RemoteDynamicKeywordAddresses : {}
+
+    Name                          : {3CBD268D-F077-4549-81BA-375C35A8D2AD}
+    DisplayName                   : VRisingServer
+    Description                   :
+    DisplayGroup                  :
+    Group                         :
+    Enabled                       : False
+    Profile                       : Domain
+    Platform                      : {}
+    Direction                     : Inbound
+    Action                        : Allow
+    EdgeTraversalPolicy           : Block
+    LooseSourceMapping            : False
+    LocalOnlyMapping              : False
+    Owner                         :
+    PrimaryStatus                 : OK
+    Status                        : The rule was parsed successfully from the store. (65536)
+    EnforcementStatus             : NotApplicable
+    PolicyStoreSource             : PersistentStore
+    PolicyStoreSourceType         : Local
+    RemoteDynamicKeywordAddresses : {}
+    ```
+    **NOTE:** As a troubleshooting step, you may disable the Windows Firewall, but turn it back on when you are done, and correctly configure it if it is the problem.
+
+7) Open your router and firewall ports to allow the UDP connections (and TCP if you want RCON)
+This is beyond the scope of this document, as it is device specific, but you can try https://PortForward.com
+
+8) Validate with your internet provider if you are able to run a servers (specifically game servers) from your purchased internet package. They may block this kind of traffic by blocking specific ports, or using packet inspection to determine the type of traffic. (This is beyond the scope of this document).  
+If you check https://ipv6-test.com/ and the shown IP on that web page is different from your address shown in your router, your address may be translated and it may be impossible to host. Additionally some providers (namely in Germany) may use something like Carrier Grade NAT (CGNAT) or DS-Lite which may prevent you from running a server. In these cases, you can try to contact your ISP and see if you are able to get an IPv4 address. You *may* be able to get away with something like Fast Reverse Proxy (https://gabrieltanner.org/blog/port-forwarding-frp) but this is again, outside the scope of this document.
+
+### Server not listed on the server browser
+1) Ensure that your `ServerHostSettings.json` configuration file has `ListOnMasterServer` set to `true`  
+   
+2) Within the `ServerHostSettings.json` configuration file, ensure your `Port` and `QueryPort` are configured in the Windows Firewall to allow UDP traffic OR allow the `VRisingServer.exe` through the firewall  
+
+3) Ensure that you see the server listed on the output from `netstat -aon` the output should look something like this (You should see additional ports listed for the PID, but these are the ones we are concerned with):
+    ```
+    UDP    0.0.0.0:<Port>                *:*                                    <PID>
+    UDP    0.0.0.0:<QueryPort>           *:*                                    <PID>
+    ```
+4) Configure your router to allow both ports in step 2 to be forwarded to the server (You can refer to https://portforward.com for assistance, but this is device specific, and beyond the scope of this document)  
+**NOTE:** Since these are UDP ports, there is no good/easy way to test them remotely other than with a game client.
+
+5) Check your `VRisingServer.log` server logs inside the appropriate directory for the public IP, the logs should look like this: `SteamPlatformSystem - OnPolicyResponse - Public IP: <VAR_PUBLIC_IP>` and ensure this is the public IP you expect it to be (This is especially useful if you have a VPN or secondary internet provider)
+    ```
+    SteamPlatformSystem - OnPolicyResponse - Public IP: <VAR_PUBLIC_IP>
+    UnityEngine.Logger:Log(LogType, Object)
+    UnityEngine.Debug:Log(Object)
+    ProjectM.Auth.SteamPlatformSystem:OnPolicyResponse(GSPolicyResponse_t)
+    Steamworks.DispatchDelegate:Invoke(T)
+    Steamworks.Callback`1:OnRunCallback(IntPtr)
+    Steamworks.CallbackDispatcher:RunFrame(Boolean)
+    ProjectM.Auth.SteamPlatformSystem:OnUpdate()
+    Unity.Entities.SystemBase:Update()
+    Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+    Unity.Entities.ComponentSystem:Update()
+    Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
+    ```
+
+6) Test that your server is able to be queried by the SteamAPI by entering your public IP on this tool  https://southnode.net/steamquery.php , and/or using https://api.steampowered.com/ISteamApps/GetServersAtAddress/v0001?addr=1.2.3.4 (Replace 1.2.3.4 with your public IP)
+
+7) BE PATIENT! The listing process can take time, it appears that you have done everything you can to ensure that your server is able to be queried.  
+**NOTE:** SOME users have found that changing both ports to something else, and back have forced the server to be listed. This is VERY anecdotal, and may infact increase the waiting process.
 
 ### Incorrect Password
 ```
