@@ -4,22 +4,31 @@
 - [Configuration](#configuration)
   - [Server StartUp Batch File](#server-startup-batch-file)
   - [Server Settings Files](#server-settings-files)
-  - [Server Startup, and Restarting on Failure](#server-startup-and-restarting-on-failure)
-  - [Enabling Console Access](#enabling-console-access)
-  - [Adding yourself to the adminlist.txt file](#adding-yourself-to-the-adminlisttxt-file)
+  - [VOIP Configuration](#voip-configuration)
   - [Allow the vRising game through the windows firewall](#allow-the-vrising-game-through-the-windows-firewall)
   - [Configure your router to allow UDP ports to the server](#configure-your-router-to-allow-udp-ports-to-the-server)
-- [Server updates](#server-updates)
-  - [In Windows Task Scheulder](#in-windows-task-scheulder)
+- [Post Configuration](#post-configuration)
+  - [Server Startup, Log Timestamps, and Restarting on Failure](#server-startup-log-timestamps-and-restarting-on-failure)
+  - [Adding yourself to the adminlist.txt file](#adding-yourself-to-the-adminlisttxt-file)
+  - [Server updates](#server-updates)
+    - [In Windows Task Scheulder](#in-windows-task-scheulder)
+- [General Instructions](#general-instructions)
+  - [Enabling Console Access](#enabling-console-access)
+  - [Direct Connect](#direct-connect)
 - [Intresting Admin Console Commands](#intresting-admin-console-commands)
-- [Troubleshooting](#troubleshooting)
-  - [Dedicated Server](#dedicated-server)
-  - [Private Server](#private-server)
+  - [Administrative Console Commands](#administrative-console-commands)
+    - [Teleportation Console Commands](#teleportation-console-commands)
+  - [Troubleshooting Console Commands](#troubleshooting-console-commands)
+- [Troubleshooting The Server](#troubleshooting-the-server)
+  - [Dedicated Server Logs](#dedicated-server-logs)
+  - [Private Server Logs](#private-server-logs)
+  - [Client (Player) Logs](#client-player-logs)
   - [Log Variables](#log-variables)
-  - [Server Loading](#server-loading)
+  - [Server Loading on 2020.3.31f1 (6b54b7616050)](#server-loading-on-2020331f1-6b54b7616050)
   - [Specific Troubleshooting Instructions](#specific-troubleshooting-instructions)
     - [Troubleshooting Networking In Windows](#troubleshooting-networking-in-windows)
     - [Server not listed on the server browser](#server-not-listed-on-the-server-browser)
+  - [Log Examples](#log-examples)
     - [Incorrect Password](#incorrect-password)
     - [Closed Connection](#closed-connection)
     - [User Login](#user-login)
@@ -74,8 +83,9 @@ Inside the file, change the serverName (`My Cool Server`) and the -saveName (`co
   echo "Starting V Rising Dedicated Server - PRESS CTRL-C to exit"
 
   @echo on
-  VRisingServer.exe -persistentDataPath .\save-data -serverName "My Cool Server" -saveName "coolServer1" -logFile ".\logs\VRisingServer.log"
+  VRisingServer.exe -persistentDataPath .\save-data -serverName "My Cool Server" -saveName "coolServer1"
   ```
+In this case, we are removing the `-logFile ".\logs\VRisingServer.log` line from the logs, we will use this later with NSSM to give us timestamps and log file rotation. Huzzah!
 
 ## Server Settings Files
 1. Create the directory `<VAR_SERVER_INSTALLATION_DIRECTORY>\save-data\Settings`
@@ -87,39 +97,53 @@ You can see the effects of all the settings in this PDF: https://cdn.stunlock.co
 
 **NOTE:** If you elect to directly modify the configuration files in `<VAR_SERVER_INSTALLATION_DIRECTORY>\VRisingServer_Data\StreamingAssets\Settings\` you may loose your configuration changes with new updates, so you may want to consider backing them up.
 
-## Server Startup, and Restarting on Failure
-This will restart the service if crashes, and sets up the server to start the service when the machine starts up.
+## VOIP Configuration
+Be advised this is 100% unsupported!
 
-In this example, we will setup the server with NSSM (Non Sucking Service Manager)
+`https://discord.com/channels/803241158054510612/976404273015431168/980896456766533743` - VOIP setup (Also in the pinned messages)  
 
-1) Download the NSSM archive from the nssm webpage (https://nssm.cc/download)
-2) Extract the NSSM program, and place `nssm.exe` into a the game directory
-3) Drop to a `cmd` prompt (`Start` -> `Run` -> `cmd`)
-4) Enter the NSSM directory and create the service.
-    ```dos
-    cd <VAR_SERVER_INSTALLATION_DIRECTORY>
-    nssm install VRisingServer
+1) Create an account on the Vivox Developer Portal (https://developer.vivox.com/register)
+**NOTE** There is no real difference between a person and an organization when signing up for access to Vivox
+3) Login to the Vivox Developer Portal 
+4) Click on `Create New Application`
+5) In Application or Game Name set the name to something like `VRising_Server`
+6) In the `Game Genres` put a check in `Action`
+7) Click `Continue`
+8) In `What engine are you building your app with? Vivox provides out-of-the-box solutions for the engines listed below - select Vivox Core if yours is not listed.` select `Unity`
+9) In `What platform(s) does your app support` select `Windows`
+10) Click `Continue`
+11) Click `Create App`
+12) Create a new file called `<GAME_SERVER_DIRECTORY>\VRisingServer_Data\StreamingAssets\Settings\ServerVoipSettings.json`
+13) Add the following content to the file
+    ```json
+    {
+        "VOIPEnabled": true,
+        "VOIPIssuer": "",
+        "VOIPSecret": "",
+        "VOIPAppUserId": "",
+        "VOIPAppUserPwd": "",
+        "VOIPVivoxDomain": "",
+        "VOIPAPIEndpoint": "",
+        "VOIPConversationalDistance": 14,
+        "VOIPAudibleDistance": 40,
+        "VOIPFadeIntensity": 2.0
+    }
     ```
-5) Click on `...` beside `Path` and locate to the `.bat` file used to start the server, created previously
-6) Click `Install Service`
-7) Click `OK`
-8) Drop to a `cmd` prompt (`Start` -> `Run` -> `cmd`)
-9) Start the service now
-    ```dos
-    cd <VAR_SERVER_INSTALLATION_DIRECTORY>
-    nssm start VRisingServer
-    ```
+14) In the `ServerVoipSettings.json` set the `VOIPIssuer` to the value you see in Vivox portal under `Api Keys` called `Issuer`
+15) In the `ServerVoipSettings.json` set the `VOIPSecret` to the value you see in the Vivox portal under `Api Keys` called `Secret Key`
+16) In the `ServerVoipSettings.json` set the `VOIPAppUserId` to the value you see in the Vivox portal under `Api Keys` called `Admin User ID`
+17) In the `ServerVoipSettings.json` set the `VOIPAppUserPwd` to the value you see in the Vivox portal under `Api Keys` called `Admin Password`
+18) In the `ServerVoipSettings.json` set the `VOIPVivoxDomain` to the value you see in the Vivox portal under `Environment Details` called `Domain`
+19) In the `ServerVoipSettings.json` set the `VOIPAPIEndpoint` to the value you see in the Vivox portal under `Environment Details` called `API End-Point`
 
-## Enabling Console Access
-* To enable the console, go to `Options` -> `General` -> put a check in `Console Enabled`
-* Press the backtick key (\`) or (`§`) depending on your keyboard layout
-* Once you connect type `adminauth` to enable admin access
+**NOTE:** The difference between a sandbox, and a production configuration is the sandbox can only maintain 100 concurrent connections, while a production configuration can mantain 5000.
 
-## Adding yourself to the adminlist.txt file
-In the logs, you should see the `adminlist.txt` and `banlist.txt` lists loaded, and thier path is `<VAR_SERVER_INSTALLATION_DIRECTORY>\VRisingServer_Data\StreamingAssets\Settings\`  
-**NOTE:** This is the only valid place for these entires!
-
-* You will need to restart the server to reload any changes to these files (They SHOULD get picked up automatically, but unclear)
+**NOTE:** Time must be sycned (This is NOT the same as the Time Zone!) on the server or you may get:
+* The VOIP option (`Options` -> `Sound` -> `Use Voice Chat`) may be forced into an off state after you have set it it on
+* You see the message `Nearby players are only displayed when connected to voice chat` 
+* In the client logs you may see `<Login>b__0: vx_req_account_anonymous_login_t failed: VivoxUnity.VivoxApiException: Access Token Expired (20121)`
+  * Unfortunatly the developer page isn't helpful here: https://docs.vivox.com/v5/general/unity/15_1_170000/en-us/Unity/developer-guide/error-codes.htm
+  * https://support.vivox.com/hc/en-us/articles/360015368274-What-causes-VxAccessTokenExpired-20121-errors-
 
 ## Allow the vRising game through the windows firewall
 You may need to allow the executable (VRisingServer.exe) through the windows firewall
@@ -132,7 +156,42 @@ These ports are configured in the `<VAR_SERVER_INSTALLATION_DIRECTORY>\save-data
 "QueryPort": 9877,
 ```
 
-# Server updates
+# Post Configuration
+These are quality of life improvments.
+
+## Server Startup, Log Timestamps, and Restarting on Failure
+This will add timestamps, restart the service if crashes, and sets up the server to start the service when the machine starts up, oh my!
+
+In this example, we will setup the server with NSSM (Non Sucking Service Manager)
+
+1) Download the NSSM archive from the nssm webpage (https://nssm.cc/download)
+2) Extract the NSSM program, and place `nssm.exe` into a the game directory
+3) Drop to a `cmd` prompt (`Start` -> `Run` -> `cmd`)
+4) Enter the NSSM directory and create the service.
+    ```dos
+    cd <VAR_SERVER_INSTALLATION_DIRECTORY>
+    nssm install VRisingServer
+    ```
+5) Click on `...` beside `Path` and locate to the `.bat` file used to start the server, created previously
+6) Click on the `I/O` tab
+7) Set the `Output (stdout):` path to `<VAR_SERVER_INSTALLATION_DIRECTORY>\logs\VRisingServer.log
+8) Set the `Error (stderr):` path to `<VAR_SERVER_INSTALLATION_DIRECTORY>\logs\VRisingServer_Error.log
+8) Click `Install Service`
+9) Click `OK`
+10) Drop to a `cmd` prompt (`Start` -> `Run` -> `cmd`)
+11) Start the service now
+    ```dos
+    cd <VAR_SERVER_INSTALLATION_DIRECTORY>
+    nssm start VRisingServer
+    ```
+
+## Adding yourself to the adminlist.txt file
+In the logs, you should see the `adminlist.txt` and `banlist.txt` lists loaded, and thier path is `<VAR_SERVER_INSTALLATION_DIRECTORY>\VRisingServer_Data\StreamingAssets\Settings\`  
+**NOTE:** This is the only valid place for these entires!
+
+* You will need to restart the server to reload any changes to these files (They SHOULD get picked up automatically, but unclear)
+
+## Server updates
 We can use the exact same command we used to install the game, to update the game, however, since we need to enter "Y" to start the update, we will wrap it in a batch file, and place it with the startup batch file in the `<VAR_SERVER_INSTALLATION_DIRECTORY>`, we will also announce to the players we are doing this with mcrcon (https://github.com/Tiiffi/mcrcon/releases/) which we will place in the server directory as well for ease of access. For the update itself, you can replace the powershell command with steamcmd (assuming you also place it in the server directory) if you wish using `steamcmd.exe +login anonymous +app_update 1829350 validate +quit`  
 
 **NOTE**: In either case, you will need to update the path to the server by replacing any line with `C:\servers\v_rising` with the correct path for your server.
@@ -155,7 +214,7 @@ echo "Starting the server"
 C:\servers\v_rising\nssm.exe start vrisingserver
 ```
 
-## In Windows Task Scheulder
+### In Windows Task Scheulder
 * Create a `Basic Task`
 * Name it `Update V-Rising Server`
 * Click `Next`
@@ -166,36 +225,48 @@ C:\servers\v_rising\nssm.exe start vrisingserver
 * Click `Next`
 * In the `What action do you want the task to perform` radio box, select `Start a program`
 * Click `Next`
-* Beside the `Program/Script:` field, type `powershell`
-* In the `Add Arguments` field, enter `update.bat`
+* Beside the `Program/Script:` field, click `Browse...` and find the customized `start_server.bat` we created earlier
 * Click `Next`
 * Click `Finish`
 
+# General Instructions
+
+## Enabling Console Access
+* To enable the console, go to `Options` -> `General` -> put a check in `Console Enabled`
+* Press the backtick key (\`) or (`§`) depending on your keyboard layout
+* Once you connect type `adminauth` to enable admin access
+
+## Direct Connect
+Start vRising -> `Play` -> `Online Play` -> `Find Servers` (bottom right) -> `Display All Servers & Settings` (Top) -> `Direct Connect` (Bottom Center) -> `<IP>:<Port from ServerHostSettings.json>` (This IP and Port is the same shown when your in the game and hit ESC on the bottom left like this `SteamIPv4://<IP>:<Port from ServerHostSettings.json>` -> Make sure `LAN Connect` is NOT selected. -> `Connect`
+
 # Intresting Admin Console Commands
-Your current binds can be found in: `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\ConsoleProfile\<machine_name.prof>`  
+Your current binds can be found in: `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\ConsoleProfile\<machine_name.prof>` (Do not modify this file directly!). You can list binds in game using `Console.ProfileInfo`
 
-You can bind a command to a function key from the console like this:
-`Console.Bind F1 listusers`
-
-
-`copyPositionDump` - Will copy your current position to your clipboard (These are not very accurate!)  
-`https://discord.com/channels/803241158054510612/976404273015431168/980326759293673472` - Teleport map  
-`toggleobserve` - Set yourself to observer mode, you will get damage immunity and a speed boost  
-`https://discord.com/channels/803241158054510612/976404273015431168/980896456766533743` - VOIP setup (Also in the pinned messages)  
-`ToggleDebugViewCategory Network` - Turn on network reporting (latency, FPS, users)
+## Administrative Console Commands
+`Console.Bind F1 listusers` - You can bind a console command to a function key  
+`toggleobserve 1` - Set yourself to observer mode, you will get damage immunity and a speed boost (You should remove your cloak for proper invisibility.)  
 `changehealthclosesttomouse -5000` - Remove palisades or castle that may be blocking passage (You may want to `console.bind` this to a function key for easy access.)
 
+### Teleportation Console Commands
+`copyPositionDump` - Will copy your current position to your clipboard (These are not very accurate!)  
+`https://discord.com/channels/803241158054510612/976404273015431168/980326759293673472` - Teleport map  
+`<CTRL> + <SHIFT> and clicking your map` - After opening the map, you will teleport to the location
 
-# Troubleshooting
+## Troubleshooting Console Commands
+`ToggleDebugViewCategory All` - Turn on all reporting  
+`ToggleDebugViewCategory Network` - Turn on network reporting (latency, FPS, users)
+
+# Troubleshooting The Server
 You should review the logs of the server to begin any troubleshooting session.
 
-## Dedicated Server
+## Dedicated Server Logs
 If you are hosting the game as a dedicated server, and you are using the batch file to start the game (as recommended) the logs should exist in `<VAR_SERVER_INSTALLATION_DIRECTORY>\logs\VRisingServer.log`
 
-## Private Server
-If you elect to host the server from the game as a private server, then the server will place the main server engine logs in `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-server.log` and some supplimentry logs in `\steamapps\common\VRising\VRising_Server\logs`
+## Private Server Logs
+If you elect to host the server from the game as a private server, then the server will place the main server engine logs in `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-server.log` a second set of logs in `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-prev.log` and some supplimentry logs in `\steamapps\common\VRising\VRising_Server\logs`
 
-There are also user client logs in in `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-prev.log` 
+## Client (Player) Logs
+These are kept in `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player.log`
 
 ## Log Variables
 <VAR_SERVER_INSTALLATION_DIRECTORY> - The directory where the game is installed
@@ -209,7 +280,8 @@ There are also user client logs in in `%USERPROFILE%\AppData\LocalLow\Stunlock S
 <VAR_PLAYER_PUBLIC_IP> - The public IP of the player  
 <VAR_RCON_PASSWORD> - The RCON password
 
-## Server Loading
+## Server Loading on 2020.3.31f1 (6b54b7616050)
+
 ```
 Initialize engine version: 2020.3.31f1 (6b54b7616050)
 
@@ -461,6 +533,8 @@ If you check https://ipv6-test.com/ and the shown IP on that web page is differe
 
 7) BE PATIENT! The listing process can take time, it appears that you have done everything you can to ensure that your server is able to be queried.  
 **NOTE:** SOME users have found that changing both ports to something else, and back have forced the server to be listed. This is VERY anecdotal, and may infact increase the waiting process.
+
+## Log Examples
 
 ### Incorrect Password
 ```
