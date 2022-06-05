@@ -3,8 +3,8 @@
 - [Installation of the game using PowerShell and SteamPS](#installation-of-the-game-using-powershell-and-steamps)
 - [Configuration](#configuration)
   - [Server StartUp Batch File](#server-startup-batch-file)
-  - [Server Startup, and Restarting on Failure](#server-startup-and-restarting-on-failure)
   - [Server Settings Files](#server-settings-files)
+  - [Server Startup, and Restarting on Failure](#server-startup-and-restarting-on-failure)
   - [Enabling Console Access](#enabling-console-access)
   - [Adding yourself to the adminlist.txt file](#adding-yourself-to-the-adminlisttxt-file)
   - [Allow the vRising game through the windows firewall](#allow-the-vrising-game-through-the-windows-firewall)
@@ -77,6 +77,16 @@ Inside the file, change the serverName (`My Cool Server`) and the -saveName (`co
   VRisingServer.exe -persistentDataPath .\save-data -serverName "My Cool Server" -saveName "coolServer1" -logFile ".\logs\VRisingServer.log"
   ```
 
+## Server Settings Files
+1. Create the directory `<VAR_SERVER_INSTALLATION_DIRECTORY>\save-data\Settings`
+2. Copy and paste `ServerHostSettings.json` and `ServerGameSettings.json` files from `<VAR_SERVER_INSTALLATION_DIRECTORY>/VRisingServer_Data/StreamingAssets/Settings/` into the directory you created in step 1
+
+You can see the effects of all the settings in this PDF: https://cdn.stunlock.com/blog/2022/05/25083113/Game-Server-Settings.pdf
+
+**NOTE:** Within the `<VAR_SERVER_INSTALLATION_DIRECTORY>\save-data\Settings\ServerHostSettings.json` file, in `Description` field, you can use line breaks using `\n`  
+
+**NOTE:** If you elect to directly modify the configuration files in `<VAR_SERVER_INSTALLATION_DIRECTORY>\VRisingServer_Data\StreamingAssets\Settings\` you may loose your configuration changes with new updates, so you may want to consider backing them up.
+
 ## Server Startup, and Restarting on Failure
 This will restart the service if crashes, and sets up the server to start the service when the machine starts up.
 
@@ -99,16 +109,6 @@ In this example, we will setup the server with NSSM (Non Sucking Service Manager
     cd <VAR_SERVER_INSTALLATION_DIRECTORY>
     nssm start VRisingServer
     ```
-
-## Server Settings Files
-1. Create the directory `<VAR_SERVER_INSTALLATION_DIRECTORY>\save-data\Settings`
-2. Copy and paste `ServerHostSettings.json` and `ServerGameSettings.json` files from `<VAR_SERVER_INSTALLATION_DIRECTORY>/VRisingServer_Data/StreamingAssets/Settings/` into the directory you created in step 1
-
-You can see the effects of all the settings in this PDF: https://cdn.stunlock.com/blog/2022/05/25083113/Game-Server-Settings.pdf
-
-**NOTE:** Within the `<VAR_SERVER_INSTALLATION_DIRECTORY>\save-data\Settings\ServerHostSettings.json` file, in `Description` field, you can use line breaks using `\n`  
-
-**NOTE:** If you elect to directly modify the configuration files in `<VAR_SERVER_INSTALLATION_DIRECTORY>\VRisingServer_Data\StreamingAssets\Settings\` you may loose your configuration changes with new updates, so you may want to consider backing them up.
 
 ## Enabling Console Access
 * To enable the console, go to `Options` -> `General` -> put a check in `Console Enabled`
