@@ -299,7 +299,8 @@ These are kept in `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Playe
 ## Specific Troubleshooting Instructions
 
 ### Troubleshooting Networking In Windows
-1) Find the PID of the `VRisingServer.exe` in `Task Manager` in the `Details` tab
+1) Find the PID of the `VRisingServer.exe` in `Task Manager` in the `Details` tab  
+  
 2) Check your server configuration file `ServerHostSettings.json` we are looking for `Port`, `QueryPort`, and optionally `Rcon/Port`  
 **NOTE** If you are hosting a private server, check the `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-server.log` log for `Port` and `QueryPort` as shown below.
 ```json
@@ -310,16 +311,18 @@ Loaded ServerHostSettings:
   "Port": 9876,
   "QueryPort": 9877,
 ```
-3) run `cmd`
-4) type in `netstat -aon | find "<PID>"` where PID is the PID of the server you found in step 1
-5) You should see something like this
+3) run `cmd`  
+   
+4) type in `netstat -aon | find "<PID>"` where PID is the PID of the server you found in step 1  
+   
+5) You should see something like this (You will see some additional ports, this is OK)
     ```
       TCP    0.0.0.0:<Rcon/Port>           0.0.0.0:0              LISTENING       <PID>
       UDP    0.0.0.0:<Port>                *:*                                    <PID>
       UDP    0.0.0.0:<QueryPort>           *:*                                    <PID>
     ```
 
-6) Ensure that the game is allowed through the Windows Firewall, if you have added the executable to the windows firewall (rather than just the ports), then you can do this from the command prompt:
+6) Ensure that the game is allowed through the Windows Firewall, if you have added the executable to the windows firewall (rather than just the ports), then you can run `powershell Get-NetFirewallRule -DisplayName VRisingServer` at the command prompt to validate:
 
     ```
     powershell Get-NetFirewallRule -DisplayName VRisingServer
