@@ -109,7 +109,7 @@ There is some confusion about configuring the `VBloodUnitSettings` this is an ex
       "UnitId": 1124739990,
       "UnitLevel": 20,
       "DefaultUnlocked": true
-    },
+    }
 ]
 ```
 
