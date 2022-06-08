@@ -300,7 +300,16 @@ These are kept in `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Playe
 
 ### Troubleshooting Networking In Windows
 1) Find the PID of the `VRisingServer.exe` in `Task Manager` in the `Details` tab
-2) Check your server configuration file `ServerHostSettings.json` we are looking for `Port`, `QueryPort`, and optionally `Rcon/Port`
+2) Check your server configuration file `ServerHostSettings.json` we are looking for `Port`, `QueryPort`, and optionally `Rcon/Port`  
+**NOTE** If you are hosting a private server, check the `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-server.log` log for `Port` and `QueryPort` as shown below.
+```json
+Loaded ServerHostSettings:
+{
+  "Name": "My Awesome World",
+  "Description": "",
+  "Port": 9876,
+  "QueryPort": 9877,
+```
 3) run `cmd`
 4) type in `netstat -aon | find "<PID>"` where PID is the PID of the server you found in step 1
 5) You should see something like this
