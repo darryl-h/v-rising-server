@@ -1,4 +1,3 @@
-- [Global Banlist](#global-banlist)
 - [Official Guide](#official-guide)
 - [Installation of the game using PowerShell and SteamPS](#installation-of-the-game-using-powershell-and-steamps)
 - [Configuration](#configuration)
@@ -49,19 +48,9 @@
   - [Server Startup](#server-startup)
     - [Server Loading on 2020.3.31f1 (6b54b7616050)](#server-loading-on-2020331f1-6b54b7616050)
 
-# Global Banlist
-The `banlist.txt` file in this repository will contain a list of Steam IDs who have griefed.  
-If your ID is on this list, it will not be removed and **there is no arbitration**.  
-As a server opreator, you may elect to add these IDs to your server, or not.  
-If you wish to add to this list:
-* Create a new issue
-* Add the evidence (screen shot of the grief, and the steam ID)
-
-Griefing is defined as:
-* Cheating
-* Blocking entrances to anothers castle
-
 # Official Guide
+I've tried to submit a pull request to this repository with some of the infomration here, but it doesn't look like they want the changes, thus, I've just updated this page in hopes that it will help someone.
+
 https://github.com/StunlockStudios/vrising-dedicated-server-instructions
 
 # Installation of the game using PowerShell and SteamPS
