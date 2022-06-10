@@ -1,4 +1,5 @@
 - [Official Guide](#official-guide)
+- [Patch Notes](#patch-notes)
 - [Installation of the game using PowerShell and SteamPS](#installation-of-the-game-using-powershell-and-steamps)
 - [Configuration](#configuration)
   - [Server StartUp Batch File](#server-startup-batch-file)
@@ -52,6 +53,26 @@
 I've tried to submit a pull request to this repository with some of the infomration here, but it doesn't look like they want the changes, thus, I've just updated this page in hopes that it will help someone.
 
 https://github.com/StunlockStudios/vrising-dedicated-server-instructions
+
+# Patch Notes
+* [Patch 0.5.41821 / 2022-06-09](https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/4480532526716778038)
+  * Server optimizations for servers with long up times and/or a lot of players.
+  * Optimized the map and minimap on servers with a lot of castles.
+  * Updated the Social Panel: Now it displays all players connected to the server and their SteamID. We also added text chat muting functionality. Muting is persistent between sessions now. 
+  * The Blood Essence Drain Modifier setting should now work properly.
+* [Patch 0.5.41669 / 2022-05-31](https://steamcommunity.com/games/1604030/announcements/detail/3294958655399932646)
+  * Maximum clan size has been increased to 50
+  * `Server Details` will now show the amount of in-game days the server has been running for.
+  * Altering the ‘Refinement Cost’ and ‘Refinement Rate’ server settings no longer affects the blood essence consumption rate of the Castle Heart.
+  * Occurrences of multiple spawns of the same V Blood units will now be repaired upon server restart.
+  * Optimized server memory by removing data from disconnected users.
+* [Patch 0.5.41591 / 2022-05-30](https://steamcommunity.com/games/1604030/announcements/detail/3294958655395719328)
+* [Patch 0.5.41448 / 2022-05-25](https://steamcommunity.com/games/1604030/announcements/detail/3294958655377836606)
+  * Added changehealthofclosesttomouse to console
+  * Added changedurability to console
+  * Added addtime to console
+  * Added LAN/Offline mode
+* [Patch 0.5.41237 / 2022-05-19 ](https://steamcommunity.com/games/1604030/announcements/detail/3218396837686301548)
 
 # Installation of the game using PowerShell and SteamPS
 We will assume that you want to install the server in `C:\servers\v_rising` (This will be <VAR_SERVER_INSTALLATION_DIRECTORY> in the rest of this document) if you do not, change the path in the following commands.
@@ -311,18 +332,42 @@ Loaded ServerHostSettings:
   "Port": 9876,
   "QueryPort": 9877,
 ```
-3) run `cmd`  
-   
-4) type in `netstat -aon | find "<PID>"` where PID is the PID of the server you found in step 1  
-   
-5) You should see something like this (You will see some additional ports, this is OK)
-    ```
-      TCP    0.0.0.0:<Rcon/Port>           0.0.0.0:0              LISTENING       <PID>
-      UDP    0.0.0.0:<Port>                *:*                                    <PID>
-      UDP    0.0.0.0:<QueryPort>           *:*                                    <PID>
-    ```
+3) Check to ensure the server is lisening on the expected ports:
+  * With CMD
+    * Find the PID of the `VRisingServer.exe` in `Task Manager` (`control` + `shift` + `esc`) in the `Details` tab
+    * Run `cmd`  
+    * Type `netstat -aon | find "<PID>"` where \<PID\> is the PID of the server
+    * You will see some additional ports, this is OK)
+      ```
+        TCP    0.0.0.0:<Rcon/Port>    0.0.0.0:0                    LISTENING       <PID>
+        TCP    127.0.0.1:55997        127.0.0.1:55998              ESTABLISHED     <PID>
+        TCP    127.0.0.1:55998        127.0.0.1:55997              ESTABLISHED     <PID>
+        TCP    <Server_IP>:55988      <P2P_STUN_ServerList>:27019  ESTABLISHED     <PID>
+        TCP    <Server_IP>:56571      52.219.47.197:443            CLOSE_WAIT      <PID>
+        TCP    <Server_IP>:56572      52.219.47.197:443            CLOSE_WAIT      <PID>
+        UDP    0.0.0.0:<QueryPort>    *:*                                          <PID>
+        UDP    0.0.0.0:<Port>         *:*                                          <PID>
+        UDP    0.0.0.0:57628          *:*                                          <PID>
+      ```
+  * With PowerShell
+    * run `cmd`
+    * run `powershell`
+    * Issue the command `(Get-NetTCPConnection)+(Get-NetUDPEndpoint) | Where {$_.LocalAddress -eq "0.0.0.0"} | select LocalAddress,LocalPort,@{Name="Process";Expression={(Get-Process -Id $_.OwningProcess).ProcessName}} | Where-Object {$_.Process -Match 'VRisingServer'}`
+    * You will see some additional ports, this is OK)
+      ```
+        LocalAddress LocalPort Process
+        ------------ --------- -------
+        0.0.0.0          56584 VRisingServer
+        0.0.0.0          56583 VRisingServer
+        0.0.0.0          55998 VRisingServer
+        0.0.0.0          55988 VRisingServer
+        0.0.0.0           9876 VRisingServer
+        0.0.0.0          57628 VRisingServer
+        0.0.0.0           9877 VRisingServer
+        0.0.0.0           9876 VRisingServer
+        ```
 
-6) Ensure that the game is allowed through the Windows Firewall, if you have added the executable to the windows firewall (rather than just the ports), then you can run `powershell Get-NetFirewallRule -DisplayName VRisingServer` at the command prompt to validate:
+3) Ensure that the game is allowed through the Windows Firewall, if you have added the executable to the windows firewall (rather than just the ports), then you can run `powershell Get-NetFirewallRule -DisplayName VRisingServer` at the command prompt to validate:
 
     ```
     powershell Get-NetFirewallRule -DisplayName VRisingServer
@@ -413,7 +458,7 @@ Loaded ServerHostSettings:
     ```
     **NOTE:** As a troubleshooting step, you may disable the Windows Firewall, but turn it back on when you are done, and correctly configure it if it is the problem.
 
-7) Open your router and firewall ports to allow the UDP connections (and TCP if you want RCON)
+4) Open your router and firewall ports to allow the UDP connections (and TCP if you want RCON)
 This is beyond the scope of this document, as it is device specific, but you can try https://PortForward.com
 
 8) Validate with your internet provider if you are able to run a servers (specifically game servers) from your purchased internet package. They may block this kind of traffic by blocking specific ports, or using packet inspection to determine the type of traffic. (This is beyond the scope of this document).  
