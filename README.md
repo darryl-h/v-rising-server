@@ -148,7 +148,9 @@ In this example, we will setup the server with NSSM (Non Sucking Service Manager
     ```dos
     cd <VAR_SERVER_INSTALLATION_DIRECTORY>
     nssm install VRisingServer
-    nssm.exe install VRisingServer <VAR_SERVER_INSTALLATION_DIRECTORY>\start_server.batz
+    nssm remove VRisingServer confirm
+    nssm.exe install VRisingServer <VAR_SERVER_INSTALLATION_DIRECTORY>\start_server.bat
+    nssm.exe set VRisingServer Application <VAR_SERVER_INSTALLATION_DIRECTORY>\start_server.bat
     nssm.exe set VRisingServer AppDirectory <VAR_SERVER_INSTALLATION_DIRECTORY>
     nssm.exe set VRisingServer AppExit Default Restart
     nssm.exe set VRisingServer AppStdout <VAR_SERVER_INSTALLATION_DIRECTORY>\logs\VRisingServer_Custom.log
