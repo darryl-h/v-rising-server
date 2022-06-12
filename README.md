@@ -2,21 +2,21 @@
 - [Patch Notes](#patch-notes)
 - [Installation of the server using the AutoInstaller](#installation-of-the-server-using-the-autoinstaller)
 - [Installation of the game using PowerShell and SteamPS](#installation-of-the-game-using-powershell-and-steamps)
-- [Configuration](#configuration)
+- [Manual Configuration](#manual-configuration)
   - [Server StartUp Batch File](#server-startup-batch-file)
   - [Server Settings Files](#server-settings-files)
-    - [ServerHostSettings.json](#serverhostsettingsjson)
-      - [Description](#description)
-    - [ServerGameSettings.json](#servergamesettingsjson)
-      - [VBloodUnitSettings](#vbloodunitsettings)
-    - [ServerVoipSettings.json (VOIP Configuration)](#servervoipsettingsjson-voip-configuration)
   - [Allow the vRising game through the windows firewall](#allow-the-vrising-game-through-the-windows-firewall)
-  - [Configure your router to allow UDP ports to the server](#configure-your-router-to-allow-udp-ports-to-the-server)
-- [Post Configuration](#post-configuration)
   - [Server Startup, Log Timestamps, and Restarting on Failure](#server-startup-log-timestamps-and-restarting-on-failure)
-  - [Adding yourself to the adminlist.txt file](#adding-yourself-to-the-adminlisttxt-file)
   - [Server updates](#server-updates)
     - [Automating updates with Windows Task Scheulder](#automating-updates-with-windows-task-scheulder)
+- [Post  Configuration](#post--configuration)
+  - [ServerHostSettings.json](#serverhostsettingsjson)
+    - [Description](#description)
+  - [ServerGameSettings.json](#servergamesettingsjson)
+    - [VBloodUnitSettings](#vbloodunitsettings)
+  - [ServerVoipSettings.json (VOIP Configuration)](#servervoipsettingsjson-voip-configuration)
+  - [Adding yourself to the adminlist.txt file](#adding-yourself-to-the-adminlisttxt-file)
+  - [Configure your router to allow UDP ports to the server](#configure-your-router-to-allow-udp-ports-to-the-server)
 - [General Instructions](#general-instructions)
   - [Enabling Console Access](#enabling-console-access)
   - [Direct Connect](#direct-connect)
@@ -75,7 +75,7 @@ https://github.com/StunlockStudios/vrising-dedicated-server-instructions
   * Added LAN/Offline mode
 * [Patch 0.5.41237 / 2022-05-19 ](https://steamcommunity.com/games/1604030/announcements/detail/3218396837686301548)
 # Installation of the server using the AutoInstaller
-I created a quick PowerShell script that will automate the installation of the V Rising Server, this can be found in this repository called `autoinstall_vrising.ps1`
+I created a quick PowerShell script that will automate the installation of the V Rising Server, and post configuration of the service. This can be found in this repository called `autoinstall_vrising.ps1`
 
 This will attempt to:
 * Download SteamCMD
@@ -91,10 +91,12 @@ This will attempt to:
 
 If this sounds like something you would like, and you have [PowerShell v5](https://docs.microsoft.com/en-us/powershell/scripting/windows-powershell/install/windows-powershell-system-requirements?view=powershell-7.2#windows-powershell-51) you can install it using these 3 steps:
 
-1. Start an administrator command prompt
-2. run `powershell`
+1. Start an `administrator` command prompt (`cmd`)
+2. type `powershell`
 3. type `powershell -ExecutionPolicy Bypass -File .\autoinstall_vrising.ps1 C:\vrisingserver`  
   **NOTE**: Change `C:\vrisingserver` to the `full path` of the location where you want to install the server.
+
+[Skip to Post Configuration](#post--configuration)
 
 # Installation of the game using PowerShell and SteamPS
 We will assume that you want to install the server in `C:\servers\v_rising` (This will be <VAR_SERVER_INSTALLATION_DIRECTORY> in the rest of this document) if you do not, change the path in the following commands.
@@ -107,7 +109,8 @@ Update-SteamApp -ApplicationName 'V Rising Dedicated Server' -Path 'C:\servers\v
 ```
 **NOTE:** Any questions should be answered with yes
 
-# Configuration
+# Manual Configuration
+If you want to manually setup everything instead of using the auto installer, you can follow these steps:
 
 ## Server StartUp Batch File
 * Copy the `<VAR_SERVER_INSTALLATION_DIRECTORY>\start_server_example.bat` to a new file (I called mine `<VAR_SERVER_INSTALLATION_DIRECTORY>\start_server.bat`)
@@ -130,15 +133,91 @@ In this case, we are removing the `-logFile ".\logs\VRisingServer.log` line from
 
 **NOTE:** If you elect to directly modify the configuration files in `<VAR_SERVER_INSTALLATION_DIRECTORY>\VRisingServer_Data\StreamingAssets\Settings\` you may loose your configuration changes with new updates, so you may want to consider backing them up.
 
-### ServerHostSettings.json
+## Allow the vRising game through the windows firewall
+You may need to allow the executable (VRisingServer.exe) through the windows firewall
 
-#### Description
-Within the `<VAR_SERVER_INSTALLATION_DIRECTORY>\save-data\Settings\ServerHostSettings.json` file, in `Description` field, you can use line breaks using `\n`  
+## Server Startup, Log Timestamps, and Restarting on Failure
+This will add timestamps, restart the service if crashes, and sets up the server to start the service when the machine starts up, oh my!
 
-### ServerGameSettings.json
+In this example, we will setup the server with NSSM (Non Sucking Service Manager)
+
+1) Download the NSSM archive from the nssm webpage (https://nssm.cc/download)
+2) Extract the NSSM program, and place `nssm.exe` into a the game directory
+3) Drop to a `cmd` prompt (`Start` -> `Run` -> `cmd`)
+4) Enter the NSSM directory and create the service.
+    ```dos
+    cd <VAR_SERVER_INSTALLATION_DIRECTORY>
+    nssm install VRisingServer
+    nssm.exe install VRisingServer <VAR_SERVER_INSTALLATION_DIRECTORY>\start_server.batz
+    nssm.exe set VRisingServer AppDirectory <VAR_SERVER_INSTALLATION_DIRECTORY>
+    nssm.exe set VRisingServer AppExit Default Restart
+    nssm.exe set VRisingServer AppStdout <VAR_SERVER_INSTALLATION_DIRECTORY>\logs\VRisingServer_Custom.log
+    nssm.exe set VRisingServer AppStderr <VAR_SERVER_INSTALLATION_DIRECTORY>\logs\VRisingServer_Error.log
+    nssm.exe set VRisingServer AppRotateFiles 1
+    nssm.exe set VRisingServer AppRotateOnline 1
+    nssm.exe set VRisingServer AppRotateBytes 1000000
+    nssm.exe set VRisingServer AppTimestampLog 1
+    nssm.exe set VRisingServer DisplayName VRisingServer
+    nssm.exe set VRisingServer ObjectName LocalSystem
+    nssm.exe set VRisingServer Start SERVICE_AUTO_START
+    nssm.exe set VRisingServer Type SERVICE_WIN32_OWN_PROCESS
+    ```
+5) Start the service now
+    ```dos
+    cd <VAR_SERVER_INSTALLATION_DIRECTORY>
+    nssm start VRisingServer
+    ```
+
+## Server updates
+We can use the exact same command we used to install the game, to update the game, however, since we need to enter "Y" to start the update, we will wrap it in a batch file, and place it with the startup batch file in the `<VAR_SERVER_INSTALLATION_DIRECTORY>`, we will also announce to the players we are doing this with mcrcon (https://github.com/Tiiffi/mcrcon/releases/) which we will place in the server directory as well for ease of access. For the update itself, you can replace the powershell command with steamcmd (assuming you also place it in the server directory) if you wish using `steamcmd.exe +login anonymous +app_update 1829350 validate +quit`  
+
+**NOTE**: In either case, you will need to update the path to the server by replacing any line with `C:\servers\v_rising` with the correct path for your server.
+
+`update.bat`
+```dos
+@echo off
+echo "Sending message to the server, restart will occur in 10 minutes"
+mcrcon.exe -H 127.0.0.1 -P <RCON_PORT> -p <RCON_PASSWORD> "announcerestart 10"
+timeout 600
+echo "Stopping the VRising server"
+C:\servers\v_rising\nssm.exe stop vrisingserver
+echo "Waiting for 60 seconds for the server to go down"
+timeout 60
+echo "Updating the server (if needed)"
+ECHO Y | powershell Update-SteamApp -ApplicationName 'V Rising Dedicated Server' -Path 'C:\servers\v_rising'
+echo "Waiting for the update to complete (5 minutes)"
+timeout 600
+echo "Starting the server"
+C:\servers\v_rising\nssm.exe start vrisingserver
+```
+
+### Automating updates with Windows Task Scheulder
+* Create a `Basic Task`
+* Name it `Update V-Rising Server`
+* Click `Next`
+* In the `When do you want the task to start` radio box, select `Daily`
+* Click `Next`
+* Beside the `Start:` Field, select todays date, and a time when you want the update to happen (Usually a time when users may not be playing, like 09:00 AM EST))
+* Ensure that the `Recur Every` is set to `1`
+* Click `Next`
+* In the `What action do you want the task to perform` radio box, select `Start a program`
+* Click `Next`
+* Beside the `Program/Script:` field, click `Browse...` and find the customized `update.bat` we created earlier
+* Click `Next`
+* Click `Finish`
+
+# Post  Configuration
+Weather or not you are using the auto installer or the manual steps, the following final configuration steps may be required.
+
+## ServerHostSettings.json
+
+### Description
+Within the `<VAR_SERVER_INSTALLATION_DIRECTORY>\save-data\Settings\ServerHostSettings.json` file, in `Description` field, you can use line breaks using `\n`
+
+## ServerGameSettings.json
 You can get more information (min/max) and descriptions on each setting using this PDF: https://cdn.stunlock.com/blog/2022/05/25083113/Game-Server-Settings.pdf
 
-#### VBloodUnitSettings
+### VBloodUnitSettings
 There is some confusion about configuring the `VBloodUnitSettings` this is an example:
 
 ```json
@@ -156,7 +235,7 @@ There is some confusion about configuring the `VBloodUnitSettings` this is an ex
 ]
 ```
 
-### ServerVoipSettings.json (VOIP Configuration)
+## ServerVoipSettings.json (VOIP Configuration)
 Be advised this is 100% unsupported!
 
 `https://discord.com/channels/803241158054510612/976404273015431168/980896456766533743` - VOIP setup (Also in the pinned messages)  
@@ -204,89 +283,22 @@ Be advised this is 100% unsupported!
   * Unfortunatly the developer page isn't helpful here: https://docs.vivox.com/v5/general/unity/15_1_170000/en-us/Unity/developer-guide/error-codes.htm
   * https://support.vivox.com/hc/en-us/articles/360015368274-What-causes-VxAccessTokenExpired-20121-errors-
 
-## Allow the vRising game through the windows firewall
-You may need to allow the executable (VRisingServer.exe) through the windows firewall
-
-## Configure your router to allow UDP ports to the server
-If you wish your server to be listed on the in game server browser, and people to connect from the internet, you will need to open two UDP ports to the server.
-These ports are configured in the `<VAR_SERVER_INSTALLATION_DIRECTORY>\save-data\Settings\ServerHostSettings.json` file
-```json
-"Port": 9876,
-"QueryPort": 9877,
-```
-
-# Post Configuration
-These are quality of life improvments.
-
-## Server Startup, Log Timestamps, and Restarting on Failure
-This will add timestamps, restart the service if crashes, and sets up the server to start the service when the machine starts up, oh my!
-
-In this example, we will setup the server with NSSM (Non Sucking Service Manager)
-
-1) Download the NSSM archive from the nssm webpage (https://nssm.cc/download)
-2) Extract the NSSM program, and place `nssm.exe` into a the game directory
-3) Drop to a `cmd` prompt (`Start` -> `Run` -> `cmd`)
-4) Enter the NSSM directory and create the service.
-    ```dos
-    cd <VAR_SERVER_INSTALLATION_DIRECTORY>
-    nssm install VRisingServer
-    ```
-5) Click on `...` beside `Path` and locate to the `.bat` file used to start the server, created previously
-6) Click on the `I/O` tab
-7) Set the `Output (stdout):` path to `<VAR_SERVER_INSTALLATION_DIRECTORY>\logs\VRisingServer.log
-8) Set the `Error (stderr):` path to `<VAR_SERVER_INSTALLATION_DIRECTORY>\logs\VRisingServer_Error.log
-8) Click `Install Service`
-9) Click `OK`
-10) Drop to a `cmd` prompt (`Start` -> `Run` -> `cmd`)
-11) Start the service now
-    ```dos
-    cd <VAR_SERVER_INSTALLATION_DIRECTORY>
-    nssm start VRisingServer
-    ```
-
 ## Adding yourself to the adminlist.txt file
 In the logs, you should see the `adminlist.txt` and `banlist.txt` lists loaded, and thier path is `<VAR_SERVER_INSTALLATION_DIRECTORY>\VRisingServer_Data\StreamingAssets\Settings\`  
 **NOTE:** This is the only valid place for these entires!
 
 * You will need to restart the server to reload any changes to these files (They SHOULD get picked up automatically, but unclear)
 
-## Server updates
-We can use the exact same command we used to install the game, to update the game, however, since we need to enter "Y" to start the update, we will wrap it in a batch file, and place it with the startup batch file in the `<VAR_SERVER_INSTALLATION_DIRECTORY>`, we will also announce to the players we are doing this with mcrcon (https://github.com/Tiiffi/mcrcon/releases/) which we will place in the server directory as well for ease of access. For the update itself, you can replace the powershell command with steamcmd (assuming you also place it in the server directory) if you wish using `steamcmd.exe +login anonymous +app_update 1829350 validate +quit`  
+## Configure your router to allow UDP ports to the server
+If you wish your server to be listed on the in game server browser, and people to connect from the internet, you will need to open two UDP ports to the server. 
+These ports are configured in the `<VAR_SERVER_INSTALLATION_DIRECTORY>\save-data\Settings\ServerHostSettings.json` file. 
 
-**NOTE**: In either case, you will need to update the path to the server by replacing any line with `C:\servers\v_rising` with the correct path for your server.
-
-`update.bat`
-```dos
-@echo off
-echo "Sending message to the server, restart will occur in 10 minutes"
-mcrcon.exe -H 127.0.0.1 -P <RCON_PORT> -p <RCON_PASSWORD> "announcerestart 10"
-timeout 600
-echo "Stopping the VRising server"
-C:\servers\v_rising\nssm.exe stop vrisingserver
-echo "Waiting for 60 seconds for the server to go down"
-timeout 60
-echo "Updating the server (if needed)"
-ECHO Y | powershell Update-SteamApp -ApplicationName 'V Rising Dedicated Server' -Path 'C:\servers\v_rising'
-echo "Waiting for the update to complete (5 minutes)"
-timeout 600
-echo "Starting the server"
-C:\servers\v_rising\nssm.exe start vrisingserver
+```json
+"Port": 9876,
+"QueryPort": 9877,
 ```
 
-### Automating updates with Windows Task Scheulder
-* Create a `Basic Task`
-* Name it `Update V-Rising Server`
-* Click `Next`
-* In the `When do you want the task to start` radio box, select `Daily`
-* Click `Next`
-* Beside the `Start:` Field, select todays date, and a time when you want the update to happen (Usually a time when users may not be playing, like 09:00 AM EST))
-* Ensure that the `Recur Every` is set to `1`
-* Click `Next`
-* In the `What action do you want the task to perform` radio box, select `Start a program`
-* Click `Next`
-* Beside the `Program/Script:` field, click `Browse...` and find the customized `update.bat` we created earlier
-* Click `Next`
-* Click `Finish`
+**NOTE: ** This is beyond the scope of this document, as it is device specific, but you can try https://PortForward.com for help with your specific device/brand
 
 # General Instructions
 
