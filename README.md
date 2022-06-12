@@ -147,9 +147,8 @@ In this example, we will setup the server with NSSM (Non Sucking Service Manager
 4) Enter the NSSM directory and create the service.
     ```dos
     cd <VAR_SERVER_INSTALLATION_DIRECTORY>
-    nssm install VRisingServer
-    nssm remove VRisingServer confirm
-    nssm.exe install VRisingServer <VAR_SERVER_INSTALLATION_DIRECTORY>\start_server.bat
+    nssm.exe remove VRisingServer confirm
+    nssm.exe install VRisingServer
     nssm.exe set VRisingServer Application <VAR_SERVER_INSTALLATION_DIRECTORY>\start_server.bat
     nssm.exe set VRisingServer AppDirectory <VAR_SERVER_INSTALLATION_DIRECTORY>
     nssm.exe set VRisingServer AppExit Default Restart
