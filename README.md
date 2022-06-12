@@ -1,5 +1,6 @@
 - [Official Guide](#official-guide)
 - [Patch Notes](#patch-notes)
+- [Installation of the server using the AutoInstaller](#installation-of-the-server-using-the-autoinstaller)
 - [Installation of the game using PowerShell and SteamPS](#installation-of-the-game-using-powershell-and-steamps)
 - [Configuration](#configuration)
   - [Server StartUp Batch File](#server-startup-batch-file)
@@ -73,6 +74,27 @@ https://github.com/StunlockStudios/vrising-dedicated-server-instructions
   * Added addtime to console
   * Added LAN/Offline mode
 * [Patch 0.5.41237 / 2022-05-19 ](https://steamcommunity.com/games/1604030/announcements/detail/3218396837686301548)
+# Installation of the server using the AutoInstaller
+I created a quick PowerShell script that will automate the installation of the V Rising Server, this can be found in this repository called `autoinstall_vrising.ps1`
+
+This will attempt to:
+* Download SteamCMD
+* Download the Non Sucking Service Manager (NSSM)
+* Install the VRising Dedicated Server into a path you desire with SteamCMD
+* Configure the server to use the configurations in a custom directory that will survive a server update
+* Create a custom update .bat file
+* Install NSSM to manage the server, rotate the logs, add timestamps to the logs, and restart the server if it crashes
+* Enable RCON
+* Install an RCON client to broadcast the restart to the users on the server
+* Open the Windows firewall for the VRising Server
+* Schedule a restart daily at 09:00 to update the server automatically
+
+If this sounds like something you would like, and you have [PowerShell v5](https://docs.microsoft.com/en-us/powershell/scripting/windows-powershell/install/windows-powershell-system-requirements?view=powershell-7.2#windows-powershell-51) you can install it using these 3 steps:
+
+1. Start an administrator command prompt
+2. run `powershell`
+3. type `powershell -ExecutionPolicy Bypass -File .\autoinstall_vrising.ps1 C:\vrisingserver`  
+  **NOTE**: Change `C:\vrisingserver` to the `full path` of the location where you want to install the server.
 
 # Installation of the game using PowerShell and SteamPS
 We will assume that you want to install the server in `C:\servers\v_rising` (This will be <VAR_SERVER_INSTALLATION_DIRECTORY> in the rest of this document) if you do not, change the path in the following commands.
