@@ -83,7 +83,7 @@ This will attempt to:
 * Install the VRising Dedicated Server into a path you desire with SteamCMD
 * Configure the server to use the configurations in a custom directory that will survive a server update
 * Create a custom update .bat file
-* Install NSSM to manage the server, rotate the logs, add timestamps to the logs, and restart the server if it crashes
+* Use NSSM to manage the server, which will create a VRising service, keep logs indefinatly, rotate the logs at 1MB, add timestamps to the logs, and restart the server if it crashes
 * Enable RCON
 * Install an RCON client to broadcast the restart to the users on the server
 * Open the Windows firewall for the VRising Server
@@ -92,9 +92,121 @@ This will attempt to:
 If this sounds like something you would like, and you have [PowerShell v5](https://docs.microsoft.com/en-us/powershell/scripting/windows-powershell/install/windows-powershell-system-requirements?view=powershell-7.2#windows-powershell-51) you can install it using these 3 steps:
 
 1. Start an `administrator` command prompt (`cmd`)
+2. Navigate to the directory where the installation script is (`cd <some_directory>`)
 2. type `powershell`
 3. type `powershell -ExecutionPolicy Bypass -File .\autoinstall_vrising.ps1 C:\vrisingserver`  
   **NOTE**: Change `C:\vrisingserver` to the `full path` of the location where you want to install the server.
+
+Before installation, the user is provided a message of what **should** happen:  
+```
+This script will:
+        * Install the VRising Dedicated Server into C:\vrisingserver with SteamCMD
+        * Configure the server to use the configurations in a custom directory that will survive a server update
+        * Create a custom update .bat file
+        * Install NSSM to manage the server which will:
+                > Start with Windows
+                > Restart the server if it crashes
+                > Add timestamps to the logs
+                > Keep logs indefinatly
+                > Rotate the logs at 1MB
+        * Enable RCON
+        * Install an RCON client to broadcast the restart to the users on the server
+        * Open the Windows firewall for the VRising Server
+        * Schedule a restart daily at 09:00 to update the server automatically
+```
+
+During installation, each step is documented
+```
+Preparing the Non Sucking Service Manager (NSSM)
+        Downloading the Non Sucking Service Manager (NSSM)
+        Extracting nssm-2.24-101-g897c7ad.zip
+        Moving the 64 bit version of NSSM
+        Removing NSSM archive
+Preparing mcrcon
+        Downloading mcrcon
+        Extracting mcrcon-0.7.2-windows-x86-64.zip
+Preparing SteamCMD
+        Downloading SteamCMD
+        Extracting steamcmd.zip
+Installing VRising Dedicated Server
+Configuring Startup Batch File
+Preparing custom server configurations that won't get replaced on update
+Enabling RCON with password:
+Setting up NSSM Service
+Setting up Task Schduler to update daily
+
+TaskPath                                       TaskName                          State
+--------                                       --------                          -----
+\                                              VRisingServerRestart              Ready
+Creating daily update .bat file
+Configuring Windows Firewall
+
+Caption                       :
+Description                   :
+ElementName                   : VRisingDedicatedServer
+InstanceID                    : {24b89a8a-3b8c-4cb5-9a07-6a069e7c07de}
+CommonName                    :
+PolicyKeywords                :
+Enabled                       : True
+PolicyDecisionStrategy        : 2
+PolicyRoles                   :
+ConditionListType             : 3
+CreationClassName             : MSFT|FW|FirewallRule|{24b89a8a-3b8c-4cb5-9a07-6a069e7c07de}
+ExecutionStrategy             : 2
+Mandatory                     :
+PolicyRuleName                :
+Priority                      :
+RuleUsage                     :
+SequencedActions              : 3
+SystemCreationClassName       :
+SystemName                    :
+Action                        : Allow
+Direction                     : Inbound
+DisplayGroup                  :
+DisplayName                   : VRisingDedicatedServer
+EdgeTraversalPolicy           : Block
+EnforcementStatus             : NotApplicable
+LocalOnlyMapping              : False
+LooseSourceMapping            : False
+Owner                         :
+Platforms                     : {}
+PolicyStoreSource             : PersistentStore
+PolicyStoreSourceType         : Local
+PrimaryStatus                 : OK
+Profiles                      : 0
+RemoteDynamicKeywordAddresses : {}
+RuleGroup                     :
+Status                        : The rule was parsed successfully from the store. (65536)
+StatusCode                    : 65536
+PSComputerName                :
+Name                          : {24b89a8a-3b8c-4cb5-9a07-6a069e7c07de}
+ID                            : {24b89a8a-3b8c-4cb5-9a07-6a069e7c07de}
+Group                         :
+Profile                       : Any
+Platform                      : {}
+LSM                           : False
+
+Starting the VRising service
+```
+
+After installation, the user is provided with all the information to manage the service
+```
+All Done!
+
+Management
+Your Startup .bat file is in C:\vrisingserver\steamapps\common\VRisingDedicatedServer\start_server.bat
+Your Update .bat file is in C:\vrisingserver\steamapps\common\VRisingDedicatedServer\update_server.bat
+Your can manage the service with C:\vrisingserver\nssm.exe [start|stop|restart|edit] VRisingServer
+Your pseudo unique RCON password is LkXiT
+
+Configuration Files
+Your ServerHostSettings.json is in C:\vrisingserver\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json
+Your ServerGameSettings.json is in C:\vrisingserver\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerGameSettings.json
+You can learn more about each of the ServerGameSettings at https://cdn.stunlock.com/blog/2022/05/25083113/Game-Server-Settings.pdf
+
+Logs
+Your logs are in C:\vrisingserver\logs\VRisingServer.log
+```
 
 [Skip to Post Configuration](#post--configuration)
 
