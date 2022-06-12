@@ -9,7 +9,7 @@
     this will also configure the windows firewall to allow the program to operate.
     The user input is expected to be the full path
 .NOTES
-    Version        : 1.0
+    Version        : 1.001
     File Name      : autoinstall_vrising.ps1
     Author         : Darryl H (https://github.com/darryl-h/)
     Prerequisite   : PowerShell V2 Windows 2022
@@ -56,7 +56,12 @@ write-host "This script will:" -ForegroundColor Cyan
 write-host "`t* Install the VRising Dedicated Server into $InstallPath with SteamCMD"
 write-host "`t* Configure the server to use the configurations in a custom directory that will survive a server update"
 write-host "`t* Create a custom update .bat file"
-write-host "`t* Install NSSM to manage the server, rotate the logs, add timestamps to the logs, and restart the server if it crashes"
+write-host "`t* Install NSSM to manage the server which will:"
+write-host "`t`t> Start with Windows"
+write-host "`t`t> Restart the server if it crashes"
+write-host "`t`t> Add timestamps to the logs"
+write-host "`t`t> Rotate the logs at 1MB"
+write-host "`t`t> Keep logs indefinatly"
 write-host "`t* Enable RCON"
 write-host "`t* Install an RCON client to broadcast the restart to the users on the server"
 write-host "`t* Open the Windows firewall for the VRising Server"
