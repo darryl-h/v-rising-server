@@ -146,10 +146,12 @@ Copy-Item "$InstallPath\steamapps\common\VRisingDedicatedServer\VRisingServer_Da
 
 # Configure RCON
 # https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/set-content?view=powershell-7.2
+# Generate an 8 letter unique password
 Add-Type -AssemblyName System.Web
-$RCONPasswordTemp = [System.Web.Security.Membership]::GeneratePassword(10,2)
-$RCONPassword = $RCONPasswordTemp -replace '[^a-zA-Z0-9]', ''
-Write-Host "`tEnabling RCON with password: $RCONPassword (debug: $RCONPasswordTemp)"
+$RCONPasswordTemp1 = [System.Web.Security.Membership]::GeneratePassword(20,2)
+$RCONPasswordTemp2 = $RCONPasswordTemp1 -replace '[^a-zA-Z0-9]', ''
+$RCONPassword = $RCONPasswordTemp2.substring(0, [System.Math]::Min(8, $RCONPasswordTemp2.Length))
+Write-Host "`tEnabling RCON with password: $RCONPassword"
 (Get-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json") -Replace '"Enabled": false,', '"Enabled": true,' | Set-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json"
 (Get-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json") -Replace '    "Password": ""', "    `"Password`": `"$RCONPassword`"" | Set-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json"
 
@@ -228,6 +230,7 @@ Write-Host "`tQuery Port: $VRisingQueryPort"
 Write-Host "`tSaves: $InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Saves\v1\$VRisingSavename"
 Write-Host "`tAuto Save Count: $VRisingAutoSaveCount"
 Write-Host "`tAuto Save Interval (In Seconds): $VRisingAutoSaveInterval"
+Write-Host "`tRCON Password: $RCONPassword"
 # Load the ServerHostSettings.json
 $ServerGameSettings = Get-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerGameSettings.json" | Out-String | ConvertFrom-Json
 $VRisingGameModeType = $ServerGameSettings.GameModeType
