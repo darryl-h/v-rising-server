@@ -1,4 +1,8 @@
-- [Official Guide](#official-guide)
+- [Resources:](#resources)
+  - [Official Guide](#official-guide)
+  - [Offical Bug Tracker](#offical-bug-tracker)
+  - [BattleMetrics Server Listing](#battlemetrics-server-listing)
+  - [World Maps](#world-maps)
 - [Patch Notes](#patch-notes)
 - [Installation of the server using the AutoInstaller](#installation-of-the-server-using-the-autoinstaller)
 - [Installation of the game using PowerShell and SteamPS](#installation-of-the-game-using-powershell-and-steamps)
@@ -50,10 +54,21 @@
   - [Server Startup](#server-startup)
     - [Server Loading on 2020.3.31f1 (6b54b7616050)](#server-loading-on-2020331f1-6b54b7616050)
 
-# Official Guide
-I've tried to submit a pull request to this repository with some of the infomration here, but it doesn't look like they want the changes, thus, I've just updated this page in hopes that it will help someone.
+# Resources:
 
+## Official Guide
+I've tried to submit a pull request to this repository with some of the information here, but it doesn't look like they want the changes, thus, I've just update this page in hopes that it will help someone.
 https://github.com/StunlockStudios/vrising-dedicated-server-instructions
+
+## Offical Bug Tracker
+https://bugs.playvrising.com/
+
+## BattleMetrics Server Listing
+https://www.battlemetrics.com/servers/vrising
+
+## World Maps
+https://vrising-map.com/
+https://v-rising.map.gd/a/
 
 # Patch Notes
 * [Patch 0.5.41821 / 2022-06-09](https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/4480532526716778038)
