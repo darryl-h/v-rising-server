@@ -3,6 +3,7 @@
   - [Offical Bug Tracker](#offical-bug-tracker)
   - [BattleMetrics Server Listing](#battlemetrics-server-listing)
   - [World Maps](#world-maps)
+  - [Game statistics](#game-statistics)
 - [Patch Notes](#patch-notes)
 - [Installation of the server using the AutoInstaller](#installation-of-the-server-using-the-autoinstaller)
 - [Installation of the game using PowerShell and SteamPS](#installation-of-the-game-using-powershell-and-steamps)
@@ -70,6 +71,9 @@ https://www.battlemetrics.com/servers/vrising
 ## World Maps
 https://vrising-map.com/
 https://v-rising.map.gd/a/
+
+## Game statistics
+https://steamdb.info/app/1604030/graphs/
 
 # Patch Notes
 * [Patch 0.5.41821 / 2022-06-09](https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/4480532526716778038)
