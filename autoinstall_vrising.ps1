@@ -150,11 +150,12 @@ Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "install VRisingSe
 Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer Application  $InstallPath\steamapps\common\VRisingDedicatedServer\start_server.bat"
 Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer AppDirectory $InstallPath\steamapps\common\VRisingDedicatedServer"
 Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer AppExit Default Restart"
-Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer AppStdout $InstallPath\logs\VRisingServer.log"
-Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer AppStderr $InstallPath\logs\VRisingServer.log"
+Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer AppStdout $InstallPath\steamapps\common\VRisingDedicatedServer\logs\VRisingServer.log"
+Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer AppStderr $InstallPath\steamapps\common\VRisingDedicatedServer\logs\VRisingServer.log"
 Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer AppRotateFiles 1"
 Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer AppRotateOnline 1"
-Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer AppRotateBytes 1000000"
+#Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer AppRotateBytes 1000000"
+Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer AppRotateSeconds 86400"
 Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer AppTimestampLog 1"
 Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer DisplayName VRisingServer"
 Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer ObjectName LocalSystem"
@@ -203,4 +204,19 @@ Write-Host "Your ServerGameSettings.json is in $InstallPath\steamapps\common\VRi
 Write-Host "You can learn more about each of the ServerGameSettings at https://cdn.stunlock.com/blog/2022/05/25083113/Game-Server-Settings.pdf" -ForegroundColor Red
 
 Write-Host "`nLogs" -ForegroundColor Cyan
-Write-Host "Your logs are in $InstallPath\logs\VRisingServer.log"
+Write-Host "Your server logs are in $InstallPath\steamapps\common\VRisingDedicatedServer\logs\VRisingServer.log"
+
+$ServerIPv4 = (Get-NetIPAddress | Where-Object {$_.AddressState -eq "Preferred" -and $_.ValidLifetime -lt "24:00:00"}).IPAddress
+$ServerGateway = (Get-wmiObject Win32_networkAdapterConfiguration | ?{$_.IPEnabled}).DefaultIPGateway
+$ServerHostSettings = Get-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json" | Out-String | ConvertFrom-Json
+$VRisingGamePort = $ServerHostSettings.Port
+$VRisingQueryPort = $ServerHostSettings.QueryPort
+Write-Host "`nAction Plan" -ForegroundColor Cyan
+Write-Host "1) Test direct connect from a machine on this same network"
+Write-Host "`tEnter the game, and use Direct Connect, and connect to $ServerIPv4:$VRisingGamePort"
+Write-Host "`tDo NOT select 'LAN Mode'"
+Write-Host "2) Configure your router at $ServerGateway and forward UDP port $VRisingGamePort and $VRisingQueryPort this machine ($ServerIPv4)"
+Write-Host "`tTry http://portforward.com for information on how to port forward"
+Write-Host "3) If you have a hardware firewall, you will need to also allow the traffic to this machine ($ServerIPv4)"
+Write-Host "4) If you are behind a CGNAT or DS-Lite, you may not be able to host without a public IPv4 address"
+Write-Host "5) If you wish, you may change the daily restart time from 09:00 local time to a more suitable time"
