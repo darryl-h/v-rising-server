@@ -9,7 +9,7 @@
     this will also configure the windows firewall to allow the program to operate.
     The user input is expected to be the full path
 .NOTES
-    Version        : 1.100
+    Version        : 1.101
     File Name      : autoinstall_vrising.ps1
     Author         : Darryl H (https://github.com/darryl-h/)
     Prerequisite   : PowerShell V2 Windows 2022
@@ -167,6 +167,8 @@ Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer
 Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer AppExit Default Restart"
 Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer AppStdout $InstallPath\steamapps\common\VRisingDedicatedServer\logs\VRisingServer.log"
 Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer AppStderr $InstallPath\steamapps\common\VRisingDedicatedServer\logs\VRisingServer.log"
+Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer AppStopMethodSkip 14"
+Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer AppKillProcessTree 0"
 #Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer AppRotateFiles 1"
 #Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer AppRotateOnline 1"
 #Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer AppRotateBytes 1000000"
@@ -203,7 +205,7 @@ Write-Host "All Done!" -ForegroundColor Green
 
 # Let the user know where files are
 Write-Host "`nManagement" -ForegroundColor Cyan
-Write-Host "Your Startup .bat file is in $InstallPath\steamapps\common\VRisingDedicatedServer\start_server.bat"
+# Write-Host "Your Startup .bat file is in $InstallPath\steamapps\common\VRisingDedicatedServer\start_server.bat"
 Write-Host "Your Update .bat file is in $InstallPath\steamapps\common\VRisingDedicatedServer\update_server.bat"
 Write-Host "Your can manage the service with $InstallPath\nssm.exe [start|stop|restart|edit] VRisingServer"
 Write-Host "Your pseudo unique RCON password is $RCONPassword"
@@ -218,21 +220,21 @@ $VRisingAutoSaveCount = $ServerHostSettings.AutoSaveCount
 $VRisingAutoSaveInterval = $ServerHostSettings.AutoSaveInterval
 $VRisingGamePort = $ServerHostSettings.Port
 $VRisingQueryPort = $ServerHostSettings.QueryPort
-Write-Host "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json"
+Write-Host "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json" -ForegroundColor Yellow
 Write-Host "`tMaximum Connected Users: $VRisingMaxConnectedUsers"
 Write-Host "`tGame Port: $VRisingGamePort"
 Write-Host "`tQuery Port: $VRisingQueryPort"
-Write-Host "`n`tSaves: $InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Saves\v1\$VRisingSavename"
+Write-Host "`tSaves: $InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Saves\v1\$VRisingSavename"
 Write-Host "`tAuto Save Count: $VRisingAutoSaveCount"
 Write-Host "`tAuto Save Interval (In Seconds): $VRisingAutoSaveInterval"
 # Load the ServerHostSettings.json
 $ServerGameSettings = Get-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerGameSettings.json" | Out-String | ConvertFrom-Json
 $VRisingGameModeType = $ServerGameSettings.GameModeType
 $VRisingClanSize = $ServerGameSettings.ClanSize
-Write-Host "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerGameSettings.json"
+Write-Host "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerGameSettings.json" -ForegroundColor Yellow
 Write-Host "`tGame Mode Type: $VRisingGameModeType"
 Write-Host "`tGroup/Clan Size: $VRisingClanSize"
-Write-Host "Settings Descriptions and Min/Maxs: https://cdn.stunlock.com/blog/2022/05/25083113/Game-Server-Settings.pdf" -ForegroundColor Yellow
+Write-Host "Settings Descriptions and Min/Maxs: https://cdn.stunlock.com/blog/2022/05/25083113/Game-Server-Settings.pdf" -ForegroundColor DarkYellow
 
 Write-Host "`nLogs" -ForegroundColor Cyan
 Write-Host "Your server logs are in $InstallPath\steamapps\common\VRisingDedicatedServer\logs\VRisingServer.log"
