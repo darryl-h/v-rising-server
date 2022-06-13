@@ -13,7 +13,7 @@
   - [Server Startup, Log Timestamps, and Restarting on Failure](#server-startup-log-timestamps-and-restarting-on-failure)
   - [Server updates](#server-updates)
     - [Automating updates with Windows Task Scheulder](#automating-updates-with-windows-task-scheulder)
-- [Post  Configuration](#post--configuration)
+- [Post Configuration](#post-configuration)
   - [ServerHostSettings.json](#serverhostsettingsjson)
     - [Description](#description)
   - [ServerGameSettings.json](#servergamesettingsjson)
@@ -34,7 +34,8 @@
   - [Client (Player) Logs](#client-player-logs)
   - [Log Variables](#log-variables)
   - [Specific Troubleshooting Instructions](#specific-troubleshooting-instructions)
-    - [Troubleshooting Networking In Windows](#troubleshooting-networking-in-windows)
+    - [Troubleshooting Direct Connection To the VRising Server](#troubleshooting-direct-connection-to-the-vrising-server)
+      - [On the Internet](#on-the-internet)
     - [Server not listed on the server browser](#server-not-listed-on-the-server-browser)
   - [Log Examples](#log-examples)
     - [Incorrect Password](#incorrect-password)
@@ -302,7 +303,7 @@ C:\servers\v_rising\nssm.exe start vrisingserver
 * Click `Next`
 * Click `Finish`
 
-# Post  Configuration
+# Post Configuration
 Weather or not you are using the auto installer or the manual steps, the following final configuration steps may be required.
 
 ## ServerHostSettings.json
@@ -449,8 +450,10 @@ These are kept in `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Playe
 
 ## Specific Troubleshooting Instructions
 
-### Troubleshooting Networking In Windows
-1) Find the PID of the `VRisingServer.exe` in `Task Manager` in the `Details` tab  
+### Troubleshooting Direct Connection To the VRising Server
+The first step is to ensure that the game is accessible to machines on the same network as the server is running on.
+
+1) On the server, find the PID of the `VRisingServer.exe` in `Task Manager` in the `Details` tab  
   
 2) Check your server configuration file `ServerHostSettings.json` we are looking for `Port`, `QueryPort`, and optionally `Rcon/Port`  
 **NOTE** If you are hosting a private server, check the `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-server.log` log for `Port` and `QueryPort` as shown below.
@@ -460,9 +463,10 @@ Loaded ServerHostSettings:
   "Name": "My Awesome World",
   "Description": "",
   "Port": 9876,
-  "QueryPort": 9877,
+  "QueryPort": 9877
+}
 ```
-3) Check to ensure the server is lisening on the expected ports:
+3) Check to ensure the server is listening on the expected ports:
   * With CMD
     * Find the PID of the `VRisingServer.exe` in `Task Manager` (`control` + `shift` + `esc`) in the `Details` tab
     * Run `cmd`  
@@ -497,7 +501,7 @@ Loaded ServerHostSettings:
         0.0.0.0           9876 VRisingServer
         ```
 
-3) Ensure that the game is allowed through the Windows Firewall, if you have added the executable to the windows firewall (rather than just the ports), then you can run `powershell Get-NetFirewallRule -DisplayName VRisingServer` at the command prompt to validate:
+3) Ensure that the game is allowed through the Windows Firewall, if you have added the executable to the windows firewall (rather than just the `Port` and `QueryPort` configured in `ServerHostSettings.json`), then you can run `powershell Get-NetFirewallRule -DisplayName VRisingServer` at the command prompt to validate:
 
     ```
     powershell Get-NetFirewallRule -DisplayName VRisingServer
@@ -588,10 +592,31 @@ Loaded ServerHostSettings:
     ```
     **NOTE:** As a troubleshooting step, you may disable the Windows Firewall, but turn it back on when you are done, and correctly configure it if it is the problem.
 
-4) Open your router and firewall ports to allow the UDP connections (and TCP if you want RCON)
+4) [Direct Connect](#direct-connect) to the game on the `Port` configured in `ServerHostSettings.json` (Not the `QueryPort` port! -- IE: 192.168.1.10:9876)
+
+#### On the Internet
+
+5) Check your `VRisingServer.log` server logs inside the appropriate directory for the public IP, the logs should look like this: `SteamPlatformSystem - OnPolicyResponse - Public IP: <VAR_PUBLIC_IP>` and ensure this is the public IP you expect it to be 
+    ```
+    SteamPlatformSystem - OnPolicyResponse - Public IP: <VAR_PUBLIC_IP>
+    UnityEngine.Logger:Log(LogType, Object)
+    UnityEngine.Debug:Log(Object)
+    ProjectM.Auth.SteamPlatformSystem:OnPolicyResponse(GSPolicyResponse_t)
+    Steamworks.DispatchDelegate:Invoke(T)
+    Steamworks.Callback`1:OnRunCallback(IntPtr)
+    Steamworks.CallbackDispatcher:RunFrame(Boolean)
+    ProjectM.Auth.SteamPlatformSystem:OnUpdate()
+    Unity.Entities.SystemBase:Update()
+    Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+    Unity.Entities.ComponentSystem:Update()
+    Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
+    ```
+**NOTE:** You can also use tools like `[whatismyip.com](https://www.whatismyip.com/)` to get your public IP, but this doesn't ensure the server is bound to this public IP, This is especially useful if you have a VPN or secondary internet provider.
+
+6) Open your router and firewall to allow the `Port` and `QueryPort` configured in `ServerHostSettings.json` to forward to this machine (and TCP if you want RCON)
 This is beyond the scope of this document, as it is device specific, but you can try https://PortForward.com
 
-8) Validate with your internet provider if you are able to run a servers (specifically game servers) from your purchased internet package. They may block this kind of traffic by blocking specific ports, or using packet inspection to determine the type of traffic. (This is beyond the scope of this document).  
+7) Validate with your internet provider if you are able to run servers (specifically game servers) from your purchased internet package. They may block this kind of traffic by blocking specific ports, or using packet inspection to determine the type of traffic. (This is beyond the scope of this document).  
 If you check https://ipv6-test.com/ and the shown IP on that web page is different from your address shown in your router, your address may be translated and it may be impossible to host. Additionally some providers (namely in Germany) may use something like Carrier Grade NAT (CGNAT, with a router public IP range from 100.64.0.0 to 100.127.255.255) or DS-Lite which may prevent you from running a server. In these cases, you can try to contact your ISP and see if you are able to get an IPv4 address. You *may* be able to get away with something like Fast Reverse Proxy (https://gabrieltanner.org/blog/port-forwarding-frp) but this is again, outside the scope of this document.
 
 ### Server not listed on the server browser
@@ -623,7 +648,7 @@ If you check https://ipv6-test.com/ and the shown IP on that web page is differe
     Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
     ```
 
-6) Test that your server is able to be queried by the SteamAPI by entering your public IP on this tool  https://southnode.net/steamquery.php , and/or using https://api.steampowered.com/ISteamApps/GetServersAtAddress/v0001?addr=1.2.3.4 (Replace 1.2.3.4 with your public IP)
+6) Validate that on boot, your server is sending data to Steam by entering your public IP on this tool  https://southnode.net/steamquery.php , and/or using https://api.steampowered.com/ISteamApps/GetServersAtAddress/v0001?addr=1.2.3.4 (Replace 1.2.3.4 with your public IP)
 
 7) BE PATIENT! The listing process can take time, it appears that you have done everything you can to ensure that your server is able to be queried.  
 **NOTE:** SOME users have found that changing both ports to something else, and back have forced the server to be listed. This is VERY anecdotal, and may infact increase the waiting process.
