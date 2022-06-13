@@ -9,7 +9,7 @@
     this will also configure the windows firewall to allow the program to operate.
     The user input is expected to be the full path
 .NOTES
-    Version        : 1.102
+    Version        : 1.103
     File Name      : autoinstall_vrising.ps1
     Author         : Darryl H (https://github.com/darryl-h/)
     Credits        : Port and JSON handling from lordfiSh (https://github.com/lordfiSh/)
@@ -232,7 +232,11 @@ Write-Host "`tAuto Save Interval (In Seconds): $VRisingAutoSaveInterval"
 $ServerGameSettings = Get-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerGameSettings.json" | Out-String | ConvertFrom-Json
 $VRisingGameModeType = $ServerGameSettings.GameModeType
 $VRisingClanSize = $ServerGameSettings.ClanSize
+$VRisingName = $ServerGameSettings.Name
+$VRisingDescription = $ServerGameSettings.Description
 Write-Host "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerGameSettings.json" -ForegroundColor Yellow
+Write-Host "`tGame Name: $VRisingName"
+Write-Host "`tGame Description: $VRisingDescription"
 Write-Host "`tGame Mode Type: $VRisingGameModeType"
 Write-Host "`tGroup/Clan Size: $VRisingClanSize"
 Write-Host "Settings Descriptions and Min/Maxs: https://cdn.stunlock.com/blog/2022/05/25083113/Game-Server-Settings.pdf" -ForegroundColor DarkYellow
