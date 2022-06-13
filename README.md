@@ -83,7 +83,7 @@ This will attempt to:
 * Install the VRising Dedicated Server into a path you desire with SteamCMD
 * Configure the server to use the configurations in a custom directory that will survive a server update
 * Create a custom update .bat file
-* Use NSSM to manage the server, which will create a VRising service, keep logs indefinatly, rotate the logs at 1MB, add timestamps to the logs, and restart the server if it crashes
+* Use NSSM to manage the server, which will create a VRising service, keep logs indefinatly, add timestamps to the logs, and restart the server if it crashes
 * Enable RCON
 * Install an RCON client to broadcast the restart to the users on the server
 * Open the Windows firewall for the VRising Server
@@ -108,7 +108,6 @@ This script will:
                 > Restart the server if it crashes
                 > Add timestamps to the logs
                 > Keep logs indefinatly
-                > Rotate the logs at 1MB
         * Enable RCON
         * Install an RCON client to broadcast the restart to the users on the server
         * Open the Windows firewall for the VRising Server
