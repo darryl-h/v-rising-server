@@ -9,7 +9,7 @@
     this will also configure the windows firewall to allow the program to operate.
     The user input is expected to be the full path
 .NOTES
-    Version        : 1.001
+    Version        : 1.002
     File Name      : autoinstall_vrising.ps1
     Author         : Darryl H (https://github.com/darryl-h/)
     Prerequisite   : PowerShell V2 Windows 2022
@@ -74,9 +74,15 @@ function DownloadAndExtractFromWeb
     $DownloadFilename = $args[2]
     Write-Host "Preparing $FriendlyName" -ForegroundColor Cyan
     write-host "`tDownloading $FriendlyName"
-    Start-BitsTransfer -Source $DownloadURL -Destination $InstallPath\
+    Start-BitsTransfer -Source $DownloadURL -Destination $InstallPath\ | Out-Null
     # Backup Method
     # Invoke-WebRequest -Uri "$DownloadURL" -OutFile $DownloadFilename -UserAgent [Microsoft.PowerShell.Commands.PSUserAgent]::FireFox
+    # If the file failed to download, exit
+    if(![System.IO.File]::Exists("$InstallPath\$DownloadFilename")) {
+        throw (New-Object System.IO.FileNotFoundException("File failed to download!"))
+        Remove-Item "$InstallPath" -Recurse
+        EXIT
+    }
     $InstallerExtension = [IO.Path]::GetExtension("$InstallPath\$DownloadFilename")
     If ($InstallerExtension -eq ".zip" ) {
         Write-Host "`tExtracting $DownloadFilename"
