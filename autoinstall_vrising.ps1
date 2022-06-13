@@ -9,7 +9,7 @@
     this will also configure the windows firewall to allow the program to operate.
     The user input is expected to be the full path
 .NOTES
-    Version        : 1.002
+    Version        : 1.100
     File Name      : autoinstall_vrising.ps1
     Author         : Darryl H (https://github.com/darryl-h/)
     Prerequisite   : PowerShell V2 Windows 2022
@@ -117,42 +117,52 @@ $SteamCMDArguments = "+force_install_dir $InstallPath +login anonymous +app_upda
 $proc = Start-Process -FilePath "$InstallPath\steamcmd.exe" -ArgumentList $SteamCMDArguments -Passthru
 do {start-sleep -Milliseconds 500}
 until ($proc.HasExited)
+write-host "`tValidating installation"
+if(![System.IO.File]::Exists("$InstallPath\steamapps\common\VRisingDedicatedServer\VRisingServer.exe")) {
+    throw (New-Object System.IO.FileNotFoundException("VRising Server failed to validate!"))
+    Remove-Item "$InstallPath" -Recurse
+    EXIT
+}
+
+write-host "`tCreating logs directory"
+New-Item -ItemType Directory -Force -Path "$InstallPath\steamapps\common\VRisingDedicatedServer\logs" | Out-Null
+
+Write-Host "Configuring Server" -ForegroundColor Cyan
 
 # Configure the startup .bat file
-Write-Host "Configuring Startup Batch File" -ForegroundColor Cyan
-Copy-Item "$InstallPath\steamapps\common\VRisingDedicatedServer\start_server_example.bat" -Destination "$InstallPath\steamapps\common\VRisingDedicatedServer\start_server.bat"
-(Get-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\start_server.bat") -Replace '-logFile ".\\logs\\VRisingServer.log"', '' | Set-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\start_server.bat"
+# Write-Host "`tConfiguring Startup Batch File"
+# Copy-Item "$InstallPath\steamapps\common\VRisingDedicatedServer\start_server_example.bat" -Destination "$InstallPath\steamapps\common\VRisingDedicatedServer\start_server.bat"
+# (Get-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\start_server.bat") -Replace '-logFile ".\\logs\\VRisingServer.log"', '' | Set-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\start_server.bat"
 
 # $VRisingStartupBat = Get-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\start_server.bat"
 # $VRisingStartupBat -replace '-logFile ".\logs\VRisingServer.log"',''
 
 # Create custom server settings files that won't get overwritten on update
-Write-Host "Preparing custom server configurations that won't get replaced on update" -ForegroundColor Cyan
+Write-Host "`tConfiguring Game and Host Settings that won't get replaced on update"
 New-Item -ItemType Directory -Force -Path "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings" | Out-Null 
 Copy-Item "$InstallPath\steamapps\common\VRisingDedicatedServer\VRisingServer_Data\StreamingAssets\Settings\ServerGameSettings.json" -Destination "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings"
 Copy-Item "$InstallPath\steamapps\common\VRisingDedicatedServer\VRisingServer_Data\StreamingAssets\Settings\ServerHostSettings.json" -Destination "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings"
 
 # Configure RCON
 # https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/set-content?view=powershell-7.2
-Write-Host "Enabling RCON with password: $RCONPassword" -ForegroundColor Cyan
-(Get-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json") -Replace '"Enabled": false,', '"Enabled": true,' | Set-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json"
 Add-Type -AssemblyName System.Web
 $RCONPasswordTemp = [System.Web.Security.Membership]::GeneratePassword(10,2)
 $RCONPassword = $RCONPasswordTemp -replace '[^a-zA-Z0-9]', ''
-#$RCONPassword = Regex.Replace($RCONPassword, @"[^a-zA-Z0-9]", m => "9" );
+Write-Host "`tEnabling RCON with password: $RCONPassword"
+(Get-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json") -Replace '"Enabled": false,', '"Enabled": true,' | Set-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json"
 (Get-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json") -Replace '    "Password": ""', "    `"Password`": `"$RCONPassword`"" | Set-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json"
-
-#$VRisingServerHostSettings = Get-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json"
-#$VRisingStartupBat -replace '"Enabled": false,','"Enabled": true,'
 
 # ToDo: Only run the update if there is an update.
 # https://github.com/C0nw0nk/SteamCMD-AutoUpdate-Any-Gameserver/blob/master/steam-CURL.cmd
 
 # Setup the VRisingServer Service with NSSM
-Write-Host "Setting up NSSM Service" -ForegroundColor Cyan
+Write-Host "`tConfiuring VRsingServer Service with NSSM"
 Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "remove VRisingServer confirm"
-Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "install VRisingServer $InstallPath\steamapps\common\VRisingDedicatedServer\start_server.bat"
-Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer Application  $InstallPath\steamapps\common\VRisingDedicatedServer\start_server.bat"
+Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "install VRisingServer VRisingServer"
+Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer Application  $InstallPath\steamapps\common\VRisingDedicatedServer\VRisingServer.exe"
+Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer AppParameters `"-persistentDataPath .\save-data`""
+Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer AppEnvironmentExtra `":set SteamAppId=1604030`""
+#Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer Application  $InstallPath\steamapps\common\VRisingDedicatedServer\start_server.bat"
 Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer AppDirectory $InstallPath\steamapps\common\VRisingDedicatedServer"
 Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer AppExit Default Restart"
 Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer AppStdout $InstallPath\steamapps\common\VRisingDedicatedServer\logs\VRisingServer.log"
@@ -168,18 +178,13 @@ Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer
 Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer Type SERVICE_WIN32_OWN_PROCESS"
 
 # Setup Windows to run the auto update daily at 09:00
-Write-Host "Setting up Task Schduler to update daily" -ForegroundColor Cyan
+Write-Host "`tConfiguring Task Scheudler to reboot and update daily at 09:00AM"
 $action = New-ScheduledTaskAction -Execute "$InstallPath\steamapps\common\VRisingDedicatedServer\update_server.bat"
 $trigger = New-ScheduledTaskTrigger -Daily -At 9am
-Register-ScheduledTask -Action $action -Trigger $trigger -TaskName "VRisingServerRestart" -Description "Restart VRising Server Daily" -Force
-
-# $Trigger= New-ScheduledTaskTrigger –Daily -At 9am  # Specify the trigger settings
-# $User= "NT AUTHORITY\SYSTEM" # Specify the account to run the script
-# $Action= New-ScheduledTaskAction -Execute "$InstallPath\steamapps\common\VRisingDedicatedServer\update_server.bat" # Specify what program to run and with its parameters
-# Register-ScheduledTask -TaskName "VRisingServerRestart" -Trigger $Trigger -User $User -Action $Action -RunLevel Highest –Force # Specify the name of the task
+Register-ScheduledTask -Action $action -Trigger $trigger -TaskName "VRisingServerRestart" -Description "Restart VRising Server Daily" -Force  | Out-Null
 
 # Setup the Update.bat file
-Write-Host "Creating daily update .bat file" -ForegroundColor Cyan
+Write-Host "`tCreating daily update .bat file"
 Add-Content -Path "$InstallPath\steamapps\common\VRisingDedicatedServer\update_server.bat" -Value "@echo off"
 Add-Content -Path "$InstallPath\steamapps\common\VRisingDedicatedServer\update_server.bat" -Value "$InstallPath\steamcmd.exe +login anonymous +app_update 1829350 validate +quit"
 Add-Content -Path "$InstallPath\steamapps\common\VRisingDedicatedServer\update_server.bat" -Value "$InstallPath\mcrcon.exe -H 127.0.0.1 -P 25575 -p $RCONPassword 'announcerestart 10'"
@@ -187,16 +192,16 @@ Add-Content -Path "$InstallPath\steamapps\common\VRisingDedicatedServer\update_s
 Add-Content -Path "$InstallPath\steamapps\common\VRisingDedicatedServer\update_server.bat" -Value "$InstallPath\nssm.exe restart VRisingServer"
 
 # Open the windows firewall for vrising
-Write-Host "Configuring Windows Firewall" -ForegroundColor Cyan
-New-NetFirewallRule -DisplayName "VRisingDedicatedServer" -Direction Inbound -Program "$InstallPath\steamapps\common\VRisingDedicatedServer\VRisingServer.exe" -Action Allow
+Write-Host "`tConfiguring Windows Firewall"
+New-NetFirewallRule -DisplayName "VRisingDedicatedServer" -Direction Inbound -Program "$InstallPath\steamapps\common\VRisingDedicatedServer\VRisingServer.exe" -Action Allow  | Out-Null
 
 # Start the service
-Write-Host "Starting the VRising service" -ForegroundColor Cyan
+Write-Host "`tStarting the VRising service"
 Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "start VRisingServer"
-
-# Let the user know where files are
 Write-Host "All Done!" -ForegroundColor Green
 
+
+# Let the user know where files are
 Write-Host "`nManagement" -ForegroundColor Cyan
 Write-Host "Your Startup .bat file is in $InstallPath\steamapps\common\VRisingDedicatedServer\start_server.bat"
 Write-Host "Your Update .bat file is in $InstallPath\steamapps\common\VRisingDedicatedServer\update_server.bat"
@@ -204,21 +209,39 @@ Write-Host "Your can manage the service with $InstallPath\nssm.exe [start|stop|r
 Write-Host "Your pseudo unique RCON password is $RCONPassword"
 
 Write-Host "`nConfiguration Files" -ForegroundColor Cyan
-Write-Host "Your ServerHostSettings.json is in $InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json"
-Write-Host "Your ServerGameSettings.json is in $InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerGameSettings.json"
-Write-Host "You can learn more about each of the ServerGameSettings at https://cdn.stunlock.com/blog/2022/05/25083113/Game-Server-Settings.pdf" -ForegroundColor Red
+# Load the ServerHostSettings.json
+$ServerHostSettings = Get-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json" | Out-String | ConvertFrom-Json
+# Load some particulars
+$VRisingMaxConnectedUsers = $ServerHostSettings.MaxConnectedUsers
+$VRisingSavename = $ServerHostSettings.SaveName
+$VRisingAutoSaveCount = $ServerHostSettings.AutoSaveCount
+$VRisingAutoSaveInterval = $ServerHostSettings.AutoSaveInterval
+$VRisingGamePort = $ServerHostSettings.Port
+$VRisingQueryPort = $ServerHostSettings.QueryPort
+Write-Host "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json"
+Write-Host "`tMaximum Connected Users: $VRisingMaxConnectedUsers"
+Write-Host "`tGame Port: $VRisingGamePort"
+Write-Host "`tQuery Port: $VRisingQueryPort"
+Write-Host "`n`tSaves: $InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Saves\v1\$VRisingSavename"
+Write-Host "`tAuto Save Count: $VRisingAutoSaveCount"
+Write-Host "`tAuto Save Interval (In Seconds): $VRisingAutoSaveInterval"
+# Load the ServerHostSettings.json
+$ServerGameSettings = Get-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerGameSettings.json" | Out-String | ConvertFrom-Json
+$VRisingGameModeType = $ServerGameSettings.GameModeType
+$VRisingClanSize = $ServerGameSettings.ClanSize
+Write-Host "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerGameSettings.json"
+Write-Host "`tGame Mode Type: $VRisingGameModeType"
+Write-Host "`tGroup/Clan Size: $VRisingClanSize"
+Write-Host "Settings Descriptions and Min/Maxs: https://cdn.stunlock.com/blog/2022/05/25083113/Game-Server-Settings.pdf" -ForegroundColor Yellow
 
 Write-Host "`nLogs" -ForegroundColor Cyan
 Write-Host "Your server logs are in $InstallPath\steamapps\common\VRisingDedicatedServer\logs\VRisingServer.log"
 
 $ServerIPv4 = (Get-NetIPAddress | Where-Object {$_.AddressState -eq "Preferred" -and $_.ValidLifetime -lt "24:00:00"}).IPAddress
 $ServerGateway = (Get-wmiObject Win32_networkAdapterConfiguration | ?{$_.IPEnabled}).DefaultIPGateway
-$ServerHostSettings = Get-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json" | Out-String | ConvertFrom-Json
-$VRisingGamePort = $ServerHostSettings.Port
-$VRisingQueryPort = $ServerHostSettings.QueryPort
 Write-Host "`nAction Plan" -ForegroundColor Cyan
 Write-Host "1) Test direct connect from a machine on this same network"
-Write-Host "`tEnter the game, and use Direct Connect, and connect to $ServerIPv4\:$VRisingGamePort"
+Write-Host "`tEnter the game, and use Direct Connect, and connect to $ServerIPv4`:$VRisingGamePort"
 Write-Host "`tDo NOT select 'LAN Mode'"
 Write-Host "2) Configure your router at $ServerGateway and forward UDP port $VRisingGamePort and $VRisingQueryPort this machine ($ServerIPv4)"
 Write-Host "`tTry http://portforward.com for information on how to port forward"
