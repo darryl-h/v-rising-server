@@ -611,7 +611,7 @@ Loaded ServerHostSettings:
     Unity.Entities.ComponentSystem:Update()
     Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
     ```
-    **NOTE:** You can also use tools like `[whatismyip.com](https://www.whatismyip.com/)` to get your public IP, but this doesn't ensure the server is bound to this public IP, This is especially useful if you have a VPN or secondary internet provider.
+    **NOTE:** You can also use tools like [whatismyip.com](https://www.whatismyip.com/) to get your public IP, but this doesn't ensure the server is bound to this public IP, This is especially useful if you have a VPN or secondary internet provider.
 
 6) Open your router and firewall to allow the `Port` and `QueryPort` configured in `ServerHostSettings.json` to forward to this machine (and TCP if you want RCON)
 This is beyond the scope of this document, as it is device specific, but you can try https://PortForward.com
