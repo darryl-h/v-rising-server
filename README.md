@@ -74,6 +74,7 @@ https://github.com/StunlockStudios/vrising-dedicated-server-instructions
   * Added addtime to console
   * Added LAN/Offline mode
 * [Patch 0.5.41237 / 2022-05-19 ](https://steamcommunity.com/games/1604030/announcements/detail/3218396837686301548)
+
 # Installation of the server using the AutoInstaller
 I created a quick PowerShell script that will automate the installation of the V Rising Server, and post configuration of the service. This can be found in this repository called `autoinstall_vrising.ps1`
 
@@ -106,7 +107,7 @@ This script will:
         * Install NSSM to manage the server which will:
                 > Start with Windows
                 > Restart the server if it crashes
-                > Add timestamps to the logs
+                > Add UTC timestamps to the logs
                 > Keep logs indefinatly
         * Enable RCON
         * Install an RCON client to broadcast the restart to the users on the server
@@ -128,83 +129,51 @@ Preparing SteamCMD
         Downloading SteamCMD
         Extracting steamcmd.zip
 Installing VRising Dedicated Server
-Configuring Startup Batch File
-Preparing custom server configurations that won't get replaced on update
-Enabling RCON with password:
-Setting up NSSM Service
-Setting up Task Schduler to update daily
-
-TaskPath                                       TaskName                          State
---------                                       --------                          -----
-\                                              VRisingServerRestart              Ready
-Creating daily update .bat file
-Configuring Windows Firewall
-
-Caption                       :
-Description                   :
-ElementName                   : VRisingDedicatedServer
-InstanceID                    : {24b89a8a-3b8c-4cb5-9a07-6a069e7c07de}
-CommonName                    :
-PolicyKeywords                :
-Enabled                       : True
-PolicyDecisionStrategy        : 2
-PolicyRoles                   :
-ConditionListType             : 3
-CreationClassName             : MSFT|FW|FirewallRule|{24b89a8a-3b8c-4cb5-9a07-6a069e7c07de}
-ExecutionStrategy             : 2
-Mandatory                     :
-PolicyRuleName                :
-Priority                      :
-RuleUsage                     :
-SequencedActions              : 3
-SystemCreationClassName       :
-SystemName                    :
-Action                        : Allow
-Direction                     : Inbound
-DisplayGroup                  :
-DisplayName                   : VRisingDedicatedServer
-EdgeTraversalPolicy           : Block
-EnforcementStatus             : NotApplicable
-LocalOnlyMapping              : False
-LooseSourceMapping            : False
-Owner                         :
-Platforms                     : {}
-PolicyStoreSource             : PersistentStore
-PolicyStoreSourceType         : Local
-PrimaryStatus                 : OK
-Profiles                      : 0
-RemoteDynamicKeywordAddresses : {}
-RuleGroup                     :
-Status                        : The rule was parsed successfully from the store. (65536)
-StatusCode                    : 65536
-PSComputerName                :
-Name                          : {24b89a8a-3b8c-4cb5-9a07-6a069e7c07de}
-ID                            : {24b89a8a-3b8c-4cb5-9a07-6a069e7c07de}
-Group                         :
-Profile                       : Any
-Platform                      : {}
-LSM                           : False
-
-Starting the VRising service
+        Validating installation
+        Creating logs directory
+Configuring Server
+        Configuring Game and Host Settings that won't get replaced on update
+        Enabling RCON with password: CCl
+        Confiuring VRsingServer Service with NSSM
+        Configuring Task Scheudler to reboot and update daily at 09:00AM
+        Creating daily update .bat file
+        Configuring Windows Firewall
+        Starting the VRising service
+All Done!
 ```
 
 After installation, the user is provided with all the information to manage the service
 ```
-All Done!
-
 Management
-Your Startup .bat file is in C:\vrisingserver\steamapps\common\VRisingDedicatedServer\start_server.bat
 Your Update .bat file is in C:\vrisingserver\steamapps\common\VRisingDedicatedServer\update_server.bat
 Your can manage the service with C:\vrisingserver\nssm.exe [start|stop|restart|edit] VRisingServer
-Your pseudo unique RCON password is LkXiT
+Your pseudo unique RCON password is CCl
 
 Configuration Files
-Your ServerHostSettings.json is in C:\vrisingserver\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json
-Your ServerGameSettings.json is in C:\vrisingserver\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerGameSettings.json
-You can learn more about each of the ServerGameSettings at https://cdn.stunlock.com/blog/2022/05/25083113/Game-Server-Settings.pdf
+C:\vrisingserver\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json
+        Maximum Connected Users: 40
+        Game Port: 9876
+        Query Port: 9877
+        Saves: C:\vrisingserver\steamapps\common\VRisingDedicatedServer\save-data\Saves\v1\world1
+        Auto Save Count: 50
+        Auto Save Interval (In Seconds): 600
+C:\vrisingserver\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerGameSettings.json
+        Game Mode Type: PvP
+        Group/Clan Size: 4
+Settings Descriptions and Min/Maxs: https://cdn.stunlock.com/blog/2022/05/25083113/Game-Server-Settings.pdf
 
 Logs
-Your logs are in C:\vrisingserver\logs\VRisingServer.log
+Your server logs are in C:\vrisingserver\steamapps\common\VRisingDedicatedServer\logs\VRisingServer.log
+
+Action Plan
+1) Test direct connect from a machine on this same network
+        Enter the game, and use Direct Connect, and connect to 192.168.1.10:9876
+        Do NOT select 'LAN Mode'
+2) Configure your router at 192.168.1.254 and forward UDP port 9876 and 9877 to this machine (192.168.1.10)
+        Try http://portforward.com for information on how to port forward
+3) If you have a hardware firewall, you will need to also allow the traffic to this machine (192.168.1.10)
+4) If you are behind a CGNAT or DS-Lite, you may not be able to host without a public IPv4 address
+5) If you wish, you may change the daily restart time from 09:00 local time to a more suitable time Task Scheduler
 ```
 
 [Skip to Post Configuration](#post--configuration)
