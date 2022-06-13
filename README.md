@@ -250,9 +250,8 @@ In this example, we will setup the server with NSSM (Non Sucking Service Manager
     nssm.exe set VRisingServer AppExit Default Restart
     nssm.exe set VRisingServer AppStdout <VAR_SERVER_INSTALLATION_DIRECTORY>\logs\VRisingServer_Custom.log
     nssm.exe set VRisingServer AppStderr <VAR_SERVER_INSTALLATION_DIRECTORY>\logs\VRisingServer_Error.log
-    nssm.exe set VRisingServer AppRotateFiles 1
-    nssm.exe set VRisingServer AppRotateOnline 1
-    nssm.exe set VRisingServer AppRotateBytes 1000000
+    nssm.exe set VRisingServer AppStopMethodSkip 14
+    nssm.exe set VRisingServer AppKillProcessTree 0
     nssm.exe set VRisingServer AppTimestampLog 1
     nssm.exe set VRisingServer DisplayName VRisingServer
     nssm.exe set VRisingServer ObjectName LocalSystem
