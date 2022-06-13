@@ -611,7 +611,7 @@ Loaded ServerHostSettings:
     Unity.Entities.ComponentSystem:Update()
     Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
     ```
-**NOTE:** You can also use tools like `[whatismyip.com](https://www.whatismyip.com/)` to get your public IP, but this doesn't ensure the server is bound to this public IP, This is especially useful if you have a VPN or secondary internet provider.
+    **NOTE:** You can also use tools like `[whatismyip.com](https://www.whatismyip.com/)` to get your public IP, but this doesn't ensure the server is bound to this public IP, This is especially useful if you have a VPN or secondary internet provider.
 
 6) Open your router and firewall to allow the `Port` and `QueryPort` configured in `ServerHostSettings.json` to forward to this machine (and TCP if you want RCON)
 This is beyond the scope of this document, as it is device specific, but you can try https://PortForward.com
@@ -648,7 +648,7 @@ If you check https://ipv6-test.com/ and the shown IP on that web page is differe
     Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
     ```
 
-6) Validate that on boot, your server is sending data to Steam by entering your public IP on this tool  https://southnode.net/steamquery.php , and/or using https://api.steampowered.com/ISteamApps/GetServersAtAddress/v0001?addr=1.2.3.4 (Replace 1.2.3.4 with your public IP)
+6) Validate that on server startup, your server is sending data to Steam by entering your public IP on this tool  https://southnode.net/steamquery.php , and/or using https://api.steampowered.com/ISteamApps/GetServersAtAddress/v0001?addr=1.2.3.4 (Replace 1.2.3.4 with your public IP)
 
 7) BE PATIENT! The listing process can take time, it appears that you have done everything you can to ensure that your server is able to be queried.  
 **NOTE:** SOME users have found that changing both ports to something else, and back have forced the server to be listed. This is VERY anecdotal, and may infact increase the waiting process.
