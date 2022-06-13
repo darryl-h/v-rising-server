@@ -9,10 +9,11 @@
     this will also configure the windows firewall to allow the program to operate.
     The user input is expected to be the full path
 .NOTES
-    Version        : 1.103
+    Version        : 1.104
     File Name      : autoinstall_vrising.ps1
     Author         : Darryl H (https://github.com/darryl-h/)
     Credits        : Port and JSON handling from lordfiSh (https://github.com/lordfiSh/)
+                   : Suggestions / Beta Testing / Bug Reporting: Svedriall (https://github.com/svedriall/)
     Prerequisite   : PowerShell V2 Windows 2022
     GNU GPLv3
 .LINK
@@ -186,6 +187,7 @@ Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "set VRisingServer
 Write-Host "`tConfiguring Task Scheudler to reboot and update daily at 09:00AM"
 $action = New-ScheduledTaskAction -Execute "$InstallPath\steamapps\common\VRisingDedicatedServer\update_server.bat"
 $trigger = New-ScheduledTaskTrigger -Daily -At 9am
+$trigger.StartBoundary = [DateTime]::Parse($trigger.StartBoundary).ToLocalTime().ToString("s")
 Register-ScheduledTask -Action $action -Trigger $trigger -TaskName "VRisingServerRestart" -Description "Restart VRising Server Daily" -Force  | Out-Null
 
 # Setup the Update.bat file
