@@ -9,9 +9,10 @@
     this will also configure the windows firewall to allow the program to operate.
     The user input is expected to be the full path
 .NOTES
-    Version        : 1.101
+    Version        : 1.102
     File Name      : autoinstall_vrising.ps1
     Author         : Darryl H (https://github.com/darryl-h/)
+    Credits        : Port and JSON handling from lordfiSh (https://github.com/lordfiSh/)
     Prerequisite   : PowerShell V2 Windows 2022
     GNU GPLv3
 .LINK
@@ -148,7 +149,7 @@ Copy-Item "$InstallPath\steamapps\common\VRisingDedicatedServer\VRisingServer_Da
 Add-Type -AssemblyName System.Web
 $RCONPasswordTemp = [System.Web.Security.Membership]::GeneratePassword(10,2)
 $RCONPassword = $RCONPasswordTemp -replace '[^a-zA-Z0-9]', ''
-Write-Host "`tEnabling RCON with password: $RCONPassword"
+Write-Host "`tEnabling RCON with password: $RCONPassword (debug: $RCONPasswordTemp)"
 (Get-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json") -Replace '"Enabled": false,', '"Enabled": true,' | Set-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json"
 (Get-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json") -Replace '    "Password": ""', "    `"Password`": `"$RCONPassword`"" | Set-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json"
 
@@ -245,8 +246,8 @@ Write-Host "`nAction Plan" -ForegroundColor Cyan
 Write-Host "1) Test direct connect from a machine on this same network"
 Write-Host "`tEnter the game, and use Direct Connect, and connect to $ServerIPv4`:$VRisingGamePort"
 Write-Host "`tDo NOT select 'LAN Mode'"
-Write-Host "2) Configure your router at $ServerGateway and forward UDP port $VRisingGamePort and $VRisingQueryPort this machine ($ServerIPv4)"
+Write-Host "2) Configure your router at $ServerGateway and forward UDP port $VRisingGamePort and $VRisingQueryPort to this machine ($ServerIPv4)"
 Write-Host "`tTry http://portforward.com for information on how to port forward"
 Write-Host "3) If you have a hardware firewall, you will need to also allow the traffic to this machine ($ServerIPv4)"
 Write-Host "4) If you are behind a CGNAT or DS-Lite, you may not be able to host without a public IPv4 address"
-Write-Host "5) If you wish, you may change the daily restart time from 09:00 local time to a more suitable time"
+Write-Host "5) If you wish, you may change the daily restart time from 09:00 local time to a more suitable time Task Scheduler"
