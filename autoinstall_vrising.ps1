@@ -9,7 +9,7 @@
     this will also configure the windows firewall to allow the program to operate.
     The user input is expected to be the full path
 .NOTES
-    Version        : 1.104
+    Version        : 1.105
     File Name      : autoinstall_vrising.ps1
     Author         : Darryl H (https://github.com/darryl-h/)
     Credits        : Port and JSON handling from lordfiSh (https://github.com/lordfiSh/)
@@ -249,7 +249,8 @@ Write-Host "Settings Descriptions and Min/Maxs: https://cdn.stunlock.com/blog/20
 Write-Host "`nLogs" -ForegroundColor Cyan
 Write-Host "Your server logs are in $InstallPath\steamapps\common\VRisingDedicatedServer\logs\VRisingServer.log"
 
-$ServerIPv4 = (Get-NetIPAddress | Where-Object {$_.AddressState -eq "Preferred" -and $_.ValidLifetime -lt "24:00:00"}).IPAddress
+$ServerIPv4 = Get-NetIPAddress -AddressFamily IPv4 -InterfaceIndex $(Get-NetConnectionProfile | Select-Object -ExpandProperty InterfaceIndex) | Select-Object -ExpandProperty IPAddress
+#$ServerIPv4 = (Get-NetIPAddress | Where-Object {$_.AddressState -eq "Preferred" -and $_.ValidLifetime -lt "24:00:00"}).IPAddress
 $ServerGateway = (Get-wmiObject Win32_networkAdapterConfiguration | ?{$_.IPEnabled}).DefaultIPGateway
 Write-Host "`nAction Plan" -ForegroundColor Cyan
 Write-Host "1) Test direct connect from a machine on this same network"
