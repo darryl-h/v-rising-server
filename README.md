@@ -128,7 +128,7 @@ I've tried to submit a pull request to this repository with some of the informat
 This section is related, and specific to the Dedicated Server that you would start from outside the game client.
 
 - [Dedicated Server Installation](#dedicated-server-installation)
-  - [Installation of the server using the AutoInstaller](#installation-of-the-server-using-the-autoinstaller)
+  - [Installation of the server using the AutoInstaller](#installation-of-the-server-using-the-autoinstaller-)
   - [Installation of the server using PowerShell and SteamPS](#installation-of-the-server-using-powershell-and-steamps)
 - [Dedicated Server Configuration](#dedicated-server-configuration)
   - [Manual Configuration](#manual-configuration)
