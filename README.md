@@ -1,24 +1,21 @@
-- [Resources:](#resources)
-  - [Official Guide](#official-guide)
-  - [Offical Bug Tracker](#offical-bug-tracker)
-  - [BattleMetrics Server Listing](#battlemetrics-server-listing)
-  - [World Maps](#world-maps)
-  - [Game statistics](#game-statistics)
+- [Resources](#resources)
 - [Patch Notes](#patch-notes)
-- [Installation of the server using the AutoInstaller](#installation-of-the-server-using-the-autoinstaller)
-- [Installation of the game using PowerShell and SteamPS](#installation-of-the-game-using-powershell-and-steamps)
-- [Manual Configuration](#manual-configuration)
-  - [Server StartUp Batch File](#server-startup-batch-file)
-  - [Server Settings Files](#server-settings-files)
-  - [Allow the vRising game through the windows firewall](#allow-the-vrising-game-through-the-windows-firewall)
-  - [Server Startup, Log Timestamps, and Restarting on Failure](#server-startup-log-timestamps-and-restarting-on-failure)
-  - [Server updates](#server-updates)
-    - [Automating updates with Windows Task Scheulder](#automating-updates-with-windows-task-scheulder)
+- [File Locations](#file-locations)
+  - [Dedicated Server](#dedicated-server)
+  - [Private Server](#private-server)
+  - [Client](#client)
+- [Dedicated Server](#dedicated-server-1)
+  - [Dedicated Server Installation](#dedicated-server-installation)
+  - [Dedicated Server Configuration](#dedicated-server-configuration)
+    - [Manual Configuration](#manual-configuration)
+      - [Server StartUp Batch File](#server-startup-batch-file)
+      - [Server Settings Files](#server-settings-files)
+      - [Allow the vRising game through the windows firewall](#allow-the-vrising-game-through-the-windows-firewall)
+      - [Server Startup, Log Timestamps, and Restarting on Failure](#server-startup-log-timestamps-and-restarting-on-failure)
+      - [Server updates](#server-updates)
 - [Post Configuration](#post-configuration)
   - [ServerHostSettings.json](#serverhostsettingsjson)
-    - [Description](#description)
   - [ServerGameSettings.json](#servergamesettingsjson)
-    - [VBloodUnitSettings](#vbloodunitsettings)
   - [ServerVoipSettings.json (VOIP Configuration)](#servervoipsettingsjson-voip-configuration)
   - [Adding yourself to the adminlist.txt file](#adding-yourself-to-the-adminlisttxt-file)
   - [Configure your router to allow UDP ports to the server](#configure-your-router-to-allow-udp-ports-to-the-server)
@@ -26,13 +23,7 @@
   - [Enabling Console Access](#enabling-console-access)
   - [Direct Connect](#direct-connect)
 - [Intresting Admin Console Commands](#intresting-admin-console-commands)
-  - [Administrative Console Commands](#administrative-console-commands)
-    - [Teleportation Console Commands](#teleportation-console-commands)
-  - [Troubleshooting Console Commands](#troubleshooting-console-commands)
 - [Troubleshooting The Server](#troubleshooting-the-server)
-  - [Dedicated Server Logs](#dedicated-server-logs)
-  - [Private Server Logs](#private-server-logs)
-  - [Client (Player) Logs](#client-player-logs)
   - [Log Variables](#log-variables)
   - [Specific Troubleshooting Instructions](#specific-troubleshooting-instructions)
     - [Troubleshooting Direct Connection To the VRising Server](#troubleshooting-direct-connection-to-the-vrising-server)
@@ -56,24 +47,24 @@
   - [Server Startup](#server-startup)
     - [Server Loading on 2020.3.31f1 (6b54b7616050)](#server-loading-on-2020331f1-6b54b7616050)
 
-# Resources:
+# Resources
 
-## Official Guide
+## Official Guide <!-- omit in toc -->
 I've tried to submit a pull request to this repository with some of the information here, but it doesn't look like they want the changes, thus, I've just update this page in hopes that it will help someone.
-https://github.com/StunlockStudios/vrising-dedicated-server-instructions
+  * https://github.com/StunlockStudios/vrising-dedicated-server-instructions
 
-## Offical Bug Tracker
-https://bugs.playvrising.com/
+## Offical Bug Tracker <!-- omit in toc -->
+  * https://bugs.playvrising.com/
 
-## BattleMetrics Server Listing
-https://www.battlemetrics.com/servers/vrising
+## BattleMetrics Server Listing <!-- omit in toc -->
+  * https://www.battlemetrics.com/servers/vrising
 
-## World Maps
-https://vrising-map.com/
-https://v-rising.map.gd/a/
+## World Maps <!-- omit in toc -->
+  * https://vrising-map.com/
+  * https://v-rising.map.gd/a/
 
-## Game statistics
-https://steamdb.info/app/1604030/graphs/
+## Game statistics <!-- omit in toc -->
+  * https://steamdb.info/app/1604030/graphs/
 
 # Patch Notes
 * [Patch 0.5.41821 / 2022-06-09](https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/4480532526716778038)
@@ -95,8 +86,65 @@ https://steamdb.info/app/1604030/graphs/
   * Added LAN/Offline mode
 * [Patch 0.5.41237 / 2022-05-19 ](https://steamcommunity.com/games/1604030/announcements/detail/3218396837686301548)
 
-# Installation of the server using the AutoInstaller
-I created a quick PowerShell script that will automate the installation of the V Rising Server, and post configuration of the service. This can be found in this repository called `autoinstall_vrising.ps1`
+# File Locations
+## Dedicated Server
+### Dedicated Server - Configuration <!-- omit in toc -->
+  - :stop_sign: These may get overwritten with each update (UNSAFE!)
+    - **Startup .bat file:** `<VAR_SERVER_INSTALLATION_DIRECTORY>`\start_server_example.bat
+    - **ServerHostSettings:** `<VAR_SERVER_INSTALLATION_DIRECTORY>`\VRisingServer_Data\StreamingAssets\Settings\ServerHostSettings.json
+    - **ServerGameSettings:** `<VAR_SERVER_INSTALLATION_DIRECTORY>`\VRisingServer_Data\StreamingAssets\Settings\ServerGameSettings.json
+  - :heavy_check_mark: These should survive server updates
+    - **Startup .bat file:** `<VAR_SERVER_INSTALLATION_DIRECTORY>`\start_server.bat
+    - **VOIP Configuration:** `<VAR_SERVER_INSTALLATION_DIRECTORY>`\VRisingServer_Data\StreamingAssets\Settings\ServerVoipSettings.json
+    - **AdminList:** `<VAR_SERVER_INSTALLATION_DIRECTORY>`\VRisingServer_Data\StreamingAssets\Settings\adminlist.txt
+    - **Banlist:** `<VAR_SERVER_INSTALLATION_DIRECTORY>`\VRisingServer_Data\StreamingAssets\Settings\banlist.txt
+    - These rely on the `-persistentDataPath` being set when launching the game
+      - **ServerHostSettings:** `<VAR_SERVER_INSTALLATION_DIRECTORY>`\\`<VAR_PERSISTENT_DATA_PATH>`\Settings\ServerHostSettings.json
+      - **ServerGameSettings:** `<VAR_SERVER_INSTALLATION_DIRECTORY>`\\`<VAR_PERSISTENT_DATA_PATH>`\Settings\ServerGameSettings.json
+### Dedicated Server - Save Games <!-- omit in toc -->
+  - These rely on the `-persistentDataPath` being set when launching the game
+    - `<VAR_SERVER_INSTALLATION_DIRECTORY>`\\`<VAR_PERSISTENT_DATA_PATH>`\Saves\v1\\`<VAR_WORLD_NAME>`\AutoSave_`NNNN`
+### Dedicated Server - Logs <!-- omit in toc -->
+  - These rely on the `-logFile` being set when launching the game
+    - `<VAR_SERVER_INSTALLATION_DIRECTORY>`\logs\VRisingServer.log
+
+## Private Server
+### Private Server - Configuration <!-- omit in toc -->
+
+### Private Server - Save Games <!-- omit in toc -->
+- %USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Saves\v1\\`<VAR_SERVER_UUID>`\AutoSave_`NNNN`
+
+### Private Server - Logs <!-- omit in toc -->
+- %USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-server.log
+
+## Client
+### Configuration <!-- omit in toc -->
+  - **Console Profile** : %USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\ConsoleProfile\\`<VAR_MACHINE_NAME>`.prof
+    * You should not modify this file directly!
+### Client - Player Logs <!-- omit in toc -->
+  * %USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player.log
+
+# Dedicated Server 
+This section is related, and specific to the Dedicated Server that you would start from outside the game client.
+
+- [Dedicated Server Installation](#dedicated-server-installation)
+  - [Installation of the server using the AutoInstaller](#installation-of-the-server-using-the-autoinstaller)
+  - [Installation of the server using PowerShell and SteamPS](#installation-of-the-server-using-powershell-and-steamps)
+- [Dedicated Server Configuration](#dedicated-server-configuration)
+  - [Manual Configuration](#manual-configuration)
+    - [Server StartUp Batch File](#server-startup-batch-file)
+    - [Server Settings Files](#server-settings-files)
+    - [Allow the vRising game through the windows firewall](#allow-the-vrising-game-through-the-windows-firewall)
+    - [Server Startup, Log Timestamps, and Restarting on Failure](#server-startup-log-timestamps-and-restarting-on-failure)
+    - [Server updates](#server-updates)
+      - [With SteamPS](#with-steamps)
+      - [With SteamCMD](#with-steamcmd)
+      - [Automating updates with Windows Task Scheulder](#automating-updates-with-windows-task-scheulder)
+
+## Dedicated Server Installation
+
+### Installation of the server using the AutoInstaller <!-- omit in toc -->
+I created a quick PowerShell script that will automate the installation of the V Rising Server, and configuration of the service. This can be found in this repository called `autoinstall_vrising.ps1`
 
 This will attempt to:
 * Download SteamCMD
@@ -195,10 +243,9 @@ Action Plan
 4) If you are behind a CGNAT or DS-Lite, you may not be able to host without a public IPv4 address
 5) If you wish, you may change the daily restart time from 09:00 local time to a more suitable time Task Scheduler
 ```
+Once complete, you can skip to the [Post Configuration](#post--configuration) of the server
 
-[Skip to Post Configuration](#post--configuration)
-
-# Installation of the game using PowerShell and SteamPS
+### Installation of the server using PowerShell and SteamPS <!-- omit in toc -->
 We will assume that you want to install the server in `C:\servers\v_rising` (This will be <VAR_SERVER_INSTALLATION_DIRECTORY> in the rest of this document) if you do not, change the path in the following commands.
 
 We will install the PowerShell module for SteamCLI to install and update the server.
@@ -209,10 +256,12 @@ Update-SteamApp -ApplicationName 'V Rising Dedicated Server' -Path 'C:\servers\v
 ```
 **NOTE:** Any questions should be answered with yes
 
-# Manual Configuration
+## Dedicated Server Configuration
+
+### Manual Configuration
 If you want to manually setup everything instead of using the auto installer, you can follow these steps:
 
-## Server StartUp Batch File
+#### Server StartUp Batch File
 * Copy the `<VAR_SERVER_INSTALLATION_DIRECTORY>\start_server_example.bat` to a new file (I called mine `<VAR_SERVER_INSTALLATION_DIRECTORY>\start_server.bat`)
 Inside the file, change the serverName (`My Cool Server`) and the -saveName (`coolServer1`)
 
@@ -227,16 +276,16 @@ Inside the file, change the serverName (`My Cool Server`) and the -saveName (`co
   ```
 In this case, we are removing the `-logFile ".\logs\VRisingServer.log` line from the logs, we will use this later with NSSM to give us timestamps and log file rotation. Huzzah!
 
-## Server Settings Files
+#### Server Settings Files
 1. Create the directory `<VAR_SERVER_INSTALLATION_DIRECTORY>\save-data\Settings`
 2. Copy and paste `ServerHostSettings.json` and `ServerGameSettings.json` files from `<VAR_SERVER_INSTALLATION_DIRECTORY>/VRisingServer_Data/StreamingAssets/Settings/` into the directory you created in step 1
 
 **NOTE:** If you elect to directly modify the configuration files in `<VAR_SERVER_INSTALLATION_DIRECTORY>\VRisingServer_Data\StreamingAssets\Settings\` you may loose your configuration changes with new updates, so you may want to consider backing them up.
 
-## Allow the vRising game through the windows firewall
+#### Allow the vRising game through the windows firewall
 You may need to allow the executable (VRisingServer.exe) through the windows firewall
 
-## Server Startup, Log Timestamps, and Restarting on Failure
+#### Server Startup, Log Timestamps, and Restarting on Failure
 This will add timestamps, restart the service if crashes, and sets up the server to start the service when the machine starts up, oh my!
 
 In this example, we will setup the server with NSSM (Non Sucking Service Manager)
@@ -248,7 +297,7 @@ In this example, we will setup the server with NSSM (Non Sucking Service Manager
     ```dos
     cd <VAR_SERVER_INSTALLATION_DIRECTORY>
     nssm.exe remove VRisingServer confirm
-    nssm.exe install VRisingServer
+    nssm.exe install VRisingServer VRisingServer
     nssm.exe set VRisingServer Application <VAR_SERVER_INSTALLATION_DIRECTORY>\start_server.bat
     nssm.exe set VRisingServer AppDirectory <VAR_SERVER_INSTALLATION_DIRECTORY>
     nssm.exe set VRisingServer AppExit Default Restart
@@ -268,11 +317,12 @@ In this example, we will setup the server with NSSM (Non Sucking Service Manager
     nssm start VRisingServer
     ```
 
-## Server updates
-We can use the exact same command we used to install the game, to update the game, however, since we need to enter "Y" to start the update, we will wrap it in a batch file, and place it with the startup batch file in the `<VAR_SERVER_INSTALLATION_DIRECTORY>`, we will also announce to the players we are doing this with mcrcon (https://github.com/Tiiffi/mcrcon/releases/) which we will place in the server directory as well for ease of access. For the update itself, you can replace the powershell command with steamcmd (assuming you also place it in the server directory) if you wish using `steamcmd.exe +login anonymous +app_update 1829350 validate +quit`  
+#### Server updates
+We will place the `update.bat` file with the startup batch file in the `<VAR_SERVER_INSTALLATION_DIRECTORY>`, we will also announce to the players we are doing this with mcrcon (https://github.com/Tiiffi/mcrcon/releases/) which we will place in the server directory as well for ease of access. 
 
 **NOTE**: In either case, you will need to update the path to the server by replacing any line with `C:\servers\v_rising` with the correct path for your server.
 
+##### With SteamPS <!-- omit in toc -->
 `update.bat`
 ```dos
 @echo off
@@ -291,7 +341,26 @@ echo "Starting the server"
 C:\servers\v_rising\nssm.exe start vrisingserver
 ```
 
-### Automating updates with Windows Task Scheulder
+##### With SteamCMD <!-- omit in toc -->
+`update.bat`
+```dos
+@echo off
+echo "Sending message to the server, restart will occur in 10 minutes"
+mcrcon.exe -H 127.0.0.1 -P <RCON_PORT> -p <RCON_PASSWORD> "announcerestart 10"
+timeout 600
+echo "Stopping the VRising server"
+C:\servers\v_rising\nssm.exe stop vrisingserver
+echo "Waiting for 60 seconds for the server to go down"
+timeout 60
+echo "Updating the server (if needed)"
+steamcmd.exe +login anonymous +app_update 1829350 validate +quit
+echo "Waiting for the update to complete (5 minutes)"
+timeout 600
+echo "Starting the server"
+C:\servers\v_rising\nssm.exe start vrisingserver
+```
+
+##### Automating updates with Windows Task Scheulder <!-- omit in toc -->
 * Create a `Basic Task`
 * Name it `Update V-Rising Server`
 * Click `Next`
@@ -311,13 +380,13 @@ Weather or not you are using the auto installer or the manual steps, the followi
 
 ## ServerHostSettings.json
 
-### Description
-Within the `<VAR_SERVER_INSTALLATION_DIRECTORY>\save-data\Settings\ServerHostSettings.json` file, in `Description` field, you can use line breaks using `\n`
+### Description <!-- omit in toc -->
+Within the `ServerHostSettings.json` file, in `Description` field, you can use line breaks using `\n`
 
 ## ServerGameSettings.json
 You can get more information (min/max) and descriptions on each setting using this PDF: https://cdn.stunlock.com/blog/2022/05/25083113/Game-Server-Settings.pdf
 
-### VBloodUnitSettings
+### VBloodUnitSettings <!-- omit in toc -->
 There is some confusion about configuring the `VBloodUnitSettings` this is an example:
 
 ```json
@@ -341,18 +410,18 @@ Be advised this is 100% unsupported!
 `https://discord.com/channels/803241158054510612/976404273015431168/980896456766533743` - VOIP setup (Also in the pinned messages)  
 
 1) Create an account on the Vivox Developer Portal (https://developer.vivox.com/register)  
-**NOTE** There is no real difference between a person and an organization when signing up for access to Vivox
-3) Login to the Vivox Developer Portal 
-4) Click on `Create New Application`
-5) In Application or Game Name set the name to something like `VRising_Server`
-6) In the `Game Genres` put a check in `Action`
-7) Click `Continue`
-8) In `What engine are you building your app with? Vivox provides out-of-the-box solutions for the engines listed below - select Vivox Core if yours is not listed.` select `Unity`
-9) In `What platform(s) does your app support` select `Windows`
-10) Click `Continue`
-11) Click `Create App`
-12) Create a new file called `<GAME_SERVER_DIRECTORY>\VRisingServer_Data\StreamingAssets\Settings\ServerVoipSettings.json`
-13) Add the following content to the file
+**NOTE** In the `Submission Type` section, there is no functional difference between a `Individual: Personal Account` and and a `Organization: Professional Account`. I would `strongly` recommend using an `Individual: Personal Account` because for an `Organization: Professional Account` each game you create `also` needs to be authorized, which can futher increase the waiting time. I would also assume that for a `Organization: Professional Account` the account will be under greater scrutiney, and it has a higher chance of taking longer, or being denied outright.
+2) Login to the Vivox Developer Portal 
+3) Click on `Create New Application`
+4) In Application or Game Name set the name to something like `VRising_Server`
+5) In the `Game Genres` put a check in `Action`
+6) Click `Continue`
+7) In `What engine are you building your app with? Vivox provides out-of-the-box solutions for the engines listed below - select Vivox Core if yours is not listed.` select `Unity`
+8) In `What platform(s) does your app support` select `Windows`
+9) Click `Continue`
+10) Click `Create App`
+11) Create a new file called `<GAME_SERVER_DIRECTORY>\VRisingServer_Data\StreamingAssets\Settings\ServerVoipSettings.json`
+12) Add the following content to the file
     ```json
     {
         "VOIPEnabled": true,
@@ -367,12 +436,12 @@ Be advised this is 100% unsupported!
         "VOIPFadeIntensity": 2.0
     }
     ```
-14) In the `ServerVoipSettings.json` set the `VOIPIssuer` to the value you see in Vivox portal under `Api Keys` called `Issuer`
-15) In the `ServerVoipSettings.json` set the `VOIPSecret` to the value you see in the Vivox portal under `Api Keys` called `Secret Key`
-16) In the `ServerVoipSettings.json` set the `VOIPAppUserId` to the value you see in the Vivox portal under `Api Keys` called `Admin User ID`
-17) In the `ServerVoipSettings.json` set the `VOIPAppUserPwd` to the value you see in the Vivox portal under `Api Keys` called `Admin Password`
-18) In the `ServerVoipSettings.json` set the `VOIPVivoxDomain` to the value you see in the Vivox portal under `Environment Details` called `Domain`
-19) In the `ServerVoipSettings.json` set the `VOIPAPIEndpoint` to the value you see in the Vivox portal under `Environment Details` called `API End-Point`
+13) In the `ServerVoipSettings.json` set the `VOIPIssuer` to the value you see in Vivox portal under `Api Keys` called `Issuer`
+14) In the `ServerVoipSettings.json` set the `VOIPSecret` to the value you see in the Vivox portal under `Api Keys` called `Secret Key`
+15) In the `ServerVoipSettings.json` set the `VOIPAppUserId` to the value you see in the Vivox portal under `Api Keys` called `Admin User ID`
+16) In the `ServerVoipSettings.json` set the `VOIPAppUserPwd` to the value you see in the Vivox portal under `Api Keys` called `Admin Password`
+17) In the `ServerVoipSettings.json` set the `VOIPVivoxDomain` to the value you see in the Vivox portal under `Environment Details` called `Domain`
+18) In the `ServerVoipSettings.json` set the `VOIPAPIEndpoint` to the value you see in the Vivox portal under `Environment Details` called `API End-Point`
 
 **NOTE:** The difference between a sandbox, and a production configuration is the sandbox can only maintain 100 concurrent connections, while a production configuration can mantain 5000.
 
@@ -413,31 +482,22 @@ Start vRising -> `Play` -> `Online Play` -> `Find Servers` (bottom right) -> `Di
 # Intresting Admin Console Commands
 Your current binds can be found in: `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\ConsoleProfile\<machine_name.prof>` (Do not modify this file directly!). You can list binds in game using `Console.ProfileInfo`
 
-## Administrative Console Commands
+## Administrative Console Commands <!-- omit in toc -->
 `Console.Bind F1 listusers` - You can bind a console command to a function key  
 `toggleobserve 1` - Set yourself to observer mode, you will get damage immunity and a speed boost (You should remove your cloak for proper invisibility.)  
 `changehealthclosesttomouse -5000` - Remove palisades or castle that may be blocking passage (You may want to `console.bind` this to a function key for easy access.)
 
-### Teleportation Console Commands
+### Teleportation Console Commands <!-- omit in toc -->
 `copyPositionDump` - Will copy your current position to your clipboard (These are not very accurate!)  
 `https://discord.com/channels/803241158054510612/976404273015431168/980326759293673472` - Teleport map  
 `<CTRL> + <SHIFT> and clicking your map` - After opening the map, you will teleport to the location
 
-## Troubleshooting Console Commands
+## Troubleshooting Console Commands <!-- omit in toc -->
 `ToggleDebugViewCategory All` - Turn on all reporting  
 `ToggleDebugViewCategory Network` - Turn on network reporting (latency, FPS, users)
 
 # Troubleshooting The Server
 You should review the logs of the server to begin any troubleshooting session.
-
-## Dedicated Server Logs
-If you are hosting the game as a dedicated server, and you are using the batch file to start the game (as recommended) the logs should exist in `<VAR_SERVER_INSTALLATION_DIRECTORY>\logs\VRisingServer.log`
-
-## Private Server Logs
-If you elect to host the server from the game as a private server, then the server will place the main server engine logs in `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-server.log` a second set of logs in `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-prev.log` and some supplimentry logs in `\steamapps\common\VRising\VRising_Server\logs`
-
-## Client (Player) Logs
-These are kept in `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player.log`
 
 ## Log Variables
 <VAR_SERVER_INSTALLATION_DIRECTORY> - The directory where the game is installed
