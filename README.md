@@ -181,6 +181,7 @@ This script will:
         * Install an RCON client to broadcast the restart to the users on the server
         * Open the Windows firewall for the VRising Server
         * Schedule a restart daily at 09:00 to update the server automatically
+Press any key to continue or CTRL+C to quit:
 ```
 
 During installation, each step is documented
@@ -201,7 +202,7 @@ Installing VRising Dedicated Server
         Creating logs directory
 Configuring Server
         Configuring Game and Host Settings that won't get replaced on update
-        Enabling RCON with password: CCl
+        Enabling RCON with password: fkagpjkO
         Confiuring VRsingServer Service with NSSM
         Configuring Task Scheudler to reboot and update daily at 09:00AM
         Creating daily update .bat file
@@ -410,7 +411,7 @@ Be advised this is 100% unsupported!
 `https://discord.com/channels/803241158054510612/976404273015431168/980896456766533743` - VOIP setup (Also in the pinned messages)  
 
 1) Create an account on the Vivox Developer Portal (https://developer.vivox.com/register)  
-**NOTE** In the `Submission Type` section, there is no functional difference between a `Individual: Personal Account` and and a `Organization: Professional Account`. I would `strongly` recommend using an `Individual: Personal Account` because for an `Organization: Professional Account` each game you create `also` needs to be authorized, which can futher increase the waiting time. I would also assume that for a `Organization: Professional Account` the account will be under greater scrutiney, and it has a higher chance of taking longer, or being denied outright.
+**NOTE** In the `Submission Type` section, there is no functional difference between a `Individual: Personal Account`. I would `strongly` recommend using an `Individual: Personal Account` if you are not representing an actual organization. 
 2) Login to the Vivox Developer Portal 
 3) Click on `Create New Application`
 4) In Application or Game Name set the name to something like `VRising_Server`
@@ -1300,6 +1301,20 @@ Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
 ```
 
 ### VOIP
+
+If it cannot find the file:
+
+```
+ProjectM.ServerVoipSettings - Error while trying to load settings from file. File not Found! (<VAR_SERVER_INSTALLATION_DIRECTORY>/VRisingServer_Data/StreamingAssets\Settings\ServerVoipSettings.json)
+```
+
+If it can:
+
+```
+
+```
+
+As it loads:
 
 ```
 Vivox Request URI <VAR_VOIPAPIEndpoint>/viv_signin.php?userid=<VAR_VOIPAppUserId>&pwd=<VAR_VOIPAppUserPwd>
