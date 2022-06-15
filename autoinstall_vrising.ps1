@@ -9,7 +9,7 @@
     this will also configure the windows firewall to allow the program to operate.
     The user input is expected to be the full path
 .NOTES
-    Version        : 1.105
+    Version        : 1.106
     File Name      : autoinstall_vrising.ps1
     Author         : Darryl H (https://github.com/darryl-h/)
     Credits        : Port and JSON handling from lordfiSh (https://github.com/lordfiSh/)
@@ -35,6 +35,16 @@ If (($PSBoundParameters.values | Measure-Object | Select-Object -ExpandProperty 
     write-host "You must provide the full path to install to, exiting..."
     EXIT
 }
+
+# Resize the console to 150
+$pshost = Get-Host              # Get the PowerShell Host.
+$pswindow = $pshost.UI.RawUI    # Get the PowerShell Host's UI.
+$newsize = $pswindow.BufferSize # Get the UI's current Buffer Size.
+$newsize.width = 150            # Set the new buffer's width to 150 columns.
+$pswindow.buffersize = $newsize # Set the new Buffer Size as active.
+$newsize = $pswindow.windowsize # Get the UI's current Window Size.
+$newsize.width = 150            # Set the new Window Width to 150 columns.
+$pswindow.windowsize = $newsize # Set the new Window Size as active.
 
 #Ensure the directory doesn't already exist
 if (Test-Path -Path $InstallPath) {
@@ -81,7 +91,7 @@ function DownloadAndExtractFromWeb
     # Invoke-WebRequest -Uri "$DownloadURL" -OutFile $DownloadFilename -UserAgent [Microsoft.PowerShell.Commands.PSUserAgent]::FireFox
     # If the file failed to download, exit
     if(![System.IO.File]::Exists("$InstallPath\$DownloadFilename")) {
-        throw (New-Object System.IO.FileNotFoundException("File failed to download!"))
+        write-host "`Failed to download $DownloadFilename, rolling back, please retry after a few moments."
         Remove-Item "$InstallPath" -Recurse
         EXIT
     }
@@ -207,13 +217,12 @@ Write-Host "`tStarting the VRising service"
 Start-Process -FilePath "$InstallPath\nssm.exe" -ArgumentList "start VRisingServer"
 Write-Host "All Done!" -ForegroundColor Green
 
-
+Write-Host "`n[[ IMPORTANT INFORMATION ]]" -ForegroundColor Red
 # Let the user know where files are
 Write-Host "`nManagement" -ForegroundColor Cyan
 # Write-Host "Your Startup .bat file is in $InstallPath\steamapps\common\VRisingDedicatedServer\start_server.bat"
 Write-Host "Your Update .bat file is in $InstallPath\steamapps\common\VRisingDedicatedServer\update_server.bat"
-Write-Host "Your can manage the service with $InstallPath\nssm.exe [start|stop|restart|edit] VRisingServer"
-Write-Host "Your pseudo unique RCON password is $RCONPassword"
+Write-Host "Your can manage the service normally with 'services.msc' or with $InstallPath\nssm.exe [start|stop|restart|edit] VRisingServer"
 
 Write-Host "`nConfiguration Files" -ForegroundColor Cyan
 # Load the ServerHostSettings.json
@@ -225,29 +234,45 @@ $VRisingAutoSaveCount = $ServerHostSettings.AutoSaveCount
 $VRisingAutoSaveInterval = $ServerHostSettings.AutoSaveInterval
 $VRisingGamePort = $ServerHostSettings.Port
 $VRisingQueryPort = $ServerHostSettings.QueryPort
-Write-Host "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json" -ForegroundColor Yellow
+Write-Host "`nServerHostSettings" -ForegroundColor Yellow
 Write-Host "`tMaximum Connected Users: $VRisingMaxConnectedUsers"
 Write-Host "`tGame Port: $VRisingGamePort"
 Write-Host "`tQuery Port: $VRisingQueryPort"
 Write-Host "`tSaves: $InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Saves\v1\$VRisingSavename"
+Write-Host "`tTo migrate your existing world, issue the following command to open the save directory:" -ForegroundColor Magenta
+Write-Host "`tInvoke-Item $InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Saves\v1\$VRisingSavename\"  -ForegroundColor DarkMagenta 
 Write-Host "`tAuto Save Count: $VRisingAutoSaveCount"
 Write-Host "`tAuto Save Interval (In Seconds): $VRisingAutoSaveInterval"
 Write-Host "`tRCON Password: $RCONPassword"
+Write-Host "`tTo make changes to your ServerHostSettings file, please issue the following command:"
+Write-Host "`tInvoke-Item $InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json"
+
 # Load the ServerHostSettings.json
 $ServerGameSettings = Get-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerGameSettings.json" | Out-String | ConvertFrom-Json
 $VRisingGameModeType = $ServerGameSettings.GameModeType
 $VRisingClanSize = $ServerGameSettings.ClanSize
 $VRisingName = $ServerGameSettings.Name
 $VRisingDescription = $ServerGameSettings.Description
-Write-Host "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerGameSettings.json" -ForegroundColor Yellow
+Write-Host "`nServerGameSettings" -ForegroundColor Yellow
 Write-Host "`tGame Name: $VRisingName"
 Write-Host "`tGame Description: $VRisingDescription"
 Write-Host "`tGame Mode Type: $VRisingGameModeType"
 Write-Host "`tGroup/Clan Size: $VRisingClanSize"
-Write-Host "Settings Descriptions and Min/Maxs: https://cdn.stunlock.com/blog/2022/05/25083113/Game-Server-Settings.pdf" -ForegroundColor DarkYellow
+Write-Host "`tSettings Descriptions and Min/Maxs: https://cdn.stunlock.com/blog/2022/05/25083113/Game-Server-Settings.pdf" -ForegroundColor DarkYellow
+Write-Host "`tTo make changes to your ServerGameSettings file, please issue the following command:" -ForegroundColor Magenta
+Write-Host "`tInvoke-Item $InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerGameSettings.json"  -ForegroundColor DarkMagenta 
+
+Write-Host "`nAdminlist" -ForegroundColor Yellow
+Write-Host "`tTo modify the adminlist.txt, please issue the following command:" -ForegroundColor Magenta
+Write-Host "`tInvoke-Item $InstallPath\steamapps\common\VRisingDedicatedServer\VRisingServer_Data\StreamingAssets\Settings\adminlist.txt"  -ForegroundColor DarkMagenta 
+
+Write-Host "`nBanlist" -ForegroundColor Yellow
+Write-Host "`tTo modify the banlist.txt, please issue the following command:" -ForegroundColor Magenta
+Write-Host "`tInvoke-Item $InstallPath\steamapps\common\VRisingDedicatedServer\VRisingServer_Data\StreamingAssets\Settings\banlist.txt"  -ForegroundColor DarkMagenta 
 
 Write-Host "`nLogs" -ForegroundColor Cyan
-Write-Host "Your server logs are in $InstallPath\steamapps\common\VRisingDedicatedServer\logs\VRisingServer.log"
+Write-Host "`tTo view your log file, please issue the following command:" -ForegroundColor Magenta
+Write-Host "`tInvoke-Item $InstallPath\steamapps\common\VRisingDedicatedServer\logs\VRisingServer.log" -ForegroundColor DarkMagenta 
 
 $ServerIPv4 = Get-NetIPAddress -AddressFamily IPv4 -InterfaceIndex $(Get-NetConnectionProfile | Select-Object -ExpandProperty InterfaceIndex) | Select-Object -ExpandProperty IPAddress
 #$ServerIPv4 = (Get-NetIPAddress | Where-Object {$_.AddressState -eq "Preferred" -and $_.ValidLifetime -lt "24:00:00"}).IPAddress
@@ -260,4 +285,6 @@ Write-Host "2) Configure your router at $ServerGateway and forward UDP port $VRi
 Write-Host "`tTry http://portforward.com for information on how to port forward"
 Write-Host "3) If you have a hardware firewall, you will need to also allow the traffic to this machine ($ServerIPv4)"
 Write-Host "4) If you are behind a CGNAT or DS-Lite, you may not be able to host without a public IPv4 address"
-Write-Host "5) If you wish, you may change the daily restart time from 09:00 local time to a more suitable time Task Scheduler"
+Write-Host "5) If you wish, you may change the daily restart and update time of the server from 09:00 local"
+Write-Host "`ttime to a more suitable time in Windows Task Scheduler"
+
