@@ -167,7 +167,7 @@ If this sounds like something you would like, and you have [PowerShell v5](https
 2. type `powershell`
 3. type `Invoke-WebRequest -Uri https://raw.githubusercontent.com/darryl-h/v-rising-server/main/autoinstall_vrising.ps1 -OutFile .\autoinstall_vrising.ps1`
 4. type `powershell -ExecutionPolicy Bypass -File .\autoinstall_vrising.ps1 C:\vrisingserver`  
-  **NOTE**: Change `C:\vrisingserver` to the `full path` of the location where you want to install the server.
+  **NOTE**: Change `C:\vrisingserver` to the `full path` of the location where you want to install the server.  
   **NOTE**: You can also specify `-gameport <game_port_#>` , `-queryport <query_port_#>` and `-rconport <rcon_port_#>` if you wish. If you do not specify a different port, it will be installed using the default ports.
 
 Before installation, the user is provided a message of what **should** happen:  
