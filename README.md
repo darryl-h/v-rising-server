@@ -147,6 +147,9 @@ This section is related, and specific to the Dedicated Server that you would sta
 I created a quick PowerShell script that will automate the installation of the V Rising Server, and configuration of the service. This can be found in this repository called `autoinstall_vrising.ps1`
 
 This will attempt to:
+* Validate that the requested ports are not in use
+* Validate your network to see if you can host properly
+* Validate the installation path
 * Download SteamCMD
 * Download the Non Sucking Service Manager (NSSM)
 * Install the VRising Dedicated Server into a path you desire with SteamCMD
@@ -158,91 +161,126 @@ This will attempt to:
 * Open the Windows firewall for the VRising Server
 * Schedule a restart daily at 09:00 to update the server automatically
 
-If this sounds like something you would like, and you have [PowerShell v5](https://docs.microsoft.com/en-us/powershell/scripting/windows-powershell/install/windows-powershell-system-requirements?view=powershell-7.2#windows-powershell-51) you can install it using these 3 steps:
+If this sounds like something you would like, and you have [PowerShell v5](https://docs.microsoft.com/en-us/powershell/scripting/windows-powershell/install/windows-powershell-system-requirements?view=powershell-7.2#windows-powershell-51) you can install it using these `4` steps:
 
 1. Start an `administrator` command prompt (`cmd`)
-2. Navigate to the directory where the installation script is (`cd <some_directory>`)
 2. type `powershell`
-3. type `powershell -ExecutionPolicy Bypass -File .\autoinstall_vrising.ps1 C:\vrisingserver`  
+3. type `Invoke-WebRequest -Uri https://raw.githubusercontent.com/darryl-h/v-rising-server/main/autoinstall_vrising.ps1 -OutFile .\autoinstall_vrising.ps1`
+4. type `powershell -ExecutionPolicy Bypass -File .\autoinstall_vrising.ps1 C:\vrisingserver`  
   **NOTE**: Change `C:\vrisingserver` to the `full path` of the location where you want to install the server.
+  **NOTE**: You can also specify `-gameport <game_port_#>` , `-queryport <query_port_#>` and `-rconport <rcon_port_#>` if you wish. If you do not specify a different port, it will be installed using the default ports.
 
 Before installation, the user is provided a message of what **should** happen:  
 ```
-This script will:
-        * Install the VRising Dedicated Server into C:\vrisingserver with SteamCMD
-        * Configure the server to use the configurations in a custom directory that will survive a server update
-        * Create a custom update .bat file
-        * Install NSSM to manage the server which will:
-                > Start with Windows
-                > Restart the server if it crashes
-                > Add UTC timestamps to the logs
-                > Keep logs indefinatly
-        * Enable RCON
-        * Install an RCON client to broadcast the restart to the users on the server
-        * Open the Windows firewall for the VRising Server
-        * Schedule a restart daily at 09:00 to update the server automatically
+[Validation - Paths]
+        Validating user supplied path
+                * User supplied path looks OK
+
+[Validation - Networking]
+        Validating user supplied game port (UDP: 9886)
+                * RCON port looks OK
+        Validating user supplied query port (UDP: 9887)
+                * Query port looks OK
+        Validating user supplied RCON port (TCP: 25585)
+                * RCON port looks OK
+        Validating Routing
+                * Routing looks OK
+
+[Prepare for full installation]
+        This script will:
+                * Install the VRising Dedicated Server into c:\vrisingserver6 with SteamCMD
+                * Configure the server to use the configurations in a custom directory that will survive a server update
+                * Create a custom update .bat file
+                * Install NSSM to manage the server which will:
+                        > Start with Windows
+                        > Restart the server if it crashes
+                        > Add UTC timestamps to the logs
+                        > Keep logs indefinatly
+                * Enable RCON
+                * Install an RCON client to broadcast the restart to the users on the server
+                * Open the Windows firewall for the VRising Server
+                * Schedule a restart daily at 09:00 to update the server automatically
 Press any key to continue or CTRL+C to quit:
 ```
 
 During installation, each step is documented
 ```
-Preparing the Non Sucking Service Manager (NSSM)
-        Downloading the Non Sucking Service Manager (NSSM)
-        Extracting nssm-2.24-101-g897c7ad.zip
-        Moving the 64 bit version of NSSM
-        Removing NSSM archive
-Preparing mcrcon
-        Downloading mcrcon
-        Extracting mcrcon-0.7.2-windows-x86-64.zip
-Preparing SteamCMD
-        Downloading SteamCMD
-        Extracting steamcmd.zip
-Installing VRising Dedicated Server
-        Validating installation
-        Creating logs directory
-Configuring Server
-        Configuring Game and Host Settings that won't get replaced on update
-        Enabling RCON with password: fkagpjkO
-        Confiuring VRsingServer Service with NSSM
-        Configuring Task Scheudler to reboot and update daily at 09:00AM
-        Creating daily update .bat file
-        Configuring Windows Firewall
-        Starting the VRising service
-All Done!
+[Installing V Rising]
+        Preparing the Non Sucking Service Manager (NSSM)
+                * Downloading the Non Sucking Service Manager (NSSM)
+                * Extracting nssm-2.24-101-g897c7ad.zip
+                * Moving the 64 bit version of NSSM
+                * Removing NSSM archive
+        Preparing mcrcon
+                * Downloading mcrcon
+                * Extracting mcrcon-0.7.2-windows-x86-64.zip
+        Preparing SteamCMD
+                * Downloading SteamCMD
+                * Extracting steamcmd.zip
+        Installing VRising Dedicated Server
+                * Validating installation
+                * Creating logs directory
+        Configuring Server
+                * Configuring Game and Host Settings that won't get replaced on update
+                * Enabling RCON with password: KgsYy3q2
+                * Confiuring VRsingServer Service with NSSM
+                * Configuring Task Scheudler to reboot and update daily at 09:00AM
+                * Creating daily update .bat file
+                * Configuring Windows Firewall                                                                                                                                                      * Starting the VRising service                                                                                                                                              All Done!   
 ```
 
 After installation, the user is provided with all the information to manage the service
 ```
-Management
-Your Update .bat file is in C:\vrisingserver\steamapps\common\VRisingDedicatedServer\update_server.bat
-Your can manage the service with C:\vrisingserver\nssm.exe [start|stop|restart|edit] VRisingServer
-Your pseudo unique RCON password is CCl
+[IMPORTANT INFORMATION - READ THIS]
 
-Configuration Files
-C:\vrisingserver\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json
-        Maximum Connected Users: 40
-        Game Port: 9876
-        Query Port: 9877
-        Saves: C:\vrisingserver\steamapps\common\VRisingDedicatedServer\save-data\Saves\v1\world1
-        Auto Save Count: 50
-        Auto Save Interval (In Seconds): 600
-C:\vrisingserver\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerGameSettings.json
-        Game Mode Type: PvP
-        Group/Clan Size: 4
-Settings Descriptions and Min/Maxs: https://cdn.stunlock.com/blog/2022/05/25083113/Game-Server-Settings.pdf
+        Management
+                * Your Update .bat file is in c:\vrisingserver6\steamapps\common\VRisingDedicatedServer\update_server.bat
+                * Your can manage the service normally with 'services.msc' or with c:\vrisingserver6\nssm.exe [start|stop|restart|edit] VRisingServer-9886
 
-Logs
-Your server logs are in C:\vrisingserver\steamapps\common\VRisingDedicatedServer\logs\VRisingServer.log
+        Configuration Files
+                ServerHostSettings
 
-Action Plan
-1) Test direct connect from a machine on this same network
-        Enter the game, and use Direct Connect, and connect to 192.168.1.10:9876
-        Do NOT select 'LAN Mode'
-2) Configure your router at 192.168.1.254 and forward UDP port 9876 and 9877 to this machine (192.168.1.10)
-        Try http://portforward.com for information on how to port forward
-3) If you have a hardware firewall, you will need to also allow the traffic to this machine (192.168.1.10)
-4) If you are behind a CGNAT or DS-Lite, you may not be able to host without a public IPv4 address
-5) If you wish, you may change the daily restart time from 09:00 local time to a more suitable time Task Scheduler
+                ServerGameSettings
+                        Game Name: V Rising Server
+                        Maximum Connected Users: 40
+                        Game Port: 9876
+                        Query Port: 9877
+                        Saves: c:\vrisingserver6\steamapps\common\VRisingDedicatedServer\save-data\Saves\v1\world1
+                        To migrate your existing world, issue the following command to open the save directory:
+                        Invoke-Item c:\vrisingserver6\steamapps\common\VRisingDedicatedServer\save-data\Saves\v1\world1\
+                        Auto Save Count: 50
+                        Auto Save Interval (In Seconds): 600
+                        RCON Password: KgsYy3q2
+                        To make changes to your ServerHostSettings file, please issue the following command:
+                        Invoke-Item c:\vrisingserver6\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json
+                        Game Description:
+                        Game Mode Type: PvP
+                        Group/Clan Size: 4
+                        Settings Descriptions and Min/Maxs: https://cdn.stunlock.com/blog/2022/05/25083113/Game-Server-Settings.pdf
+                        To make changes to your ServerGameSettings file, please issue the following command:
+                        Invoke-Item c:\vrisingserver6\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerGameSettings.json
+
+                Adminlist
+                        To modify the adminlist.txt, please issue the following command:
+                        Invoke-Item c:\vrisingserver6\steamapps\common\VRisingDedicatedServer\VRisingServer_Data\StreamingAssets\Settings\adminlist.txt
+
+                Banlist
+                        To modify the banlist.txt, please issue the following command:
+                        Invoke-Item c:\vrisingserver6\steamapps\common\VRisingDedicatedServer\VRisingServer_Data\StreamingAssets\Settings\banlist.txt
+
+        Logs
+                To view your log file, please issue the following command:
+                Invoke-Item c:\vrisingserver6\steamapps\common\VRisingDedicatedServer\logs\VRisingServer.log
+
+        Action Plan
+                1) Test direct connect from a machine on this same network
+                        a) Enter the game, and use Direct Connect, and connect to 192.168.1.10:9876
+                        b) Do NOT select 'LAN Mode'
+                2) Configure your router at 192.168.1.254 and forward UDP port 9876 and 9877 to this machine (192.168.1.10)
+                        a) Try http://portforward.com for information on how to port forward
+                3) If you have a hardware firewall, you will need to also allow the traffic to this machine (192.168.1.10)
+                4) If you are behind a CGNAT or DS-Lite, you may not be able to host without a public IPv4 address
+                5) If you wish, you may change the daily restart and update time of the server from 09:00 local time to a more suitable time in Windows Task Scheduler
 ```
 Once complete, you can skip to the [Post Configuration](#post--configuration) of the server
 
