@@ -284,7 +284,7 @@ After installation, the user is provided with all the information to manage the 
                 4) If you are behind a CGNAT or DS-Lite, you may not be able to host without a public IPv4 address
                 5) If you wish, you may change the daily restart and update time of the server from 09:00 local time to a more suitable time in Windows Task Scheduler
 ```
-Once complete, you can skip to the [Post Configuration](#post--configuration) of the server
+Once complete, you can skip to the [Post Configuration](#post-configuration) of the server
 
 ### Installation of the server using PowerShell and SteamPS <!-- omit in toc -->
 We will assume that you want to install the server in `C:\servers\v_rising` (This will be <VAR_SERVER_INSTALLATION_DIRECTORY> in the rest of this document) if you do not, change the path in the following commands.
