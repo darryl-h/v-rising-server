@@ -177,18 +177,18 @@ Before installation, the user is provided a message of what **should** happen:
                 * User supplied path looks OK
 
 [Validation - Networking]
-        Validating user supplied game port (UDP: 9886)
+        Validating user supplied game port (UDP: 9876)
                 * RCON port looks OK
-        Validating user supplied query port (UDP: 9887)
+        Validating user supplied query port (UDP: 9877)
                 * Query port looks OK
-        Validating user supplied RCON port (TCP: 25585)
+        Validating user supplied RCON port (TCP: 25575)
                 * RCON port looks OK
         Validating Routing
                 * Routing looks OK
 
 [Prepare for full installation]
         This script will:
-                * Install the VRising Dedicated Server into c:\vrisingserver6 with SteamCMD
+                * Install the VRising Dedicated Server into c:\vrisingserver with SteamCMD
                 * Configure the server to use the configurations in a custom directory that will survive a server update
                 * Create a custom update .bat file
                 * Install NSSM to manage the server which will:
@@ -226,7 +226,9 @@ During installation, each step is documented
                 * Confiuring VRsingServer Service with NSSM
                 * Configuring Task Scheudler to reboot and update daily at 09:00AM
                 * Creating daily update .bat file
-                * Configuring Windows Firewall                                                                                                                                                      * Starting the VRising service                                                                                                                                              All Done!   
+                * Configuring Windows Firewall
+                * Starting the VRising service
+        All Done!
 ```
 
 After installation, the user is provided with all the information to manage the service
@@ -234,8 +236,8 @@ After installation, the user is provided with all the information to manage the 
 [IMPORTANT INFORMATION - READ THIS]
 
         Management
-                * Your Update .bat file is in c:\vrisingserver6\steamapps\common\VRisingDedicatedServer\update_server.bat
-                * Your can manage the service normally with 'services.msc' or with c:\vrisingserver6\nssm.exe [start|stop|restart|edit] VRisingServer-9886
+                * Your Update .bat file is in c:\vrisingserver\steamapps\common\VRisingDedicatedServer\update_server.bat
+                * Your can manage the service normally with 'services.msc' or with c:\vrisingserver\nssm.exe [start|stop|restart|edit] VRisingServer-9876
 
         Configuration Files
                 ServerHostSettings
@@ -245,7 +247,7 @@ After installation, the user is provided with all the information to manage the 
                         Maximum Connected Users: 40
                         Game Port: 9876
                         Query Port: 9877
-                        Saves: c:\vrisingserver6\steamapps\common\VRisingDedicatedServer\save-data\Saves\v1\world1
+                        Saves: c:\vrisingserver\steamapps\common\VRisingDedicatedServer\save-data\Saves\v1\world1
                         To migrate your existing world, issue the following command to open the save directory:
                         Invoke-Item c:\vrisingserver6\steamapps\common\VRisingDedicatedServer\save-data\Saves\v1\world1\
                         Auto Save Count: 50
@@ -258,19 +260,19 @@ After installation, the user is provided with all the information to manage the 
                         Group/Clan Size: 4
                         Settings Descriptions and Min/Maxs: https://cdn.stunlock.com/blog/2022/05/25083113/Game-Server-Settings.pdf
                         To make changes to your ServerGameSettings file, please issue the following command:
-                        Invoke-Item c:\vrisingserver6\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerGameSettings.json
+                        Invoke-Item c:\vrisingserver\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerGameSettings.json
 
                 Adminlist
                         To modify the adminlist.txt, please issue the following command:
-                        Invoke-Item c:\vrisingserver6\steamapps\common\VRisingDedicatedServer\VRisingServer_Data\StreamingAssets\Settings\adminlist.txt
+                        Invoke-Item c:\vrisingserver\steamapps\common\VRisingDedicatedServer\VRisingServer_Data\StreamingAssets\Settings\adminlist.txt
 
                 Banlist
                         To modify the banlist.txt, please issue the following command:
-                        Invoke-Item c:\vrisingserver6\steamapps\common\VRisingDedicatedServer\VRisingServer_Data\StreamingAssets\Settings\banlist.txt
+                        Invoke-Item c:\vrisingserver\steamapps\common\VRisingDedicatedServer\VRisingServer_Data\StreamingAssets\Settings\banlist.txt
 
         Logs
                 To view your log file, please issue the following command:
-                Invoke-Item c:\vrisingserver6\steamapps\common\VRisingDedicatedServer\logs\VRisingServer.log
+                Invoke-Item c:\vrisingserver\steamapps\common\VRisingDedicatedServer\logs\VRisingServer.log
 
         Action Plan
                 1) Test direct connect from a machine on this same network
