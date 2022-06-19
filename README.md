@@ -17,6 +17,9 @@
   - [ServerHostSettings.json](#serverhostsettingsjson)
   - [ServerGameSettings.json](#servergamesettingsjson)
   - [ServerVoipSettings.json (VOIP Configuration)](#servervoipsettingsjson-voip-configuration)
+    - [VOIP Troubleshooting](#voip-troubleshooting)
+      - [Problem Description: Can't keep VOIP enabled](#problem-description-cant-keep-voip-enabled)
+      - [VOIP Logs](#voip-logs)
   - [Adding yourself to the adminlist.txt file](#adding-yourself-to-the-adminlisttxt-file)
   - [Configure your router to allow UDP ports to the server](#configure-your-router-to-allow-udp-ports-to-the-server)
 - [General Instructions](#general-instructions)
@@ -451,7 +454,7 @@ Be advised this is 100% unsupported!
 `https://discord.com/channels/803241158054510612/976404273015431168/980896456766533743` - VOIP setup (Also in the pinned messages)  
 
 1) Create an account on the Vivox Developer Portal (https://developer.vivox.com/register)  
-**NOTE** In the `Submission Type` section, there is no functional difference between a `Individual: Personal Account`. I would `strongly` recommend using an `Individual: Personal Account` if you are not representing an actual organization. 
+:radioactive: In the `Submission Type` section, there is no functional difference between a `Individual: Personal Account` and `Organization: Professional Account`. I would `strongly` recommend using an `Individual: Personal Account` unless you are representing an actual organization. I would also strongly recommend you use proper real information, rather than made up information.
 2) Login to the Vivox Developer Portal 
 3) Click on `Create New Application`
 4) In Application or Game Name set the name to something like `VRising_Server`
@@ -484,14 +487,22 @@ Be advised this is 100% unsupported!
 17) In the `ServerVoipSettings.json` set the `VOIPVivoxDomain` to the value you see in the Vivox portal under `Environment Details` called `Domain`
 18) In the `ServerVoipSettings.json` set the `VOIPAPIEndpoint` to the value you see in the Vivox portal under `Environment Details` called `API End-Point`
 
-**NOTE:** The difference between a sandbox, and a production configuration is the sandbox can only maintain 100 concurrent connections, while a production configuration can mantain 5000.
+:spiral_notepad: The main difference between a sandbox, and a production configuration is the sandbox can only maintain `100` concurrent connections, while a production configuration can mantain `5000`.
 
-**NOTE:** Time must be sycned (This is NOT the same as the Time Zone!) on the server or you may get:
-* The VOIP option (`Options` -> `Sound` -> `Use Voice Chat`) may be forced into an off state after you have set it it on
-* You see the message `Nearby players are only displayed when connected to voice chat` 
-* In the client logs you may see `<Login>b__0: vx_req_account_anonymous_login_t failed: VivoxUnity.VivoxApiException: Access Token Expired (20121)`
+### VOIP Troubleshooting
+#### Problem Description: Can't keep VOIP enabled
+- Symptoms: 
+  - The VOIP option (`Options` -> `Sound` -> `Use Voice Chat`) may be forced into an off state after you have set it it on
+  - You see the message `Nearby players are only displayed when connected to voice chat` 
+  - In the client logs you may see `<Login>b__0: vx_req_account_anonymous_login_t failed: VivoxUnity.VivoxApiException: Access Token Expired (20121)`
   * Unfortunatly the developer page isn't helpful here: https://docs.vivox.com/v5/general/unity/15_1_170000/en-us/Unity/developer-guide/error-codes.htm
   * https://support.vivox.com/hc/en-us/articles/360015368274-What-causes-VxAccessTokenExpired-20121-errors-
+- Resolution
+  - Time on the server must be sycned (This is NOT the same as the Time Zone!) even a few seconds drift can cause the problem to manifest. 
+  - In general you should use `NTP` to sync time on the server and sync the server manually to start
+
+#### VOIP Logs
+Expected/Successful VOIP logs can be found in the [VOIP](#voip) log section.
 
 ## Adding yourself to the adminlist.txt file
 In the logs, you should see the `adminlist.txt` and `banlist.txt` lists loaded, and thier path is `<VAR_SERVER_INSTALLATION_DIRECTORY>\VRisingServer_Data\StreamingAssets\Settings\`  
