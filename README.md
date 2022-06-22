@@ -758,7 +758,7 @@ If you check https://ipv6-test.com/ and the shown IP on that web page is differe
     UDP    0.0.0.0:<Port>                *:*                                    <PID>
     UDP    0.0.0.0:<QueryPort>           *:*                                    <PID>
     ```  
-:spiral_notepad: If you are using a dedicated game hosting provider and you do not have access to the OS (Windows) this step may not be possible.
+  :spiral_notepad: If you are using a dedicated game hosting provider and you do not have access to the OS (Windows) this step may not be possible.
 
 5) Configure your router to allow both ports in step 2 to be forwarded to the server (You can refer to https://portforward.com for assistance, but this is device specific, and beyond the scope of this document)  
 :warning: Since these are UDP ports, there is no good/easy way to test them remotely other than with a game client.  
@@ -780,13 +780,13 @@ If you check https://ipv6-test.com/ and the shown IP on that web page is differe
     Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
     ```
 
-7) Validate that on server startup, your server is sending data to Steam by entering your public IP on this tool  https://southnode.net/steamquery.php , and/or using https://api.steampowered.com/ISteamApps/GetServersAtAddress/v0001?addr=1.2.3.4 (Replace 1.2.3.4 with your public IP)
+7) Validate that on server startup, your server is sending data to Steam by entering your public IP on this tool  https://southnode.net/steamquery.php , and/or using https://api.steampowered.com/ISteamApps/GetServersAtAddress/v0001?addr=1.2.3.4 (Replace 1.2.3.4 with your public IP)  
 :warning: This does NOT mean that your ports are actually open, just that as the game starts up, the game was correctly advertised to Steam.
 
 8) Validate your ports are open using http://steam-portcheck.herokuapp.com/index.php
 
 9) BE PATIENT! The listing process can take time, it appears that you have done everything you can to ensure that your server is able to be queried.  
-**NOTE:** SOME users have found that changing both ports to something else, and back have forced the server to be listed. This is VERY anecdotal, and may infact increase the waiting process.
+:radioactive: SOME users have found that changing both ports to something else, and back have forced the server to be listed. This is VERY anecdotal, and may infact increase the waiting process.
 
 ## Log Examples
 
