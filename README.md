@@ -746,19 +746,25 @@ This is beyond the scope of this document, as it is device specific, but you can
 If you check https://ipv6-test.com/ and the shown IP on that web page is different from your address shown in your router, your address may be translated and it may be impossible to host. Additionally some providers (namely in Germany) may use something like Carrier Grade NAT (CGNAT, with a router public IP range from 100.64.0.0 to 100.127.255.255) or DS-Lite which may prevent you from running a server. In these cases, you can try to contact your ISP and see if you are able to get an IPv4 address. You *may* be able to get away with something like Fast Reverse Proxy (https://gabrieltanner.org/blog/port-forwarding-frp) but this is again, outside the scope of this document.
 
 ### Server not listed on the server browser
-1) Ensure that your `ServerHostSettings.json` configuration file has `ListOnMasterServer` set to `true`  
-   
-2) Within the `ServerHostSettings.json` configuration file, ensure your `Port` and `QueryPort` are configured in the Windows Firewall to allow UDP traffic OR allow the `VRisingServer.exe` through the firewall  
+1) Check `https://www.battlemetrics.com/servers/vrising` and see if your server is listed there, if so, your setup appears to be configured correctly.
 
-3) Ensure that you see the server listed on the output from `netstat -aon` the output should look something like this (You should see additional ports listed for the PID, but these are the ones we are concerned with):
+2) Ensure that your `ServerHostSettings.json` configuration file has `ListOnMasterServer` set to `true`  
+   
+3) Within the `ServerHostSettings.json` configuration file, ensure your `Port` and `QueryPort` are configured in the Windows Firewall to allow UDP traffic OR allow the `VRisingServer.exe` through the firewall  
+:spiral_notepad: If you are using a dedicated game hosting provider this *should* be done automatically for you
+
+4) Ensure that you see the server listed on the output from `netstat -aon` the output should look something like this (You should see additional ports listed for the PID, but these are the ones we are concerned with):
     ```
     UDP    0.0.0.0:<Port>                *:*                                    <PID>
     UDP    0.0.0.0:<QueryPort>           *:*                                    <PID>
-    ```
-4) Configure your router to allow both ports in step 2 to be forwarded to the server (You can refer to https://portforward.com for assistance, but this is device specific, and beyond the scope of this document)  
-**NOTE:** Since these are UDP ports, there is no good/easy way to test them remotely other than with a game client.
+    ```  
+:spiral_notepad: If you are using a dedicated game hosting provider and you do not have access to the OS (Windows) this step may not be possible.
 
-5) Check your `VRisingServer.log` server logs inside the appropriate directory for the public IP, the logs should look like this: `SteamPlatformSystem - OnPolicyResponse - Public IP: <VAR_PUBLIC_IP>` and ensure this is the public IP you expect it to be (This is especially useful if you have a VPN or secondary internet provider)
+5) Configure your router to allow both ports in step 2 to be forwarded to the server (You can refer to https://portforward.com for assistance, but this is device specific, and beyond the scope of this document)  
+:warning: Since these are UDP ports, there is no good/easy way to test them remotely other than with a game client.  
+:spiral_notepad: If you are using a dedicated game hosting provider this *should* be done automatically for you
+
+6) Check your `VRisingServer.log` server logs inside the appropriate directory for the public IP, the logs should look like this: `SteamPlatformSystem - OnPolicyResponse - Public IP: <VAR_PUBLIC_IP>` and ensure this is the public IP you expect it to be (This is especially useful if you have a VPN or secondary internet provider)
     ```
     SteamPlatformSystem - OnPolicyResponse - Public IP: <VAR_PUBLIC_IP>
     UnityEngine.Logger:Log(LogType, Object)
@@ -774,9 +780,12 @@ If you check https://ipv6-test.com/ and the shown IP on that web page is differe
     Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
     ```
 
-6) Validate that on server startup, your server is sending data to Steam by entering your public IP on this tool  https://southnode.net/steamquery.php , and/or using https://api.steampowered.com/ISteamApps/GetServersAtAddress/v0001?addr=1.2.3.4 (Replace 1.2.3.4 with your public IP)
+7) Validate that on server startup, your server is sending data to Steam by entering your public IP on this tool  https://southnode.net/steamquery.php , and/or using https://api.steampowered.com/ISteamApps/GetServersAtAddress/v0001?addr=1.2.3.4 (Replace 1.2.3.4 with your public IP)
+:warning: This does NOT mean that your ports are actually open, just that as the game starts up, the game was correctly advertised to Steam.
 
-7) BE PATIENT! The listing process can take time, it appears that you have done everything you can to ensure that your server is able to be queried.  
+8) Validate your ports are open using http://steam-portcheck.herokuapp.com/index.php
+
+9) BE PATIENT! The listing process can take time, it appears that you have done everything you can to ensure that your server is able to be queried.  
 **NOTE:** SOME users have found that changing both ports to something else, and back have forced the server to be listed. This is VERY anecdotal, and may infact increase the waiting process.
 
 ## Log Examples
