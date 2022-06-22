@@ -758,7 +758,7 @@ If you check https://ipv6-test.com/ and the shown IP on that web page is differe
     UDP    0.0.0.0:<Port>                *:*                                    <PID>
     UDP    0.0.0.0:<QueryPort>           *:*                                    <PID>
     ```  
-  :spiral_notepad: If you are using a dedicated game hosting provider and you do not have access to the OS (Windows) this step may not be possible.
+    :spiral_notepad: If you are using a dedicated game hosting provider and you do not have access to the OS (Windows) this step may not be possible.
 
 5) Configure your router to allow both ports in step 2 to be forwarded to the server (You can refer to https://portforward.com for assistance, but this is device specific, and beyond the scope of this document)  
 :warning: Since these are UDP ports, there is no good/easy way to test them remotely other than with a game client.  
