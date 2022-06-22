@@ -59,6 +59,9 @@ I've tried to submit a pull request to this repository with some of the informat
 ## Offical Bug Tracker <!-- omit in toc -->
   * https://bugs.playvrising.com/
 
+## Server Tester <!-- omit in toc -->
+  * http://steam-portcheck.herokuapp.com/index.php
+
 ## BattleMetrics Server Listing <!-- omit in toc -->
   * https://www.battlemetrics.com/servers/vrising
 
@@ -70,24 +73,31 @@ I've tried to submit a pull request to this repository with some of the informat
   * https://steamdb.info/app/1604030/graphs/
 
 # Patch Notes
-* [Patch 0.5.41821 / 2022-06-09](https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/4480532526716778038)
+* [Patch 0.5.42050 / 2022-06-16 -- Server Version: v0.5.42023 (2022-06-15 00:18 UTC)](https://steamcommunity.com/games/1604030/announcements/detail/4822806821988384687)
+  * Players can now dismantle floors and borders that are next to walls/pillars without having to dismantle any wall/pillar first, as long as this does not leave any wall/pillar without a floor connection (#305517).
+  * Improved error handling and error feedback when the server saves the game world (related to #304262 and #304381 but is not expected to solve all reported cases).
+  * Added more validation and safety checks to catch more types of rare errors while saving.
+  * If the server fails to save, all active players on the server now get a chat notification containing basic information about the type of error that was encountered.
+  * The server no longer uses the Windows temp folder while saving the world. It instead saves the temporary files to a neighboring folder to the target save path.
+  * Fixed an issue where territory and buildings had a chance of not getting destroyed with their castle if they were constructed at a large enough distance from the Castle Heart (#306085, #305657).
+* [Patch 0.5.41821 / 2022-06-09 -- Server Version: v0.5.41821 (2022-06-09 01:17 UTC)](https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/4480532526716778038)
   * Server optimizations for servers with long up times and/or a lot of players.
   * Optimized the map and minimap on servers with a lot of castles.
   * Updated the Social Panel: Now it displays all players connected to the server and their SteamID. We also added text chat muting functionality. Muting is persistent between sessions now. 
   * The Blood Essence Drain Modifier setting should now work properly.
-* [Patch 0.5.41669 / 2022-05-31](https://steamcommunity.com/games/1604030/announcements/detail/3294958655399932646)
+* [Patch 0.5.41669 / 2022-05-31 -- Server Version: v0.5.41669 (2022-05-30 23:21 UTC)](https://steamcommunity.com/games/1604030/announcements/detail/3294958655399932646)
   * Maximum clan size has been increased to 50
   * `Server Details` will now show the amount of in-game days the server has been running for.
   * Altering the ‘Refinement Cost’ and ‘Refinement Rate’ server settings no longer affects the blood essence consumption rate of the Castle Heart.
   * Occurrences of multiple spawns of the same V Blood units will now be repaired upon server restart.
   * Optimized server memory by removing data from disconnected users.
-* [Patch 0.5.41591 / 2022-05-30](https://steamcommunity.com/games/1604030/announcements/detail/3294958655395719328)
-* [Patch 0.5.41448 / 2022-05-25](https://steamcommunity.com/games/1604030/announcements/detail/3294958655377836606)
+* [Patch 0.5.41591 / 2022-05-30 -- Server Version: UNKNOWN](https://steamcommunity.com/games/1604030/announcements/detail/3294958655395719328)
+* [Patch 0.5.41448 / 2022-05-25 -- Server Version: v0.5.41471 (2022-05-25 08:56 UTC)](https://steamcommunity.com/games/1604030/announcements/detail/3294958655377836606)
   * Added changehealthofclosesttomouse to console
   * Added changedurability to console
   * Added addtime to console
   * Added LAN/Offline mode
-* [Patch 0.5.41237 / 2022-05-19 ](https://steamcommunity.com/games/1604030/announcements/detail/3218396837686301548)
+* [Patch 0.5.41237 / 2022-05-19 -- Server Version: v0.5.41258 (2022-05-19 12:26 UTC)](https://steamcommunity.com/games/1604030/announcements/detail/3218396837686301548)
 
 # File Locations
 ## Dedicated Server
@@ -403,6 +413,7 @@ timeout 600
 echo "Starting the server"
 C:\servers\v_rising\nssm.exe start vrisingserver
 ```
+You can also add `+force_install_dir "C:\Path\To\v_rising_server\"` to the `SteamCMD` executable.
 
 ##### Automating updates with Windows Task Scheulder <!-- omit in toc -->
 * Create a `Basic Task`
