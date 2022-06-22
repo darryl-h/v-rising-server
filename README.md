@@ -746,7 +746,7 @@ This is beyond the scope of this document, as it is device specific, but you can
 If you check https://ipv6-test.com/ and the shown IP on that web page is different from your address shown in your router, your address may be translated and it may be impossible to host. Additionally some providers (namely in Germany) may use something like Carrier Grade NAT (CGNAT, with a router public IP range from 100.64.0.0 to 100.127.255.255) or DS-Lite which may prevent you from running a server. In these cases, you can try to contact your ISP and see if you are able to get an IPv4 address. You *may* be able to get away with something like Fast Reverse Proxy (https://gabrieltanner.org/blog/port-forwarding-frp) but this is again, outside the scope of this document.
 
 ### Server not listed on the server browser
-1) Check `https://www.battlemetrics.com/servers/vrising` and see if your server is listed there, if so, your setup appears to be configured correctly.
+1) Check `https://www.battlemetrics.com/servers/vrising` and see if your server is listed there, if so, your setup appears to be configured correctly, the only thing left to do is to BE PATIENT! The listing process can take time, it appears that you have done everything you can to ensure that your server is able to be queried.
 
 2) Ensure that your `ServerHostSettings.json` configuration file has `ListOnMasterServer` set to `true`  
    
