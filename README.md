@@ -350,21 +350,41 @@ In this example, we will setup the server with NSSM (Non Sucking Service Manager
 4) Enter the NSSM directory and create the service.
     ```dos
     cd <VAR_SERVER_INSTALLATION_DIRECTORY>
-    nssm.exe remove VRisingServer confirm
-    nssm.exe install VRisingServer VRisingServer
-    nssm.exe set VRisingServer Application <VAR_SERVER_INSTALLATION_DIRECTORY>\start_server.bat
-    nssm.exe set VRisingServer AppDirectory <VAR_SERVER_INSTALLATION_DIRECTORY>
-    nssm.exe set VRisingServer AppExit Default Restart
-    nssm.exe set VRisingServer AppStdout <VAR_SERVER_INSTALLATION_DIRECTORY>\logs\VRisingServer_Custom.log
-    nssm.exe set VRisingServer AppStderr <VAR_SERVER_INSTALLATION_DIRECTORY>\logs\VRisingServer_Error.log
-    nssm.exe set VRisingServer AppStopMethodSkip 14
-    nssm.exe set VRisingServer AppKillProcessTree 0
-    nssm.exe set VRisingServer AppTimestampLog 1
-    nssm.exe set VRisingServer DisplayName VRisingServer
-    nssm.exe set VRisingServer ObjectName LocalSystem
-    nssm.exe set VRisingServer Start SERVICE_AUTO_START
-    nssm.exe set VRisingServer Type SERVICE_WIN32_OWN_PROCESS
+    nssm.exe removeVRisingServer-9876 confirm
+    nssm.exe install VRisingServer VRisingServer-9876
+    nssm.exe set VRisingServer-9876 Application <VAR_SERVER_INSTALLATION_DIRECTORY>\start_server.bat
+    nssm.exe set VRisingServer-9876 AppDirectory <VAR_SERVER_INSTALLATION_DIRECTORY>
+    nssm.exe set VRisingServer-9876 AppExit Default Restart
+    nssm.exe set VRisingServer-9876 AppStdout <VAR_SERVER_INSTALLATION_DIRECTORY>\logs\VRisingServer_Custom.log
+    nssm.exe set VRisingServer-9876 AppStderr <VAR_SERVER_INSTALLATION_DIRECTORY>\logs\VRisingServer_Error.log
+    nssm.exe set VRisingServer-9876 AppStopMethodSkip 14
+    nssm.exe set VRisingServer-9876 AppKillProcessTree 0
+    nssm.exe set VRisingServer-9876 AppTimestampLog 1
+    nssm.exe set VRisingServer-9876 DisplayName VRisingServer-9876
+    nssm.exe set VRisingServer-9876 ObjectName LocalSystem
+    nssm.exe set VRisingServer-9876 Start SERVICE_AUTO_START
+    nssm.exe set VRisingServer-9876 Type SERVICE_WIN32_OWN_PROCESS
     ```
+    or you can tell NSSM to call the `VRisingServer.exe` directly:
+    ```dos
+    cd <VAR_SERVER_INSTALLATION_DIRECTORY>
+    nssm.exe remove VRisingServer-9876 confirm
+    nssm install VRisingServer-9876 <VAR_SERVER_INSTALLATION_DIRECTORY>\VRisingServer.exe
+    nssm set VRisingServer-9876 AppParameters "-persistentDataPath .\save-data"
+    nssm set VRisingServer-9876 AppDirectory <VAR_SERVER_INSTALLATION_DIRECTORY>
+    nssm set VRisingServer-9876 AppExit Default Restart
+    nssm set VRisingServer-9876 AppEnvironmentExtra ":set SteamAppId=1604030"
+    nssm set VRisingServer-9876 AppStdout <VAR_SERVER_INSTALLATION_DIRECTORY>\logs\VRisingServer.log
+    nssm set VRisingServer-9876 AppStderr <VAR_SERVER_INSTALLATION_DIRECTORY>\logs\VRisingServer.log
+    nssm set VRisingServer-9876 AppStopMethodSkip 14
+    nssm set VRisingServer-9876 AppKillProcessTree 0
+    nssm set VRisingServer-9876 AppTimestampLog 1
+    nssm set VRisingServer-9876 DisplayName VRisingServer-9876
+    nssm set VRisingServer-9876 ObjectName LocalSystem
+    nssm set VRisingServer-9876 Start SERVICE_AUTO_START
+    nssm set VRisingServer-9876 Type SERVICE_WIN32_OWN_PROCESS
+    ```
+
 5) Start the service now
     ```dos
     cd <VAR_SERVER_INSTALLATION_DIRECTORY>
