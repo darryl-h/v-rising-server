@@ -457,7 +457,16 @@ Weather or not you are using the auto installer or the manual steps, the followi
 ## ServerHostSettings.json
 
 ### Description <!-- omit in toc -->
-Within the `ServerHostSettings.json` file, in `Description` field, you can use line breaks using `\n`
+In `Description` field, you can use line breaks using `\n`
+
+### Address <!-- omit in toc -->
+In the `Address` field, if you set this to a local address (192.168.1.X or 10.X.X.X) this will cause the server and RCON to only listen on this address. This is useful if you have more than one interface or are using a VPN and want to bind the server and RCON to a single IP.
+:warning: If you set this address, you will need to adjust your RCON commands to use the server IP, rather than the local loopback address as it will not be listening on the loopback address anymore!
+
+```
+netstat -aon | find "19280"
+  TCP    192.168.1.10:25575          0.0.0.0:0              LISTENING       19280
+```
 
 ## ServerGameSettings.json
 You can get more information (min/max) and descriptions on each setting using this PDF: https://cdn.stunlock.com/blog/2022/05/25083113/Game-Server-Settings.pdf
