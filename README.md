@@ -471,6 +471,8 @@ netstat -aon | find "19280"
 ## ServerGameSettings.json
 You can get more information (min/max) and descriptions on each setting using this PDF: https://cdn.stunlock.com/blog/2022/05/25083113/Game-Server-Settings.pdf
 
+If you need assistnace with how these should be formatted, you can check `<VAR_SERVER_INSTALLATION_DIRECTORY>\VRisingServer_Data\StreamingAssets\GameSettingPresets` IE: `C:\vrisingserver\steamapps\common\VRisingDedicatedServer\VRisingServer_Data\StreamingAssets\GameSettingPresets` usually the `Level70PvE.json` or the `Level70PvP.json` files will have the syntax
+
 ### VBloodUnitSettings <!-- omit in toc -->
 There is some confusion about configuring the `VBloodUnitSettings` this is an example:
 
