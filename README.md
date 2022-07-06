@@ -597,7 +597,6 @@ You should review the logs of the server to begin any troubleshooting session.
 ## Log Variables
 <VAR_SERVER_INSTALLATION_DIRECTORY> - The directory where the game is installed
 <VAR_PLAYER_STEAM_ID> - Steam Player ID  
-<VAR_PLAYER_NAME> - V Rising Player Name  
 <VAR_PUBLIC_IP> - Server Public IP  
 <VAR_SERVERNAME> - The name of the server
 <VAR_VOIPAPIEndpoint> - The `VOIPAPIEndpoint` from your ServerVoipSettings.json file  
@@ -863,23 +862,98 @@ Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
 
 Relogin
 ```
-2022-06-05 03:46:10.844: SteamPlatformSystem - BeginAuthSession for SteamID: <VAR_PLAYER_STEAM_ID> Result: k_EBeginAuthSessionResultOK
+SteamPlatformSystem - BeginAuthSession for SteamID: <VAR_PLAYER_STEAM_ID> Result: k_EBeginAuthSessionResultOK
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+ProjectM.Auth.SteamPlatformSystem:BeginAuthSession(Byte[], UInt16, UInt64)
+ProjectM.ServerBootstrapSystem:OnConnectionApproval(NetBufferIn&, NetConnectionId)
+ProjectM.Scripting.OnDeathDelegate:Invoke(ServerGameManager&, SelfServer&)
+Stunlock.Network.ServerNetworkLayer:OnDataReceived(NetBufferIn&, NetConnectionId)
+ProjectM.Scripting.OnDeathDelegate:Invoke(ServerGameManager&, SelfServer&)
+Stunlock.Network.Steam.ServerSteamTransportLayer:ProcessNewMessages()
+Stunlock.Network.Steam.ServerSteamTransportLayer:Update(Double)
+ProjectM.ServerBootstrapSystem:OnUpdate()
+Unity.Entities.SystemBase:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+ProjectM.ServerSimulationSystemGroup:OnUpdate()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
 
-2022-06-05 03:46:10.845: NetEndPoint '{Steam 1839308785}' reconnect was approved. approvedUserIndex: 0 HasLocalCharacter: True Hail Message Size: 361 Version: 1 PlatformId: <VAR_PLAYER_STEAM_ID> UserIndex: 0 ShouldCreateCharacter: False IsAdmin: False Length: 361
+NetEndPoint '{Steam 3600223286}' reconnect was approved. approvedUserIndex: 0 HasLocalCharacter: True Hail Message Size: 339 Version: 1 PlatformId: <VAR_PLAYER_STEAM_ID> UserIndex: 30 ShouldCreateCharacter: False IsAdmin: False Length: 339
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+ProjectM.ServerBootstrapSystem:ApproveClient(NetConnectionId, Int32, UInt64, Boolean, Boolean, User&, Entity, ConnectAddress, ConnectAddress)
+ProjectM.ServerBootstrapSystem:TryAuthenticate(NetConnectionId, Int32, UInt64)
+ProjectM.ServerBootstrapSystem:OnConnectionApproval(NetBufferIn&, NetConnectionId)
+ProjectM.Scripting.OnDeathDelegate:Invoke(ServerGameManager&, SelfServer&)
+Stunlock.Network.ServerNetworkLayer:ApproveWaitingClients()
+Stunlock.Network.ServerNetworkLayer:Update(Double)
+ProjectM.ServerBootstrapSystem:OnUpdate()
+Unity.Entities.SystemBase:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+ProjectM.ServerSimulationSystemGroup:OnUpdate()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
 
-2022-06-05 03:46:11.145: SteamPlatformSystem - OnValidateAuthTicketResponse for SteamID: <VAR_PLAYER_STEAM_ID>, Response: k_EAuthSessionResponseOK
+SteamPlatformSystem - OnValidateAuthTicketResponse for SteamID: <VAR_PLAYER_STEAM_ID>, Response: k_EAuthSessionResponseOK
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+ProjectM.Auth.SteamPlatformSystem:OnValidateAuthTicketResponse(ValidateAuthTicketResponse_t)
+System.Action`1:Invoke(T)
+Steamworks.Callback`1:OnRunCallback(IntPtr)
+Steamworks.CallbackDispatcher:RunFrame(Boolean)
+ProjectM.Auth.SteamPlatformSystem:OnUpdate()
+Unity.Entities.SystemBase:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
 
-2022-06-05 03:46:11.146: SteamPlatformSystem - UserHasLicenseForApp for SteamID: <VAR_PLAYER_STEAM_ID>, Result: k_EUserHasLicenseResultHasLicense, UserContentFlags: None
+SteamPlatformSystem - UserHasLicenseForApp for SteamID: <VAR_PLAYER_STEAM_ID>, Result: k_EUserHasLicenseResultHasLicense, UserContentFlags: None
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+ProjectM.Auth.SteamPlatformSystem:OnValidateAuthTicketResponse(ValidateAuthTicketResponse_t)
+System.Action`1:Invoke(T)
+Steamworks.Callback`1:OnRunCallback(IntPtr)
+Steamworks.CallbackDispatcher:RunFrame(Boolean)
+ProjectM.Auth.SteamPlatformSystem:OnUpdate()
+Unity.Entities.SystemBase:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
 
-2022-06-05 03:46:18.916: User '{Steam 1839308785}' '<VAR_PLAYER_STEAM_ID>', approvedUserIndex: 0, Character: '<VAR_PLAYER_NAME>' connected as ID '0,1', Entity '<VAR_PLAYER_ENTITY_ID>,1'.
-
-2022-06-05 03:46:18.919:  -- DEBUG - SendRevealedMapData to user: <VAR_PLAYER_ENTITY_ID>, name: <VAR_PLAYER_NAME>
-
-2022-06-05 03:46:18.921:  -- DEBUG - SendDiscoveredMapZones to user: <VAR_PLAYER_ENTITY_ID>, name: <VAR_PLAYER_NAME>
-
-2022-06-05 03:46:18.921:  -- DEBUG - SendClaimedAchievements to user: <VAR_PLAYER_ENTITY_ID>, name: <VAR_PLAYER_NAME>
-
-2022-06-05 03:46:18.922:  -- DEBUG - SendInitialUnlockedProgressionEvent to user: <VAR_PLAYER_ENTITY_ID>, name: <VAR_PLAYER_NAME>
+User '{Steam 3600223286}' '<VAR_PLAYER_STEAM_ID>', approvedUserIndex: 2, Character: 'Raven' connected as ID '0,1', Entity '94090,1'.
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+ProjectM.ServerBootstrapSystem:OnUserConnected(NetConnectionId)
+System.Xml.Schema.XdrBeginChildFunction:Invoke(XdrBuilder)
+Stunlock.Network.ServerNetworkLayer:OnDataReceived(NetBufferIn&, NetConnectionId)
+ProjectM.Scripting.OnDeathDelegate:Invoke(ServerGameManager&, SelfServer&)
+Stunlock.Network.Steam.ServerSteamTransportLayer:ProcessNewMessages()
+Stunlock.Network.Steam.ServerSteamTransportLayer:Update(Double)
+ProjectM.ServerBootstrapSystem:OnUpdate()
+Unity.Entities.SystemBase:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+ProjectM.ServerSimulationSystemGroup:OnUpdate()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
+Unity.Entities.ComponentSystem:Update()
+Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
 ```
 
 ### Loading ServerHostSettings
