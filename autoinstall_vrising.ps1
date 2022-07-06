@@ -9,7 +9,7 @@
     this will also configure the windows firewall to allow the program to operate.
     The user input is expected to be the full path
 .NOTES
-    Version        : 1.510
+    Version        : 1.520
     File Name      : autoinstall_vrising.ps1
     Author         : Darryl H (https://github.com/darryl-h/)
     Credits        : Port and JSON handling from lordfiSh (https://github.com/lordfiSh/)
@@ -266,7 +266,10 @@ function PostConfigureServer {
     Add-Content -Path "$InstallPath\steamapps\common\VRisingDedicatedServer\update_server.bat" -Value "$InstallPath\steamcmd.exe +login anonymous +app_update 1829350 validate +quit"
     Add-Content -Path "$InstallPath\steamapps\common\VRisingDedicatedServer\update_server.bat" -Value "$InstallPath\mcrcon.exe -H 127.0.0.1 -P 25575 -p $RCONPassword `"announcerestart 10`""
     Add-Content -Path "$InstallPath\steamapps\common\VRisingDedicatedServer\update_server.bat" -Value "timeout 600"
-    Add-Content -Path "$InstallPath\steamapps\common\VRisingDedicatedServer\update_server.bat" -Value "$InstallPath\nssm.exe restart VRisingServer-$GamePort"
+    Add-Content -Path "$InstallPath\steamapps\common\VRisingDedicatedServer\update_server.bat" -Value "$InstallPath\nssm.exe stop VRisingServer-$GamePort"
+    Add-Content -Path "$InstallPath\steamapps\common\VRisingDedicatedServer\update_server.bat" -Value "cd `"$InstallPath\steamapps\common\VRisingDedicatedServer\logs`""
+    Add-Content -Path "$InstallPath\steamapps\common\VRisingDedicatedServer\update_server.bat" -Value "ren `"VRisingServer.log`" `"VRisingServer_%date:~10,4%-%date:~4,2%-%date:~7,2%T%time::=-%.log`""
+    Add-Content -Path "$InstallPath\steamapps\common\VRisingDedicatedServer\update_server.bat" -Value "$InstallPath\nssm.exe start VRisingServer-$GamePort"
 
     # Open the windows firewall for vrising
     Write-Host "`t`t* Configuring Windows Firewall"
