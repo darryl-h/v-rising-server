@@ -73,6 +73,27 @@ I've tried to submit a pull request to this repository with some of the informat
   * https://steamdb.info/app/1604030/graphs/
 
 # Patch Notes
+* [Patch 0.5.42553 | Patch Notes | Hotfix 8 -- Server Version: v0.5.42562 (2022-07-06 10:15 UTC)](https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/4474904295776381022)
+  * Server Wipes
+    * Severs that support Scheduled Wipes will have an icon in the server list
+    * Server with Scheduled Wipes will display the number of days remaining until the next planned wipe.
+    * This appears to be set in `ServerHostSettings.json` using `ResetDaysInterval` which is a number of days to reset, and `DayOfReset` which can be `Any` , `Monday` , `Tuesday` , `Wednesday` , `Thursday` , `Friday` , `Saturday` or `Sunday`
+      * C/O Ersan : https://discord.com/channels/803241158054510612/976404273015431168/994194443961909381
+  * Added new ServerHostSettings for lowering FPS on servers when they are empty: `-LowerFPSWhenEmpty` and `-LowerFPSWhenEmptyValue`. The default is `true` and with a value of `1`.
+  * Official PvP Presets now uses `1.25` `BloodDrainModifier` instead of `1.0`
+  * DLCs now work in LAN Mode.
+  * The initial Server List request will now prioritize servers with players, to increase the speed at which servers are fetched.
+  * Replaced `Days Played` with `Days Running` in the Server Details.
+  * `Days Played` previously displayed the number of in-game days since server start, `Days Running` will now instead display the number of real-time days since server start.
+* [Patch 0.5.42405 | Patch Notes | Hotfix 7 -- Server Version: v0.5.42405 (2022-06-29 15:34 UTC)](https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/4474904295754340476)
+  * We added Steam Cloud support for Private Game saves. This allows playing your saves on different computers.
+  * All new Private Games hosted will now be saved on Steam Cloud by default.
+  * You can move saves to/from Steam Cloud Saving.
+* [Patch 0.5.42236 | Patch Notes | Hotfix 6 -- Server Version: v0.5.42236 (2022-06-22 17:00 UTC)](https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/4474904295728853576)
+  * Added a new admin command `decayusercastles <playername>` that puts all the castles owned by a target player in decay.
+  * The `adminlist.txt` and `banlist.txt` files are now loaded from both the default Settings folder as well as from the local override Settings folder. These files always save to the local override folder now.
+  * The RCON socket now binds to the bind address if specified. There is also a specific RCON Bind Address to override the default one.
+  * Lumber, Stone, and Plant Fibre no longer block players from using waygates or bat form.
 * [Patch 0.5.42050 / 2022-06-16 -- Server Version: v0.5.42023 (2022-06-15 00:18 UTC)](https://steamcommunity.com/games/1604030/announcements/detail/4822806821988384687)
   * Players can now dismantle floors and borders that are next to walls/pillars without having to dismantle any wall/pillar first, as long as this does not leave any wall/pillar without a floor connection (#305517).
   * Improved error handling and error feedback when the server saves the game world (related to #304262 and #304381 but is not expected to solve all reported cases).
@@ -136,6 +157,8 @@ I've tried to submit a pull request to this repository with some of the informat
     * You should not modify this file directly!
 ### Client - Player Logs <!-- omit in toc -->
   * %USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player.log
+### Client - Settings <!-- omit in toc -->
+  * %USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Settings\ClientSettings.json
 
 # Dedicated Server 
 This section is related, and specific to the Dedicated Server that you would start from outside the game client.
