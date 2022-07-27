@@ -157,10 +157,10 @@ I've tried to submit a pull request to this repository with some of the informat
 
 ### Private Server - Save Games <!-- omit in toc -->
 * If you do not have cloud saves enabled, it should live in:
-%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Saves\v1\<GAME_UUID>
+%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Saves\v1\<GAME_UUID>\AutoSave_NNNN
 
 * If you do have cloud saves enabled, it should live in:
-%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\CloudSaves\<STEAM_PLAYER_ID>\v1\<GAME_UUID>
+%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\CloudSaves\<STEAM_PLAYER_ID>\v1\<GAME_UUID>\AutoSave_NNNN
   
 :spiral_notepad: You can see what's in your steam saves, by opening the following URL: https://store.steampowered.com/account/remotestorageapp/?appid=1604030
 
