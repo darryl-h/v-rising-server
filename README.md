@@ -73,6 +73,9 @@ I've tried to submit a pull request to this repository with some of the informat
   * https://steamdb.info/app/1604030/graphs/
 
 # Patch Notes
+* [Patch 0.5.42584 | Patch Notes | Hotfix 9 -- Server Version: v0.5.42600 (2022-07-08 08:30 UTC)](https://store.steampowered.com/news/app/1604030?emclan=103582791469988961&emgid=3320858336357099261)
+  * Disabled LowerFPSWhenEmpty due to unexpected side effects
+  * Fixed DLCs not working in LAN mode under certain conditions.
 * [Patch 0.5.42553 | Patch Notes | Hotfix 8 -- Server Version: v0.5.42562 (2022-07-06 10:15 UTC)](https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/4474904295776381022)
   * Server Wipes
     * Severs that support Scheduled Wipes will have an icon in the server list
@@ -144,9 +147,22 @@ I've tried to submit a pull request to this repository with some of the informat
 
 ## Private Server
 ### Private Server - Configuration <!-- omit in toc -->
+* If you do not have cloud saves enabled, it should live in:
+%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Saves\v1\<GAME_UUID>
+
+* If you do have cloud saves enabled, it should live in:
+%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\CloudSaves\<STEAM_PLAYER_ID>\v1\<GAME_UUID>
+  
+:spiral_notepad: You can see what's in your steam saves, by opening the following URL: https://store.steampowered.com/account/remotestorageapp/?appid=1604030
 
 ### Private Server - Save Games <!-- omit in toc -->
-- %USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Saves\v1\\`<VAR_SERVER_UUID>`\AutoSave_`NNNN`
+* If you do not have cloud saves enabled, it should live in:
+%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Saves\v1\<GAME_UUID>
+
+* If you do have cloud saves enabled, it should live in:
+%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\CloudSaves\<STEAM_PLAYER_ID>\v1\<GAME_UUID>
+  
+:spiral_notepad: You can see what's in your steam saves, by opening the following URL: https://store.steampowered.com/account/remotestorageapp/?appid=1604030
 
 ### Private Server - Logs <!-- omit in toc -->
 - %USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-server.log
@@ -203,8 +219,8 @@ If this sounds like something you would like, and you have [PowerShell v5](https
 2. type `powershell`
 3. type `Invoke-WebRequest -Uri https://raw.githubusercontent.com/darryl-h/v-rising-server/main/autoinstall_vrising.ps1 -OutFile .\autoinstall_vrising.ps1`
 4. type `powershell -ExecutionPolicy Bypass -File .\autoinstall_vrising.ps1 C:\vrisingserver`  
-  **NOTE**: Change `C:\vrisingserver` to the `full path` of the location where you want to install the server.  
-  **NOTE**: You can also specify `-gameport <game_port_#>` , `-queryport <query_port_#>` and `-rconport <rcon_port_#>` if you wish. If you do not specify a different port, it will be installed using the default ports.
+  :spiral_notepad: Change `C:\vrisingserver` to the `full path` of the location where you want to install the server.  
+  :spiral_notepad: You can also specify `-gameport <game_port_#>` , `-queryport <query_port_#>` and `-rconport <rcon_port_#>` if you wish. If you do not specify a different port, it will be installed using the default ports.
 
 Before installation, the user is provided a message of what **should** happen:  
 ```
@@ -330,8 +346,8 @@ We will install the PowerShell module for SteamCLI to install and update the ser
 Install-Module -Name SteamPS
 Install-SteamCMD
 Update-SteamApp -ApplicationName 'V Rising Dedicated Server' -Path 'C:\servers\v_rising'
-```
-**NOTE:** Any questions should be answered with yes
+```  
+:spiral_notepad: Any questions should be answered with yes
 
 ## Dedicated Server Configuration
 
@@ -356,8 +372,8 @@ In this case, we are removing the `-logFile ".\logs\VRisingServer.log` line from
 #### Server Settings Files
 1. Create the directory `<VAR_SERVER_INSTALLATION_DIRECTORY>\save-data\Settings`
 2. Copy and paste `ServerHostSettings.json` and `ServerGameSettings.json` files from `<VAR_SERVER_INSTALLATION_DIRECTORY>/VRisingServer_Data/StreamingAssets/Settings/` into the directory you created in step 1
-
-**NOTE:** If you elect to directly modify the configuration files in `<VAR_SERVER_INSTALLATION_DIRECTORY>\VRisingServer_Data\StreamingAssets\Settings\` you may loose your configuration changes with new updates, so you may want to consider backing them up.
+  
+:spiral_notepad: If you elect to directly modify the configuration files in `<VAR_SERVER_INSTALLATION_DIRECTORY>\VRisingServer_Data\StreamingAssets\Settings\` you may loose your configuration changes with new updates, so you may want to consider backing them up.
 
 #### Allow the vRising game through the windows firewall
 You may need to allow the executable (VRisingServer.exe) through the windows firewall
@@ -418,7 +434,7 @@ In this example, we will setup the server with NSSM (Non Sucking Service Manager
 #### Server updates
 We will place the `update.bat` file with the startup batch file in the `<VAR_SERVER_INSTALLATION_DIRECTORY>`, we will also announce to the players we are doing this with mcrcon (https://github.com/Tiiffi/mcrcon/releases/) which we will place in the server directory as well for ease of access. 
 
-**NOTE**: In either case, you will need to update the path to the server by replacing any line with `C:\servers\v_rising` with the correct path for your server.
+:spiral_notepad: In either case, you will need to update the path to the server by replacing any line with `C:\servers\v_rising` with the correct path for your server.
 
 ##### With SteamPS <!-- omit in toc -->
 `update.bat`
@@ -572,7 +588,7 @@ Expected/Successful VOIP logs can be found in the [VOIP](#voip) log section.
 
 ## Adding yourself to the adminlist.txt file
 In the logs, you should see the `adminlist.txt` and `banlist.txt` lists loaded, and thier path is `<VAR_SERVER_INSTALLATION_DIRECTORY>\VRisingServer_Data\StreamingAssets\Settings\`  
-**NOTE:** This is the only valid place for these entires!
+:spiral_notepad: This is the only valid place for these entires!
 
 * You will need to restart the server to reload any changes to these files (They SHOULD get picked up automatically, but unclear)
 
@@ -584,8 +600,8 @@ These ports are configured in the `<VAR_SERVER_INSTALLATION_DIRECTORY>\save-data
 "Port": 9876,
 "QueryPort": 9877,
 ```
-
-**NOTE: ** This is beyond the scope of this document, as it is device specific, but you can try https://PortForward.com for help with your specific device/brand
+  
+:spiral_notepad: This is beyond the scope of this document, as it is device specific, but you can try https://PortForward.com for help with your specific device/brand
 
 # General Instructions
 
@@ -637,7 +653,7 @@ The first step is to ensure that the game is accessible to machines on the same 
 1) On the server, find the PID of the `VRisingServer.exe` in `Task Manager` in the `Details` tab  
   
 2) Check your server configuration file `ServerHostSettings.json` we are looking for `Port`, `QueryPort`, and optionally `Rcon/Port`  
-**NOTE** If you are hosting a private server, check the `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-server.log` log for `Port` and `QueryPort` as shown below.
+:spiral_notepad: If you are hosting a private server, check the `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-server.log` log for `Port` and `QueryPort` as shown below.
 ```json
 Loaded ServerHostSettings:
 {
@@ -791,8 +807,8 @@ Loaded ServerHostSettings:
     Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
     Unity.Entities.ComponentSystem:Update()
     Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
-    ```
-    **NOTE:** You can also use tools like [whatismyip.com](https://www.whatismyip.com/) to get your public IP, but this doesn't ensure the server is bound to this public IP, This is especially useful if you have a VPN or secondary internet provider.
+    ```  
+    :spiral_notepad: You can also use tools like [whatismyip.com](https://www.whatismyip.com/) to get your public IP, but this doesn't ensure the server is bound to this public IP, This is especially useful if you have a VPN or secondary internet provider.
 
 6) Open your router and firewall to allow the `Port` and `QueryPort` configured in `ServerHostSettings.json` to forward to this machine (and TCP if you want RCON)
 This is beyond the scope of this document, as it is device specific, but you can try https://PortForward.com
