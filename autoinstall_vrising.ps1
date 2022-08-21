@@ -9,7 +9,7 @@
     this will also configure the windows firewall to allow the program to operate.
     The user input is expected to be the full path
 .NOTES
-    Version        : 1.520
+    Version        : 1.521
     File Name      : autoinstall_vrising.ps1
     Author         : Darryl H (https://github.com/darryl-h/)
     Credits        : Port and JSON handling from lordfiSh (https://github.com/lordfiSh/)
@@ -105,11 +105,11 @@ function ValidatePorts {
     }
     
     Write-Host "`tValidating Routing"
-    $TraceRoute = Test-NetConnection -ComputerName (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content -TraceRoute | Select -ExpandProperty TraceRoute | Measure-Object | Select-Object -ExpandProperty Count
+    $TraceRoute = Test-NetConnection -ComputerName (Invoke-WebRequest -uri "http://ifconfig.me/ip" -UseBasicParsing).Content -TraceRoute | Select -ExpandProperty TraceRoute | Measure-Object | Select-Object -ExpandProperty Count
     If ($TraceRoute -gt 1){
         Write-Host "`t`t* WARNING: You appear to be behind a NAT of some sort!! You may not be able to host correctly on the internet!" -ForegroundColor Red
         Write-Host "`n`t`tTracerouting to your Public IP:"
-        Test-NetConnection -ComputerName (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content -TraceRoute | Select -ExpandProperty TraceRoute
+        Test-NetConnection -ComputerName (Invoke-WebRequest -uri "http://ifconfig.me/ip" -UseBasicParsing).Content -TraceRoute | Select -ExpandProperty TraceRoute
     } ElseIf ($TraceRoute -eq 1 ) {
         Write-Host "`t`t* Routing looks OK" -ForegroundColor Green
     }
