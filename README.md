@@ -647,6 +647,21 @@ You should review the logs of the server to begin any troubleshooting session.
 
 ## Specific Troubleshooting Instructions
 
+### Troubleshooting Crashes due to JSON issues (out of range)
+In the logs you may see something similar to this:
+```
+OverflowException: Value was either too large or too small for an unsigned byte.
+  at System.Convert.ToByte (System.Int32 value) [0x00000] in <00000000000000000000000000000000>:0 
+  at System.Convert.ChangeType (System.Object value, System.Type conversionType, System.IFormatProvider provider) [0x00000] in <00000000000000000000000000000000>:0 
+  at Newtonsoft.Json.Serialization.JsonSerializerInternalReader.EnsureType (Newtonsoft.Json.JsonReader reader, System.Object value, System.Globalization.CultureInfo culture,
+```
+
+If you go futher down, you will see this (Look for `JsonSerializationException`):
+```
+Rethrow as JsonSerializationException: Error converting value 350 to type 'System.Byte'. Path 'CastleStatModifiers_Global.HeartLimits.Level4.FloorLimit', line 177, position 25.
+```
+
+
 ### Troubleshooting Direct Connection To the VRising Server
 The first step is to ensure that the game is accessible to machines on the same network as the server is running on.
 
