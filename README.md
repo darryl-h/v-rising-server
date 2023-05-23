@@ -533,43 +533,41 @@ There is some confusion about configuring the `VBloodUnitSettings` this is an ex
 ## ServerVoipSettings.json (VOIP Configuration)
 Be advised this is 100% unsupported!
 
-`https://discord.com/channels/803241158054510612/976404273015431168/980896456766533743` - VOIP setup (Also in the pinned messages)  
+`https://discord.com/channels/803241158054510612/976404273015431168/980896456766533743` - Old (Pre-Gloomrot) VOIP setup (Also in the pinned messages)  
 
-1) Create an account on the Vivox Developer Portal (https://developer.vivox.com/register)  
-:radioactive: In the `Submission Type` section, there is no functional difference between a `Individual: Personal Account` and `Organization: Professional Account`. I would `strongly` recommend using an `Individual: Personal Account` unless you are representing an actual organization. I would also strongly recommend you use proper real information, rather than made up information.
-2) Login to the Vivox Developer Portal 
-3) Click on `Create New Application`
-4) In Application or Game Name set the name to something like `VRising_Server`
-5) In the `Game Genres` put a check in `Action`
-6) Click `Continue`
-7) In `What engine are you building your app with? Vivox provides out-of-the-box solutions for the engines listed below - select Vivox Core if yours is not listed.` select `Unity`
-8) In `What platform(s) does your app support` select `Windows`
-9) Click `Continue`
-10) Click `Create App`
-11) Create a new file called `<GAME_SERVER_DIRECTORY>\VRisingServer_Data\StreamingAssets\Settings\ServerVoipSettings.json`
-12) Add the following content to the file
-    ```json
-    {
-        "VOIPEnabled": true,
-        "VOIPIssuer": "",
-        "VOIPSecret": "",
-        "VOIPAppUserId": "",
-        "VOIPAppUserPwd": "",
-        "VOIPVivoxDomain": "",
-        "VOIPAPIEndpoint": "",
-        "VOIPConversationalDistance": 14,
-        "VOIPAudibleDistance": 40,
-        "VOIPFadeIntensity": 2.0
-    }
-    ```
-13) In the `ServerVoipSettings.json` set the `VOIPIssuer` to the value you see in Vivox portal under `Api Keys` called `Issuer`
-14) In the `ServerVoipSettings.json` set the `VOIPSecret` to the value you see in the Vivox portal under `Api Keys` called `Secret Key`
-15) In the `ServerVoipSettings.json` set the `VOIPAppUserId` to the value you see in the Vivox portal under `Api Keys` called `Admin User ID`
-16) In the `ServerVoipSettings.json` set the `VOIPAppUserPwd` to the value you see in the Vivox portal under `Api Keys` called `Admin Password`
-17) In the `ServerVoipSettings.json` set the `VOIPVivoxDomain` to the value you see in the Vivox portal under `Environment Details` called `Domain`
-18) In the `ServerVoipSettings.json` set the `VOIPAPIEndpoint` to the value you see in the Vivox portal under `Environment Details` called `API End-Point`
-
-:spiral_notepad: The main difference between a sandbox, and a production configuration is the sandbox can only maintain `100` concurrent connections, while a production configuration can mantain `5000`.
+1)	Create an account on Unity at https://dashboard.unity.com/
+2)	Click on `Create account`
+3)	Create your account
+4)	In the left hand menu under `Organization` click `Projects`
+5)	Click `Create Project`
+6)	Give the project a name, like `V Rising Server`
+7)	Click `Create project`
+8)	In the left menu, click on `Multiplayer`
+9)	Click on `Voice and Text Chat`
+10)	Click on `Set up Voice and Text Chat`
+11)	Leave the default engine `Unity` and click `Next`
+12)	Click `Next` again
+13)	Click `Finish`
+14)	In the left menu, click on `Credentials`
+15)	Find the 4 bits of the credentials we need which are:
+`Server` -> `VOIPAPIEndpoint`
+`Domain` -> `VOIPVivoxDomain`
+`Token Issuer` -> `VOIPIssuer`
+`Token Key` -> `VOIPSecret`
+16)	Use these to 4 pieces to generate your own ServerVoipSettings.json file (You can copy and paste this, just change the values. These credentials will not work.)
+```json
+{
+    "VOIPEnabled": true,
+  	"VOIPAPIEndpoint": "https://mtu1xp-mad.vivox.com",
+    "VOIPVivoxDomain": "mtu1xp.vivox.com",
+    "VOIPIssuer": "35740-v_ris-20710-udash",
+    "VOIPSecret": "hT2XIhzCEBBApkLFxyMTN4UqerdCfi1N",
+    "VOIPConversationalDistance": 14,
+    "VOIPAudibleDistance": 40,
+    "VOIPFadeIntensity": 2.0
+}
+```
+17)	Place this file in `\VRisingDedicatedServer\save-data\Settings\`
 
 ### VOIP Troubleshooting
 #### Problem Description: Can't keep VOIP enabled
@@ -582,6 +580,13 @@ Be advised this is 100% unsupported!
 - Resolution
   - Time on the server must be sycned (This is NOT the same as the Time Zone!) even a few seconds drift can cause the problem to manifest. 
   - In general you should use `NTP` to sync time on the server and sync the server manually to start
+
+#### Problem Description: Can't keep VOIP enabled
+- Symptoms: 
+  - The VOIP option (`Options` -> `Sound` -> `Use Voice Chat`) may be forced into an off state after you have set it it on
+  - In the client logs you may see `LoginSession: Invalid State - must be logged out to perform this operation.`
+- Resolution
+  - The Vivox account is not functioning correctly. You may want to create a new project.
 
 #### VOIP Logs
 Expected/Successful VOIP logs can be found in the [VOIP](#voip) log section.
