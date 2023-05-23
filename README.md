@@ -549,12 +549,12 @@ Be advised this is 100% unsupported!
 12)	Click `Next` again
 13)	Click `Finish`
 14)	In the left menu, click on `Credentials`
-15)	Find the 4 bits of the credentials we need which are:
+15)	Find the 4 bits of the credentials we need which are:  
 `Server` -> `VOIPAPIEndpoint`  
 `Domain` -> `VOIPVivoxDomain`  
 `Token Issuer` -> `VOIPIssuer`  
 `Token Key` -> `VOIPSecret`  
-16)	Use these to 4 pieces to generate your own ServerVoipSettings.json file (You can copy and paste this, just change the values. These credentials will not work.)
+16)	Use these to 4 pieces to generate your own `\VRisingDedicatedServer\save-data\Settings\ServerVoipSettings.json` file (You can copy and paste this, just change the values. These credentials will not work.)
 ```json
 {
     "VOIPEnabled": true,
@@ -567,7 +567,6 @@ Be advised this is 100% unsupported!
     "VOIPFadeIntensity": 2.0
 }
 ```
-17)	Place this file in `\VRisingDedicatedServer\save-data\Settings\`
 
 ### VOIP Troubleshooting
 #### Problem Description: Can't keep VOIP enabled
