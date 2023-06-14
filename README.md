@@ -52,6 +52,18 @@
 
 # Resources
 
+## DirectX Error Mappings <!-- omit in toc -->
+https://learn.microsoft.com/en-us/windows/win32/direct3ddxgi/dxgi-error
+```
+d3d11: failed to create staging 2D texture w=320 h=320 d3dfmt=61 [887a0005]
+d3d11: failed to create staging 2D texture w=256 h=256 d3dfmt=61 [887a0005]
+d3d11: failed to create buffer (target 0x21 mode 0 size 17152) [0x887A0005]
+d3d11: failed to create buffer (target 0x200 mode 1 size 288) [0x887A0005]
+d3d11: failed to create buffer (target 0x200 mode 1 size 288) [0x887A0005]
+```
+DXGI_ERROR_DEVICE_REMOVED - 0x887A0005
+The video card has been physically removed from the system, or a driver upgrade for the video card has occurred. The application should destroy and recreate the device. For help debugging the problem, call ID3D10Device::GetDeviceRemovedReason.
+
 ## Official Guide <!-- omit in toc -->
 I've tried to submit a pull request to this repository with some of the information here, but it doesn't look like they want the changes, thus, I've just update this page in hopes that it will help someone.
   * https://github.com/StunlockStudios/vrising-dedicated-server-instructions
