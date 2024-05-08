@@ -521,9 +521,9 @@ function AdviseUserAfterFullInstall {
     Write-Host "`t`t`tMaximum Connected Users: $VRisingMaxConnectedUsers"
     Write-Host "`t`t`tGame Port: $VRisingGamePort"
     Write-Host "`t`t`tQuery Port: $VRisingQueryPort"
-    Write-Host "`t`t`tSaves: $InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Saves\v1\$VRisingSavename"
+    Write-Host "`t`t`tSaves: $InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Saves\v3\$VRisingSavename"
     Write-Host "`t`t`tTo migrate your existing world, issue the following command to open the save directory:" -ForegroundColor Magenta
-    Write-Host "`t`t`tInvoke-Item $InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Saves\v1\$VRisingSavename\"  -ForegroundColor DarkMagenta 
+    Write-Host "`t`t`tInvoke-Item $InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Saves\v3\$VRisingSavename\"  -ForegroundColor DarkMagenta 
     Write-Host "`t`t`tAuto Save Count: $VRisingAutoSaveCount"
     Write-Host "`t`t`tAuto Save Interval (In Seconds): $VRisingAutoSaveInterval"
     Write-Host "`t`t`tRCON Password: $RCONPassword"
