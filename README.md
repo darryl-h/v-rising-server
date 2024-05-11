@@ -554,19 +554,18 @@ Be advised this is 100% unsupported!
 5)	Click `Create Project`
 6)	Give the project a name, like `V Rising Server`
 7)	Click `Create project`
-8)	In the left menu, click on `Multiplayer`
-9)	Click on `Voice and Text Chat`
-10)	Click on `Set up Voice and Text Chat`
-11)	Leave the default engine `Unity` and click `Next`
-12)	Click `Next` again
-13)	Click `Finish`
-14)	In the left menu, click on `Credentials`
-15)	Find the 4 bits of the credentials we need which are:  
+8)	Scroll down, and click on `Vivox Voice and Text Chat`
+9)	Click on `Launch` in the top right
+10)	Click `Next`
+11)	Click `Next`
+12)	Click `Finsh`
+17)	In the left menu, click on `Credentials`
+18)	Find the 4 bits of the credentials we need which are:  
 `Server` -> `VOIPAPIEndpoint`  
 `Domain` -> `VOIPVivoxDomain`  
 `Token Issuer` -> `VOIPIssuer`  
 `Token Key` -> `VOIPSecret`  
-16)	Use these to 4 pieces to generate your own `\VRisingDedicatedServer\save-data\Settings\ServerVoipSettings.json` file (You can copy and paste this, just change the values. These credentials will not work.)
+19)	Use these to 4 pieces to generate your own `\VRisingDedicatedServer\save-data\Settings\ServerVoipSettings.json` file (You can copy and paste this, just change the values. These credentials will not work.)
 ```json
 {
     "VOIPEnabled": true,
