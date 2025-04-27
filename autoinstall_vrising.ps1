@@ -20,12 +20,14 @@
 .LINK
     https://github.com/darryl-h/v-rising-server
 .EXAMPLE
-    Start an administrator 'command prompt'
-    run 'powershell'
-    Install using the defualts:
-    powershell -ExecutionPolicy Bypass -File .\autoinstall_vrising.ps1 -action install -installpath C:\vrisingserver
-    OR install using custom ports (helpful if you want to run more than one VRising server on the same machine):
-    powershell -ExecutionPolicy Bypass -File .\autoinstall_vrising.ps1 -action install -installpath C:\vrisingserver -gameport 1234 -queryport 4567 -rconport 8481
+    1) Start an administrator 'command prompt'
+    2) run 'powershell'
+    3) Download the installer:
+      iwr https://raw.githubusercontent.com/darryl-h/v-rising-server/main/autoinstall_vrising.ps1 -OutFile .\autoinstall_vrising.ps1
+    4a) Install using the defualts:
+      powershell -ExecutionPolicy Bypass -File .\autoinstall_vrising.ps1 -action install -installpath C:\vrisingserver
+    4b) OR install using custom ports (helpful if you want to run more than one VRising server on the same machine):
+      powershell -ExecutionPolicy Bypass -File .\autoinstall_vrising.ps1 -action install -installpath C:\vrisingserver -gameport 1234 -queryport 4567 -rconport 8481
 #>
 
 # Assign the arguments from the user (This MUST be the first line after comments!)
