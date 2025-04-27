@@ -72,7 +72,7 @@ I've tried to submit a pull request to this repository with some of the informat
   * https://bugs.playvrising.com/
 
 ## Server Tester <!-- omit in toc -->
-  * http://steam-portcheck.herokuapp.com/index.php
+  * [http://steam-portcheck.herokuapp.com/index.php](V Rising Server Tools)
 
 ## BattleMetrics Server Listing <!-- omit in toc -->
   * https://www.battlemetrics.com/servers/vrising
