@@ -544,28 +544,33 @@ There is some confusion about configuring the `VBloodUnitSettings` this is an ex
 
 ## ServerVoipSettings.json (VOIP Configuration)
 Be advised this is 100% unsupported!
+Version 1.1
 
-`https://discord.com/channels/803241158054510612/976404273015431168/980896456766533743` - Old (Pre-Gloomrot) VOIP setup (Also in the pinned messages)  
-
-1)	Create an account on Unity at https://dashboard.unity.com/
+1)	Create an account on Unity at [https://dashboard.unity.com/](https://cloud.unity.com/home/login)
 2)	Click on `Create account`
 3)	Create your account
-4)	In the left hand menu under `Organization` click `Projects`
-5)	Click `Create Project`
-6)	Give the project a name, like `V Rising Server`
-7)	Click `Create project`
-8)	Scroll down, and click on `Vivox Voice and Text Chat`
-9)	Click on `Launch` in the top right
-10)	Click `Next`
-11)	Click `Next`
-12)	Click `Finsh`
-17)	In the left menu, click on `Credentials`
-18)	Find the 4 bits of the credentials we need which are:  
+4)	In the left hand menu under `My Organizations` click `Create`
+5)	Click `+ Create`
+6)	Set the `Organization name` to something meaningful, like `Darryls V Rising Voice Services` (This needs to be globally unique!)
+7)	Set the `Industry` to `Gaming`
+8)	Click `Create`
+9)	Click on the new organization
+10)	In the left menu, click on `Project integrations`
+11)	Set the `Project name` to something meaningful, like `Server 01 - Voice Services`
+12)	Click `Create`
+13)	Scroll down, and beside `Vivox Voice and Text Chat` click `Launch`
+14)	Click on `Launch` in the top right
+15)	Click `Next`
+16)	Click `Next`
+17)	Click `Next`
+18)	Click `Finsh`
+19)	In the second left menu, under `Voice and Text Chat` click on `Credentials`
+20)	Find the 4 bits of the credentials we need which are:  
 `Server` -> `VOIPAPIEndpoint`  
 `Domain` -> `VOIPVivoxDomain`  
 `Token Issuer` -> `VOIPIssuer`  
 `Token Key` -> `VOIPSecret`  
-19)	Use these to 4 pieces to generate your own `\VRisingDedicatedServer\save-data\Settings\ServerVoipSettings.json` file (You can copy and paste this, just change the values. These credentials will not work.)
+21)	Use these to 4 pieces to generate your own `\VRisingDedicatedServer\save-data\Settings\ServerVoipSettings.json` file (You can copy and paste this, just change the values. These credentials will not work.)
 ```json
 {
     "VOIPEnabled": true,
