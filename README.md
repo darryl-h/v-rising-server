@@ -1,12 +1,12 @@
 - [VRising Server Manager](#vrising-server-manager)
   - [🖥️ Features](#️-features)
-  - [Download](#download)
+  - [💾 Download](#-download)
   - [📝 User Guide](#-user-guide)
-- [File Locations](#file-locations)
-- [Server Management](#server-management)
-    - [Dedicated Server](#dedicated-server)
-    - [Private Server](#private-server)
-    - [Client](#client)
+- [📂 File Locations](#-file-locations)
+  - [Dedicated Server](#dedicated-server)
+  - [Private Server](#private-server)
+  - [Client](#client)
+- [🖥️ Server Management](#️-server-management)
   - [Installing the dedicated server using SteamCMD](#installing-the-dedicated-server-using-steamcmd)
     - [Dedicated Server Installation](#dedicated-server-installation)
     - [Dedicated Server Configuration](#dedicated-server-configuration)
@@ -68,7 +68,7 @@ I created a lightweight Windows GUI for installing, configuring and running your
 - **Network Verification**  
   - Jump to [portcheck.onrender.com](https://portcheck.onrender.com/) to confirm port forwarding.
 
-## Download
+## 💾 Download
 Head over to Releases -- https://github.com/darryl-h/v-rising-server/releases
 
 ## 📝 User Guide
@@ -153,7 +153,7 @@ Increase LogPollInterval or check your PowerShell execution policy.
 
 The app will auto-generate Host, Game & VOIP JSON on first open.
 
-# File Locations
+# 📂 File Locations
 ## Dedicated Server
 ### Dedicated Server - Configuration <!-- omit in toc -->
   - :stop_sign: These may get overwritten with each update (UNSAFE!)
@@ -205,19 +205,19 @@ The app will auto-generate Host, Game & VOIP JSON on first open.
 ### Client - Settings <!-- omit in toc -->
   * %USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Settings\ClientSettings.json
 
-# Server Management
+# 🖥️ Server Management
 ## Installing the dedicated server using SteamCMD
 This section is related, and specific to the Dedicated Server that you would start from outside the game client.
 
 - [VRising Server Manager](#vrising-server-manager)
   - [🖥️ Features](#️-features)
-  - [Download](#download)
+  - [💾 Download](#-download)
   - [📝 User Guide](#-user-guide)
-- [Server Management](#server-management)
-  - [File Locations](#file-locations)
-    - [Dedicated Server](#dedicated-server)
-    - [Private Server](#private-server)
-    - [Client](#client)
+- [📂 File Locations](#-file-locations)
+  - [Dedicated Server](#dedicated-server)
+  - [Private Server](#private-server)
+  - [Client](#client)
+- [🖥️ Server Management](#️-server-management)
   - [Installing the dedicated server using SteamCMD](#installing-the-dedicated-server-using-steamcmd)
     - [Dedicated Server Installation](#dedicated-server-installation)
     - [Dedicated Server Configuration](#dedicated-server-configuration)
