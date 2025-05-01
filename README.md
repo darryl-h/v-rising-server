@@ -79,12 +79,12 @@ I've tried to submit a pull request to this repository with some of the informat
 
 ## World Maps <!-- omit in toc -->
   * https://vrising-map.com/
-  * https://v-rising.map.gd/a/
 
 ## Game statistics <!-- omit in toc -->
   * https://steamdb.info/app/1604030/graphs/
 
 # Patch Notes
+* https://store.steampowered.com/news/app/1604030
 * [Patch 0.5.42584 | Patch Notes | Hotfix 9 -- Server Version: v0.5.42600 (2022-07-08 08:30 UTC)](https://store.steampowered.com/news/app/1604030?emclan=103582791469988961&emgid=3320858336357099261)
   * Disabled LowerFPSWhenEmpty due to unexpected side effects
   * Fixed DLCs not working in LAN mode under certain conditions.
