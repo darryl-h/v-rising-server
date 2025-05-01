@@ -1,213 +1,256 @@
-- [Resources](#resources)
-- [Patch Notes](#patch-notes)
-- [File Locations](#file-locations)
-  - [Dedicated Server](#dedicated-server)
-  - [Private Server](#private-server)
-  - [Client](#client)
-- [Dedicated Server](#dedicated-server-1)
-  - [Dedicated Server Installation](#dedicated-server-installation)
-  - [Dedicated Server Configuration](#dedicated-server-configuration)
-    - [Manual Configuration](#manual-configuration)
-      - [Server StartUp Batch File](#server-startup-batch-file)
-      - [Server Settings Files](#server-settings-files)
-      - [Allow the vRising game through the windows firewall](#allow-the-vrising-game-through-the-windows-firewall)
-      - [Server Startup, Log Timestamps, and Restarting on Failure](#server-startup-log-timestamps-and-restarting-on-failure)
-      - [Server updates](#server-updates)
-- [Post Configuration](#post-configuration)
-  - [ServerHostSettings.json](#serverhostsettingsjson)
-  - [ServerGameSettings.json](#servergamesettingsjson)
-  - [ServerVoipSettings.json (VOIP Configuration)](#servervoipsettingsjson-voip-configuration)
-    - [VOIP Troubleshooting](#voip-troubleshooting)
-      - [Problem Description: Can't keep VOIP enabled](#problem-description-cant-keep-voip-enabled)
-      - [VOIP Logs](#voip-logs)
-  - [Adding yourself to the adminlist.txt file](#adding-yourself-to-the-adminlisttxt-file)
-  - [Configure your router to allow UDP ports to the server](#configure-your-router-to-allow-udp-ports-to-the-server)
+- [VRising Server Manager](#vrising-server-manager)
+  - [🖥️ Features](#️-features)
+  - [Download](#download)
+  - [📝 User Guide](#-user-guide)
+- [Server Management](#server-management)
+  - [File Locations](#file-locations)
+    - [Dedicated Server](#dedicated-server)
+    - [Private Server](#private-server)
+    - [Client](#client)
+  - [Installing the dedicated server using SteamCMD](#installing-the-dedicated-server-using-steamcmd)
+    - [Dedicated Server Installation](#dedicated-server-installation)
+    - [Dedicated Server Configuration](#dedicated-server-configuration)
+      - [Manual Configuration](#manual-configuration)
+        - [Server StartUp Batch File](#server-startup-batch-file)
+        - [Server Settings Files](#server-settings-files)
+        - [Allow the vRising game through the windows firewall](#allow-the-vrising-game-through-the-windows-firewall)
+        - [Server Startup, Log Timestamps, and Restarting on Failure](#server-startup-log-timestamps-and-restarting-on-failure)
+        - [Server updates](#server-updates)
+  - [Post Configuration](#post-configuration)
+    - [ServerHostSettings.json](#serverhostsettingsjson)
+    - [ServerGameSettings.json](#servergamesettingsjson)
+    - [ServerVoipSettings.json (VOIP Configuration)](#servervoipsettingsjson-voip-configuration)
+      - [VOIP Troubleshooting](#voip-troubleshooting)
+    - [Adding yourself to the adminlist.txt file](#adding-yourself-to-the-adminlisttxt-file)
+    - [Configure your router to allow UDP ports to the server](#configure-your-router-to-allow-udp-ports-to-the-server)
+  - [Troubleshooting](#troubleshooting)
+    - [Log Variables](#log-variables)
+    - [Specific Troubleshooting Instructions](#specific-troubleshooting-instructions)
+      - [Troubleshooting Crashes due to JSON issues (out of range)](#troubleshooting-crashes-due-to-json-issues-out-of-range)
+      - [Troubleshooting Direct Connection To the VRising Server](#troubleshooting-direct-connection-to-the-vrising-server)
+        - [On the Internet](#on-the-internet)
+      - [Server not listed on the server browser](#server-not-listed-on-the-server-browser)
 - [General Instructions](#general-instructions)
   - [Enabling Console Access](#enabling-console-access)
   - [Direct Connect](#direct-connect)
-- [Intresting Admin Console Commands](#intresting-admin-console-commands)
-- [Troubleshooting The Server](#troubleshooting-the-server)
-  - [Log Variables](#log-variables)
-  - [Specific Troubleshooting Instructions](#specific-troubleshooting-instructions)
-    - [Troubleshooting Direct Connection To the VRising Server](#troubleshooting-direct-connection-to-the-vrising-server)
-      - [On the Internet](#on-the-internet)
-    - [Server not listed on the server browser](#server-not-listed-on-the-server-browser)
-  - [Log Examples](#log-examples)
-    - [Incorrect Password](#incorrect-password)
-    - [Closed Connection](#closed-connection)
-    - [User Login](#user-login)
-    - [Loading ServerHostSettings](#loading-serverhostsettings)
-    - [Loading ServerGameSettings](#loading-servergamesettings)
-    - [Loading adminlist](#loading-adminlist)
-    - [Loading Banlist](#loading-banlist)
-    - [Update Master Server](#update-master-server)
-    - [Broadcasting public IP](#broadcasting-public-ip)
-    - [Autosaves](#autosaves)
-    - [Granting admin permissions from the console](#granting-admin-permissions-from-the-console)
-    - [Give Item Event](#give-item-event)
-    - [VOIP](#voip)
-    - [Crashes](#crashes)
-  - [Server Startup](#server-startup)
-    - [Server Loading on 2020.3.31f1 (6b54b7616050)](#server-loading-on-2020331f1-6b54b7616050)
+  - [Intresting Admin Console Commands](#intresting-admin-console-commands)
+- [Resources](#resources)
+- [Patch Notes](#patch-notes)
 
-# Resources
+# VRising Server Manager
+I created a lightweight Windows GUI for installing, configuring and running your V Rising dedicated server, do note this is NOT endorsed by the studio, but after moderating the offical VRising discord, I tried to address some of the very common issues I've seen in my time volunteering there.
 
-## DirectX Error Mappings <!-- omit in toc -->
-https://learn.microsoft.com/en-us/windows/win32/direct3ddxgi/dxgi-error
-```
-d3d11: failed to create staging 2D texture w=320 h=320 d3dfmt=61 [887a0005]
-d3d11: failed to create staging 2D texture w=256 h=256 d3dfmt=61 [887a0005]
-d3d11: failed to create buffer (target 0x21 mode 0 size 17152) [0x887A0005]
-d3d11: failed to create buffer (target 0x200 mode 1 size 288) [0x887A0005]
-d3d11: failed to create buffer (target 0x200 mode 1 size 288) [0x887A0005]
-```
-DXGI_ERROR_DEVICE_REMOVED - 0x887A0005
-The video card has been physically removed from the system, or a driver upgrade for the video card has occurred. The application should destroy and recreate the device. For help debugging the problem, call ID3D10Device::GetDeviceRemovedReason.
+## 🖥️ Features
 
-## Official Guide <!-- omit in toc -->
-I've tried to submit a pull request to this repository with some of the information here, but it doesn't look like they want the changes, thus, I've just update this page in hopes that it will help someone.
-  * https://github.com/StunlockStudios/vrising-dedicated-server-instructions
+- **1 Click Install using SteamCMD**  
+- **Service Management**  
+  - Start service
+  - Stop service
+  - Edit NSSM-managed service
+  - Direct access to Windows Task Manager
+  - Direct access to Windows Firewall
+- **Log Viewer**  
+  - Highlights `ERROR` in red and `WARN` in orange  
+  - Regex filter, `Pause Logs` toggle  
+  - Configurable buffer (last N lines) & poll interval  
+- **Gameplay Settings**
+  - Host Settings
+  - Game Settings
+  - Quick links to official docs & PDF guides
+  - VOIP Settings with built in template (`ServerVoipSettings.json`)
+  - Adminlist (`adminlist.txt`)
+  - Banlist (`banlist.txt`)
+- **World Management**  
+  - Show `/Saves/v4` folder  
+  - Backup & Restore entire `save-data` directory as timestamped ZIP  
+- **RCON**  
+  - Launch `mcrcon.exe` with credentials read straight from your HostSettings JSON.
+- **Network Verification**  
+  - Jump to [portcheck.onrender.com](https://portcheck.onrender.com/) to confirm port forwarding.
 
-## Offical Bug Tracker <!-- omit in toc -->
-  * https://bugs.playvrising.com/
+## Download
+Head over to Releases -- https://github.com/darryl-h/v-rising-server/releases
 
-## Server Tester <!-- omit in toc -->
-  * https://portcheck.onrender.com/
+## 📝 User Guide
+### Main Window: <!-- omit in toc -->
+* Filter Logs (Regex): type any pattern to limit visible lines
+* Pause Logs: stop automatic refreshing
 
-## BattleMetrics Server Listing <!-- omit in toc -->
-  * https://www.battlemetrics.com/servers/vrising
+### Application Menu <!-- omit in toc -->
+#### Configuration <!-- omit in toc -->
+* Base Directory: where your VRising server lives (default C:\vrisingserver)
+* Service Name: your NSSM service identifier (default VRisingServer-9876)
+* Log Buffer Size: how many lines to show in the log window
+* Log Poll Interval: how often (ms) to refresh logs
+* Service Poll Interval: how often (ms) to check service status
+* Update .bat Path: full path to your nightly update script
+* Launcher .bat Path: path to a custom start script (if not using NSSM)
+Click Save then OK. All values are written to vrising_manager_config.json.
 
-## World Maps <!-- omit in toc -->
-  * https://vrising-map.com/
+### World Menu <!-- omit in toc -->
+* Show Saves – opens …\Saves\v4
+* Backup Saves – ZIP up your entire save-data folder
+* Restore Saves – choose a ZIP, wipes & extracts, then restarts server
 
-## Game statistics <!-- omit in toc -->
-  * https://steamdb.info/app/1604030/graphs/
+### Server Menu <!-- omit in toc -->
+* Start/Stop Service – NSSM-managed Windows service
+* Edit Service – invoke nssm.exe edit <service>
+* Ban/Admin List – one-click open of banlist.txt & adminlist.txt
+* Update – run your configured update_server.bat
+* Start Standalone – run a custom launcher script if set
+* RCON – launches mcrcon.exe with credentials from HostSettings
+* Verify Network – opens [portcheck.onrender.com](https://portcheck.onrender.com/)
+* Install – downloads & elevates the PowerShell installer from GitHub
 
-# Patch Notes
-* https://store.steampowered.com/news/app/1604030
-* [Patch 0.5.42584 | Patch Notes | Hotfix 9 -- Server Version: v0.5.42600 (2022-07-08 08:30 UTC)](https://store.steampowered.com/news/app/1604030?emclan=103582791469988961&emgid=3320858336357099261)
-  * Disabled LowerFPSWhenEmpty due to unexpected side effects
-  * Fixed DLCs not working in LAN mode under certain conditions.
-* [Patch 0.5.42553 | Patch Notes | Hotfix 8 -- Server Version: v0.5.42562 (2022-07-06 10:15 UTC)](https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/4474904295776381022)
-  * Server Wipes
-    * Severs that support Scheduled Wipes will have an icon in the server list
-    * Server with Scheduled Wipes will display the number of days remaining until the next planned wipe.
-    * This appears to be set in `ServerHostSettings.json` using `ResetDaysInterval` which is a number of days to reset, and `DayOfReset` which can be `Any` , `Monday` , `Tuesday` , `Wednesday` , `Thursday` , `Friday` , `Saturday` or `Sunday`
-      * C/O Ersan : https://discord.com/channels/803241158054510612/976404273015431168/994194443961909381
-  * Added new ServerHostSettings for lowering FPS on servers when they are empty: `-LowerFPSWhenEmpty` and `-LowerFPSWhenEmptyValue`. The default is `true` and with a value of `1`.
-  * Official PvP Presets now uses `1.25` `BloodDrainModifier` instead of `1.0`
-  * DLCs now work in LAN Mode.
-  * The initial Server List request will now prioritize servers with players, to increase the speed at which servers are fetched.
-  * Replaced `Days Played` with `Days Running` in the Server Details.
-  * `Days Played` previously displayed the number of in-game days since server start, `Days Running` will now instead display the number of real-time days since server start.
-* [Patch 0.5.42405 | Patch Notes | Hotfix 7 -- Server Version: v0.5.42405 (2022-06-29 15:34 UTC)](https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/4474904295754340476)
-  * We added Steam Cloud support for Private Game saves. This allows playing your saves on different computers.
-  * All new Private Games hosted will now be saved on Steam Cloud by default.
-  * You can move saves to/from Steam Cloud Saving.
-* [Patch 0.5.42236 | Patch Notes | Hotfix 6 -- Server Version: v0.5.42236 (2022-06-22 17:00 UTC)](https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/4474904295728853576)
-  * Added a new admin command `decayusercastles <playername>` that puts all the castles owned by a target player in decay.
-  * The `adminlist.txt` and `banlist.txt` files are now loaded from both the default Settings folder as well as from the local override Settings folder. These files always save to the local override folder now.
-  * The RCON socket now binds to the bind address if specified. There is also a specific RCON Bind Address to override the default one.
-  * Lumber, Stone, and Plant Fibre no longer block players from using waygates or bat form.
-* [Patch 0.5.42050 / 2022-06-16 -- Server Version: v0.5.42023 (2022-06-15 00:18 UTC)](https://steamcommunity.com/games/1604030/announcements/detail/4822806821988384687)
-  * Players can now dismantle floors and borders that are next to walls/pillars without having to dismantle any wall/pillar first, as long as this does not leave any wall/pillar without a floor connection (#305517).
-  * Improved error handling and error feedback when the server saves the game world (related to #304262 and #304381 but is not expected to solve all reported cases).
-  * Added more validation and safety checks to catch more types of rare errors while saving.
-  * If the server fails to save, all active players on the server now get a chat notification containing basic information about the type of error that was encountered.
-  * The server no longer uses the Windows temp folder while saving the world. It instead saves the temporary files to a neighboring folder to the target save path.
-  * Fixed an issue where territory and buildings had a chance of not getting destroyed with their castle if they were constructed at a large enough distance from the Castle Heart (#306085, #305657).
-* [Patch 0.5.41821 / 2022-06-09 -- Server Version: v0.5.41821 (2022-06-09 01:17 UTC)](https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/4480532526716778038)
-  * Server optimizations for servers with long up times and/or a lot of players.
-  * Optimized the map and minimap on servers with a lot of castles.
-  * Updated the Social Panel: Now it displays all players connected to the server and their SteamID. We also added text chat muting functionality. Muting is persistent between sessions now. 
-  * The Blood Essence Drain Modifier setting should now work properly.
-* [Patch 0.5.41669 / 2022-05-31 -- Server Version: v0.5.41669 (2022-05-30 23:21 UTC)](https://steamcommunity.com/games/1604030/announcements/detail/3294958655399932646)
-  * Maximum clan size has been increased to 50
-  * `Server Details` will now show the amount of in-game days the server has been running for.
-  * Altering the ‘Refinement Cost’ and ‘Refinement Rate’ server settings no longer affects the blood essence consumption rate of the Castle Heart.
-  * Occurrences of multiple spawns of the same V Blood units will now be repaired upon server restart.
-  * Optimized server memory by removing data from disconnected users.
-* [Patch 0.5.41591 / 2022-05-30 -- Server Version: UNKNOWN](https://steamcommunity.com/games/1604030/announcements/detail/3294958655395719328)
-* [Patch 0.5.41448 / 2022-05-25 -- Server Version: v0.5.41471 (2022-05-25 08:56 UTC)](https://steamcommunity.com/games/1604030/announcements/detail/3294958655377836606)
-  * Added changehealthofclosesttomouse to console
-  * Added changedurability to console
-  * Added addtime to console
-  * Added LAN/Offline mode
-* [Patch 0.5.41237 / 2022-05-19 -- Server Version: v0.5.41258 (2022-05-19 12:26 UTC)](https://steamcommunity.com/games/1604030/announcements/detail/3218396837686301548)
+### Common Workflows <!-- omit in toc -->
+#### Fresh Server Install <!-- omit in toc -->
+1) Click on Server
+2) Click on Install
+3) Choose install directory & (optional) ports.
+4) Accept UAC prompt
+5) Wait for SteamCMD to complete
+6) Click on Application
+7) Click on Configuration
+8) Ensure that the Service Name is correct (Validate the service name in `services.msc`).
+IF you used the installer, it will name the server `VRisingServer-[GAMEPORT]` IE: VRisingServer-9876.
+9) Click on Server
+10) Click on Start Service
 
-# File Locations
-## Dedicated Server
-### Dedicated Server - Configuration <!-- omit in toc -->
+#### Configuring VOIP <!-- omit in toc -->
+* Server Configuration → VOIP Settings.
+* If missing, the app creates ServerVoipSettings.json with a template.
+* It then opens in Notepad—enter your credentials and save.
+
+#### Backing Up & Restoring Worlds <!-- omit in toc -->
+* Backup Saves:
+* Creates YYYY-MM-DDTHHMM.zip in your Base Directory.
+
+#### Restore Saves: <!-- omit in toc -->
+* Stops service → choose a ZIP → wipes save-data → extracts → restarts service.
+
+## ⚙️ Quick Start <!-- omit in toc -->
+
+1. **Configure** your Base Directory & Service Name under **Application → Configuration**.  
+2. **Install** the game server by clicking **Server → Install**, choosing an install path and (optionally) ports.  
+3. **Start Service** under **Server**.  
+4. Watch **Logs** stream in real time; filter, pause, or jump to bottom.  
+5. Edit any JSON settings via the **Server Configuration** menu.  
+6. Backup & restore worlds via **World**.
+
+---
+## 🎓 Tips & Troubleshooting <!-- omit in toc -->
+- You do NOT need to have this application running all the time, in fact, you can discontinue it's use whenever you want.
+
+- “Access Denied” when starting/stopping service?
+
+The app will automatically prompt for UAC elevation only as needed.
+
+- Logs not updating?
+
+Increase LogPollInterval or check your PowerShell execution policy.
+
+- Missing JSON templates?
+
+The app will auto-generate Host, Game & VOIP JSON on first open.
+
+# Server Management
+## File Locations
+### Dedicated Server
+#### Dedicated Server - Configuration <!-- omit in toc -->
   - :stop_sign: These may get overwritten with each update (UNSAFE!)
-    - **Startup .bat file:** `<VAR_SERVER_INSTALLATION_DIRECTORY>`\start_server_example.bat
+    - **Startup .bat file:** `<VAR_SERVER_INSTALLATION_DIRECTORY>`\steamapps\common\VRisingDedicatedServer\start_server_example.bat
     - **ServerHostSettings:** `<VAR_SERVER_INSTALLATION_DIRECTORY>`\VRisingServer_Data\StreamingAssets\Settings\ServerHostSettings.json
     - **ServerGameSettings:** `<VAR_SERVER_INSTALLATION_DIRECTORY>`\VRisingServer_Data\StreamingAssets\Settings\ServerGameSettings.json
-  - :heavy_check_mark: These should survive server updates
-    - **Startup .bat file:** `<VAR_SERVER_INSTALLATION_DIRECTORY>`\start_server.bat
-    - **VOIP Configuration:** `<VAR_SERVER_INSTALLATION_DIRECTORY>`\VRisingServer_Data\StreamingAssets\Settings\ServerVoipSettings.json
-    - **AdminList:** `<VAR_SERVER_INSTALLATION_DIRECTORY>`\VRisingServer_Data\StreamingAssets\Settings\adminlist.txt
-    - **Banlist:** `<VAR_SERVER_INSTALLATION_DIRECTORY>`\VRisingServer_Data\StreamingAssets\Settings\banlist.txt
-    - These rely on the `-persistentDataPath` being set when launching the game
-      - **ServerHostSettings:** `<VAR_SERVER_INSTALLATION_DIRECTORY>`\\`<VAR_PERSISTENT_DATA_PATH>`\Settings\ServerHostSettings.json
-      - **ServerGameSettings:** `<VAR_SERVER_INSTALLATION_DIRECTORY>`\\`<VAR_PERSISTENT_DATA_PATH>`\Settings\ServerGameSettings.json
-### Dedicated Server - Save Games <!-- omit in toc -->
-  - These rely on the `-persistentDataPath` being set when launching the game
-    - `<VAR_SERVER_INSTALLATION_DIRECTORY>`\\`<VAR_PERSISTENT_DATA_PATH>`\Saves\v1\\`<VAR_WORLD_NAME>`\AutoSave_`NNNN`
-### Dedicated Server - Logs <!-- omit in toc -->
-  - These rely on the `-logFile` being set when launching the game
-    - `<VAR_SERVER_INSTALLATION_DIRECTORY>`\logs\VRisingServer.log
+  
+  - :heavy_check_mark: These should survive server updates and rely on the `-persistentDataPath` parameter being set to `.\save-data` when launching the game
+    - **Startup .bat file:** `.\vrisingserver\steamapps\common\VRisingDedicatedServer\start_server.bat`
+    - **VOIP Configuration:** `.\vrisingserver\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerVoipSettings.json`
+    - **AdminList:** `.\vrisingserver\steamapps\common\VRisingDedicatedServer\save-data\Settings\adminlist.txt`
+    - **Banlist:** ``.\vrisingserver\steamapps\common\VRisingDedicatedServer\save-data\Settings\banlist.txt`
+#### Dedicated Server - Save Games <!-- omit in toc -->
+  - These rely on the `-persistentDataPath` parameter being set to `.\save-data` when launching the game
+  - These rely on the `-saveName` parameter being set to `world1` when launching the game
+    - `.\vrisingserver\steamapps\common\VRisingDedicatedServer\save-data\Saves\v4\world1\AutoSave_NNNN.save.gz`
+#### Dedicated Server - Logs <!-- omit in toc -->
+  - These rely on the `-logFile` parameter being set to `.\logs\VRisingServer.log` when launching the game
+    - `.\vrisingserver\steamapps\common\VRisingDedicatedServer\logs\VRisingServer.log`
 
-## Private Server
-### Private Server - Configuration <!-- omit in toc -->
+### Private Server
+#### Private Server - Configuration <!-- omit in toc -->
 * If you do not have cloud saves enabled, it should live in:
-%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Saves\v1\<GAME_UUID>
+`%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Saves\v4\<GAME_UUID>`
 
 * If you do have cloud saves enabled, it should live in:
-%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\CloudSaves\<STEAM_PLAYER_ID>\v1\<GAME_UUID>
+`%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\CloudSaves\<STEAM_PLAYER_ID>\v4\<GAME_UUID>`
   
 :spiral_notepad: You can see what's in your steam saves, by opening the following URL: https://store.steampowered.com/account/remotestorageapp/?appid=1604030
 
-### Private Server - Save Games <!-- omit in toc -->
+#### Private Server - Save Games <!-- omit in toc -->
 * If you do not have cloud saves enabled, it should live in:
-%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Saves\v1\<GAME_UUID>\AutoSave_NNNN
+%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Saves\v4\<GAME_UUID>\AutoSave_NNNN.save.gz
 
 * If you do have cloud saves enabled, it should live in:
-%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\CloudSaves\<STEAM_PLAYER_ID>\v1\<GAME_UUID>\AutoSave_NNNN
+%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\CloudSaves\<STEAM_PLAYER_ID>\v4\<GAME_UUID>\AutoSave_NNNN.save.gz
   
 :spiral_notepad: You can see what's in your steam saves, by opening the following URL: https://store.steampowered.com/account/remotestorageapp/?appid=1604030
 
-### Private Server - Logs <!-- omit in toc -->
+#### Private Server - Logs <!-- omit in toc -->
 - %USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-server.log
 
-## Client
-### Configuration <!-- omit in toc -->
-  - **Console Profile** : %USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\ConsoleProfile\\`<VAR_MACHINE_NAME>`.prof
+### Client
+#### Configuration <!-- omit in toc -->
+  - **Console Profile** : %USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\ConsoleProfile\`<VAR_MACHINE_NAME>`.prof
     * You should not modify this file directly!
-### Client - Player Logs <!-- omit in toc -->
+#### Client - Player Logs <!-- omit in toc -->
   * %USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player.log
-### Client - Settings <!-- omit in toc -->
+#### Client - Settings <!-- omit in toc -->
   * %USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Settings\ClientSettings.json
 
-# Dedicated Server 
+## Installing the dedicated server using SteamCMD
 This section is related, and specific to the Dedicated Server that you would start from outside the game client.
 
-- [Dedicated Server Installation](#dedicated-server-installation)
-  - [Installation of the server using the AutoInstaller](#installation-of-the-server-using-the-autoinstaller-)
-  - [Installation of the server using PowerShell and SteamPS](#installation-of-the-server-using-powershell-and-steamps)
-- [Dedicated Server Configuration](#dedicated-server-configuration)
-  - [Manual Configuration](#manual-configuration)
-    - [Server StartUp Batch File](#server-startup-batch-file)
-    - [Server Settings Files](#server-settings-files)
-    - [Allow the vRising game through the windows firewall](#allow-the-vrising-game-through-the-windows-firewall)
-    - [Server Startup, Log Timestamps, and Restarting on Failure](#server-startup-log-timestamps-and-restarting-on-failure)
-    - [Server updates](#server-updates)
-      - [With SteamPS](#with-steamps)
-      - [With SteamCMD](#with-steamcmd)
-      - [Automating updates with Windows Task Scheulder](#automating-updates-with-windows-task-scheulder)
+- [VRising Server Manager](#vrising-server-manager)
+  - [🖥️ Features](#️-features)
+  - [Download](#download)
+  - [📝 User Guide](#-user-guide)
+- [Server Management](#server-management)
+  - [File Locations](#file-locations)
+    - [Dedicated Server](#dedicated-server)
+    - [Private Server](#private-server)
+    - [Client](#client)
+  - [Installing the dedicated server using SteamCMD](#installing-the-dedicated-server-using-steamcmd)
+    - [Dedicated Server Installation](#dedicated-server-installation)
+    - [Dedicated Server Configuration](#dedicated-server-configuration)
+      - [Manual Configuration](#manual-configuration)
+        - [Server StartUp Batch File](#server-startup-batch-file)
+        - [Server Settings Files](#server-settings-files)
+        - [Allow the vRising game through the windows firewall](#allow-the-vrising-game-through-the-windows-firewall)
+        - [Server Startup, Log Timestamps, and Restarting on Failure](#server-startup-log-timestamps-and-restarting-on-failure)
+        - [Server updates](#server-updates)
+  - [Post Configuration](#post-configuration)
+    - [ServerHostSettings.json](#serverhostsettingsjson)
+    - [ServerGameSettings.json](#servergamesettingsjson)
+    - [ServerVoipSettings.json (VOIP Configuration)](#servervoipsettingsjson-voip-configuration)
+      - [VOIP Troubleshooting](#voip-troubleshooting)
+    - [Adding yourself to the adminlist.txt file](#adding-yourself-to-the-adminlisttxt-file)
+    - [Configure your router to allow UDP ports to the server](#configure-your-router-to-allow-udp-ports-to-the-server)
+  - [Troubleshooting](#troubleshooting)
+    - [Log Variables](#log-variables)
+    - [Specific Troubleshooting Instructions](#specific-troubleshooting-instructions)
+      - [Troubleshooting Crashes due to JSON issues (out of range)](#troubleshooting-crashes-due-to-json-issues-out-of-range)
+      - [Troubleshooting Direct Connection To the VRising Server](#troubleshooting-direct-connection-to-the-vrising-server)
+        - [On the Internet](#on-the-internet)
+      - [Server not listed on the server browser](#server-not-listed-on-the-server-browser)
+- [General Instructions](#general-instructions)
+  - [Enabling Console Access](#enabling-console-access)
+  - [Direct Connect](#direct-connect)
+  - [Intresting Admin Console Commands](#intresting-admin-console-commands)
+- [Resources](#resources)
+- [Patch Notes](#patch-notes)
 
-## Dedicated Server Installation
+### Dedicated Server Installation
 
-### Installation of the server using the AutoInstaller <!-- omit in toc -->
+#### Installation of the server using the AutoInstaller <!-- omit in toc -->
 I created a quick PowerShell script that will automate the installation of the V Rising Server, and configuration of the service. This can be found in this repository called `autoinstall_vrising.ps1`
 
 This will attempt to:
@@ -350,7 +393,7 @@ After installation, the user is provided with all the information to manage the 
 ```
 Once complete, you can skip to the [Post Configuration](#post-configuration) of the server
 
-### Installation of the server using PowerShell and SteamPS <!-- omit in toc -->
+#### Installation of the server using PowerShell and SteamPS <!-- omit in toc -->
 We will assume that you want to install the server in `C:\servers\v_rising` (This will be <VAR_SERVER_INSTALLATION_DIRECTORY> in the rest of this document) if you do not, change the path in the following commands.
 
 We will install the PowerShell module for SteamCLI to install and update the server.
@@ -361,12 +404,12 @@ Update-SteamApp -ApplicationName 'V Rising Dedicated Server' -Path 'C:\servers\v
 ```  
 :spiral_notepad: Any questions should be answered with yes
 
-## Dedicated Server Configuration
+### Dedicated Server Configuration
 
-### Manual Configuration
+#### Manual Configuration
 If you want to manually setup everything instead of using the auto installer, you can follow these steps:
 
-#### Server StartUp Batch File
+##### Server StartUp Batch File
 * Copy the `<VAR_SERVER_INSTALLATION_DIRECTORY>\start_server_example.bat` to a new file (I called mine `<VAR_SERVER_INSTALLATION_DIRECTORY>\start_server.bat`)
 Inside the file, change the serverName (`My Cool Server`) and the -saveName (`coolServer1`)
 
@@ -381,16 +424,16 @@ Inside the file, change the serverName (`My Cool Server`) and the -saveName (`co
   ```
 In this case, we are removing the `-logFile ".\logs\VRisingServer.log` line from the logs, we will use this later with NSSM to give us timestamps and log file rotation. Huzzah!
 
-#### Server Settings Files
+##### Server Settings Files
 1. Create the directory `<VAR_SERVER_INSTALLATION_DIRECTORY>\save-data\Settings`
 2. Copy and paste `ServerHostSettings.json` and `ServerGameSettings.json` files from `<VAR_SERVER_INSTALLATION_DIRECTORY>/VRisingServer_Data/StreamingAssets/Settings/` into the directory you created in step 1
   
 :spiral_notepad: If you elect to directly modify the configuration files in `<VAR_SERVER_INSTALLATION_DIRECTORY>\VRisingServer_Data\StreamingAssets\Settings\` you may loose your configuration changes with new updates, so you may want to consider backing them up.
 
-#### Allow the vRising game through the windows firewall
+##### Allow the vRising game through the windows firewall
 You may need to allow the executable (VRisingServer.exe) through the windows firewall
 
-#### Server Startup, Log Timestamps, and Restarting on Failure
+##### Server Startup, Log Timestamps, and Restarting on Failure
 This will add timestamps, restart the service if crashes, and sets up the server to start the service when the machine starts up, oh my!
 
 In this example, we will setup the server with NSSM (Non Sucking Service Manager)
@@ -443,12 +486,12 @@ In this example, we will setup the server with NSSM (Non Sucking Service Manager
     nssm start VRisingServer-9876
     ```
 
-#### Server updates
+##### Server updates
 We will place the `update.bat` file with the startup batch file in the `<VAR_SERVER_INSTALLATION_DIRECTORY>`, we will also announce to the players we are doing this with mcrcon (https://github.com/Tiiffi/mcrcon/releases/) which we will place in the server directory as well for ease of access. 
 
 :spiral_notepad: In either case, you will need to update the path to the server by replacing any line with `C:\servers\v_rising` with the correct path for your server.
 
-##### With SteamPS <!-- omit in toc -->
+###### With SteamPS <!-- omit in toc -->
 `update.bat`
 ```dos
 @echo off
@@ -467,7 +510,7 @@ echo "Starting the server"
 C:\servers\v_rising\nssm.exe start vrisingserver
 ```
 
-##### With SteamCMD <!-- omit in toc -->
+###### With SteamCMD <!-- omit in toc -->
 `update.bat`
 ```dos
 @echo off
@@ -487,7 +530,7 @@ C:\servers\v_rising\nssm.exe start vrisingserver
 ```
 You can also add `+force_install_dir "C:\Path\To\v_rising_server\"` to the `SteamCMD` executable.
 
-##### Automating updates with Windows Task Scheulder <!-- omit in toc -->
+###### Automating updates with Windows Task Scheulder <!-- omit in toc -->
 * Create a `Basic Task`
 * Name it `Update V-Rising Server`
 * Click `Next`
@@ -502,15 +545,15 @@ You can also add `+force_install_dir "C:\Path\To\v_rising_server\"` to the `Stea
 * Click `Next`
 * Click `Finish`
 
-# Post Configuration
+## Post Configuration
 Weather or not you are using the auto installer or the manual steps, the following final configuration steps may be required.
 
-## ServerHostSettings.json
+### ServerHostSettings.json
 
-### Description <!-- omit in toc -->
+#### Description <!-- omit in toc -->
 In `Description` field, you can use line breaks using `\n`
 
-### Address <!-- omit in toc -->
+#### Address <!-- omit in toc -->
 In the `Address` field, if you set this to a local address (192.168.1.X or 10.X.X.X) this will cause the server and RCON to only listen on this address. This is useful if you have more than one interface or are using a VPN and want to bind the server and RCON to a single IP.
 :warning: If you set this address, you will need to adjust your RCON commands to use the server IP, rather than the local loopback address as it will not be listening on the loopback address anymore!
 
@@ -519,12 +562,12 @@ netstat -aon | find "19280"
   TCP    192.168.1.10:25575          0.0.0.0:0              LISTENING       19280
 ```
 
-## ServerGameSettings.json
+### ServerGameSettings.json
 You can get more information (min/max) and descriptions on each setting using this PDF: https://cdn.stunlock.com/blog/2022/05/25083113/Game-Server-Settings.pdf
 
 If you need assistnace with how these should be formatted, you can check `<VAR_SERVER_INSTALLATION_DIRECTORY>\VRisingServer_Data\StreamingAssets\GameSettingPresets` IE: `C:\vrisingserver\steamapps\common\VRisingDedicatedServer\VRisingServer_Data\StreamingAssets\GameSettingPresets` usually the `Level70PvE.json` or the `Level70PvP.json` files will have the syntax
 
-### VBloodUnitSettings <!-- omit in toc -->
+#### VBloodUnitSettings <!-- omit in toc -->
 There is some confusion about configuring the `VBloodUnitSettings` this is an example:
 
 ```json
@@ -542,7 +585,7 @@ There is some confusion about configuring the `VBloodUnitSettings` this is an ex
 ]
 ```
 
-## ServerVoipSettings.json (VOIP Configuration)
+### ServerVoipSettings.json (VOIP Configuration)
 Be advised this is 100% unsupported!
 Version 1.1
 
@@ -584,8 +627,8 @@ Version 1.1
 }
 ```
 
-### VOIP Troubleshooting
-#### Problem Description: Can't keep VOIP enabled
+#### VOIP Troubleshooting
+##### Problem Description: Can't keep VOIP enabled <!-- omit in toc -->
 - Symptoms: 
   - The VOIP option (`Options` -> `Sound` -> `Use Voice Chat`) may be forced into an off state after you have set it it on
   - You see the message `Nearby players are only displayed when connected to voice chat` 
@@ -596,23 +639,23 @@ Version 1.1
   - Time on the server must be sycned (This is NOT the same as the Time Zone!) even a few seconds drift can cause the problem to manifest. 
   - In general you should use `NTP` to sync time on the server and sync the server manually to start
 
-#### Problem Description: Can't keep VOIP enabled
+##### Problem Description: Can't keep VOIP enabled <!-- omit in toc -->
 - Symptoms: 
   - The VOIP option (`Options` -> `Sound` -> `Use Voice Chat`) may be forced into an off state after you have set it it on
   - In the client logs you may see `LoginSession: Invalid State - must be logged out to perform this operation.`
 - Resolution
   - The Vivox account is not functioning correctly. You may want to create a new project.
 
-#### VOIP Logs
+##### VOIP Logs <!-- omit in toc -->
 Expected/Successful VOIP logs can be found in the [VOIP](#voip) log section.
 
-## Adding yourself to the adminlist.txt file
+### Adding yourself to the adminlist.txt file
 In the logs, you should see the `adminlist.txt` and `banlist.txt` lists loaded, and thier path is `<VAR_SERVER_INSTALLATION_DIRECTORY>\VRisingServer_Data\StreamingAssets\Settings\`  
 :spiral_notepad: This is the only valid place for these entires!
 
 * You will need to restart the server to reload any changes to these files (They SHOULD get picked up automatically, but unclear)
 
-## Configure your router to allow UDP ports to the server
+### Configure your router to allow UDP ports to the server
 If you wish your server to be listed on the in game server browser, and people to connect from the internet, you will need to open two UDP ports to the server. 
 These ports are configured in the `<VAR_SERVER_INSTALLATION_DIRECTORY>\save-data\Settings\ServerHostSettings.json` file. 
 
@@ -623,37 +666,10 @@ These ports are configured in the `<VAR_SERVER_INSTALLATION_DIRECTORY>\save-data
   
 :spiral_notepad: This is beyond the scope of this document, as it is device specific, but you can try https://PortForward.com for help with your specific device/brand
 
-# General Instructions
-
-## Enabling Console Access
-* To enable the console, go to `Options` -> `General` -> put a check in `Console Enabled`
-* Press the backtick key (\`) or (`§`) depending on your keyboard layout
-* Once you connect type `adminauth` to enable admin access
-
-## Direct Connect
-Start vRising -> `Play` -> `Online Play` -> `Find Servers` (bottom right) -> `Display All Servers & Settings` (Top) -> `Direct Connect` (Bottom Center) -> `<IP>:<Port from ServerHostSettings.json>` (This IP and Port is the same shown when your in the game and hit ESC on the bottom left like this `SteamIPv4://<IP>:<Port from ServerHostSettings.json>` -> Make sure `LAN Connect` is NOT selected. -> `Connect`
-
-# Intresting Admin Console Commands
-Your current binds can be found in: `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\ConsoleProfile\<machine_name.prof>` (Do not modify this file directly!). You can list binds in game using `Console.ProfileInfo`
-
-## Administrative Console Commands <!-- omit in toc -->
-`Console.Bind F1 listusers` - You can bind a console command to a function key  
-`toggleobserve 1` - Set yourself to observer mode, you will get damage immunity and a speed boost (You should remove your cloak for proper invisibility.)  
-`changehealthclosesttomouse -5000` - Remove palisades or castle that may be blocking passage (You may want to `console.bind` this to a function key for easy access.)
-
-### Teleportation Console Commands <!-- omit in toc -->
-`copyPositionDump` - Will copy your current position to your clipboard (These are not very accurate!)  
-`https://discord.com/channels/803241158054510612/976404273015431168/980326759293673472` - Teleport map  
-`<CTRL> + <SHIFT> and clicking your map` - After opening the map, you will teleport to the location
-
-## Troubleshooting Console Commands <!-- omit in toc -->
-`ToggleDebugViewCategory All` - Turn on all reporting  
-`ToggleDebugViewCategory Network` - Turn on network reporting (latency, FPS, users)
-
-# Troubleshooting The Server
+## Troubleshooting
 You should review the logs of the server to begin any troubleshooting session.
 
-## Log Variables
+### Log Variables
 <VAR_SERVER_INSTALLATION_DIRECTORY> - The directory where the game is installed
 <VAR_PLAYER_STEAM_ID> - Steam Player ID  
 <VAR_PUBLIC_IP> - Server Public IP  
@@ -665,9 +681,9 @@ You should review the logs of the server to begin any troubleshooting session.
 <VAR_PLAYER_PUBLIC_IP> - The public IP of the player  
 <VAR_RCON_PASSWORD> - The RCON password
 
-## Specific Troubleshooting Instructions
+### Specific Troubleshooting Instructions
 
-### Troubleshooting Crashes due to JSON issues (out of range)
+#### Troubleshooting Crashes due to JSON issues (out of range)
 In the logs you may see something similar to this:
 ```
 OverflowException: Value was either too large or too small for an unsigned byte.
@@ -682,7 +698,7 @@ Rethrow as JsonSerializationException: Error converting value 350 to type 'Syste
 ```
 
 
-### Troubleshooting Direct Connection To the VRising Server
+#### Troubleshooting Direct Connection To the VRising Server
 The first step is to ensure that the game is accessible to machines on the same network as the server is running on.
 
 1) On the server, find the PID of the `VRisingServer.exe` in `Task Manager` in the `Details` tab  
@@ -826,7 +842,7 @@ Loaded ServerHostSettings:
 
 4) [Direct Connect](#direct-connect) to the game on the `Port` configured in `ServerHostSettings.json` (Not the `QueryPort` port! -- IE: 192.168.1.10:9876)
 
-#### On the Internet
+##### On the Internet
 
 5) Check your `VRisingServer.log` server logs inside the appropriate directory for the public IP, the logs should look like this: `SteamPlatformSystem - OnPolicyResponse - Public IP: <VAR_PUBLIC_IP>` and ensure this is the public IP you expect it to be 
     ```
@@ -851,7 +867,7 @@ This is beyond the scope of this document, as it is device specific, but you can
 7) Validate with your internet provider if you are able to run servers (specifically game servers) from your purchased internet package. They may block this kind of traffic by blocking specific ports, or using packet inspection to determine the type of traffic. (This is beyond the scope of this document).  
 If you check https://ipv6-test.com/ and the shown IP on that web page is different from your address shown in your router, your address may be translated and it may be impossible to host. Additionally some providers (namely in Germany) may use something like Carrier Grade NAT (CGNAT, with a router public IP range from 100.64.0.0 to 100.127.255.255) or DS-Lite which may prevent you from running a server. In these cases, you can try to contact your ISP and see if you are able to get an IPv4 address. You *may* be able to get away with something like Fast Reverse Proxy (https://gabrieltanner.org/blog/port-forwarding-frp) but this is again, outside the scope of this document.
 
-### Server not listed on the server browser
+#### Server not listed on the server browser
 1) Check `https://www.battlemetrics.com/servers/vrising` and see if your server is listed there, if so, your setup appears to be configured correctly, the only thing left to do is to BE PATIENT! The listing process can take time, it appears that you have done everything you can to ensure that your server is able to be queried.
 
 2) Ensure that your `ServerHostSettings.json` configuration file has `ListOnMasterServer` set to `true`  
@@ -894,849 +910,112 @@ If you check https://ipv6-test.com/ and the shown IP on that web page is differe
 9) BE PATIENT! The listing process can take time, it appears that you have done everything you can to ensure that your server is able to be queried.  
 :radioactive: SOME users have found that changing both ports to something else, and back have forced the server to be listed. This is VERY anecdotal, and may infact increase the waiting process.
 
-## Log Examples
+# General Instructions
 
-### Incorrect Password
+## Enabling Console Access
+* To enable the console, go to `Options` -> `General` -> put a check in `Console Enabled`
+* Press the backtick key (\`) or (`§`) depending on your keyboard layout
+* Once you connect type `adminauth` to enable admin access
+
+## Direct Connect
+Start vRising -> `Play` -> `Online Play` -> `Find Servers` (bottom right) -> `Display All Servers & Settings` (Top) -> `Direct Connect` (Bottom Center) -> `<IP>:<Port from ServerHostSettings.json>` (This IP and Port is the same shown when your in the game and hit ESC on the bottom left like this `SteamIPv4://<IP>:<Port from ServerHostSettings.json>` -> Make sure `LAN Connect` is NOT selected. -> `Connect`
+
+## Intresting Admin Console Commands
+Your current binds can be found in: `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\ConsoleProfile\<machine_name.prof>` (Do not modify this file directly!). You can list binds in game using `Console.ProfileInfo`
+
+### Administrative Console Commands <!-- omit in toc -->
+`Console.Bind F1 listusers` - You can bind a console command to a function key  
+`toggleobserve 1` - Set yourself to observer mode, you will get damage immunity and a speed boost (You should remove your cloak for proper invisibility.)  
+`changehealthclosesttomouse -5000` - Remove palisades or castle that may be blocking passage (You may want to `console.bind` this to a function key for easy access.)
+
+#### Teleportation Console Commands <!-- omit in toc -->
+`copyPositionDump` - Will copy your current position to your clipboard (These are not very accurate!)  
+`https://discord.com/channels/803241158054510612/976404273015431168/980326759293673472` - Teleport map  
+`<CTRL> + <SHIFT> and clicking your map` - After opening the map, you will teleport to the location
+
+### Troubleshooting Console Commands <!-- omit in toc -->
+`ToggleDebugViewCategory All` - Turn on all reporting  
+`ToggleDebugViewCategory Network` - Turn on network reporting (latency, FPS, users)
+
+# Resources
+### DirectX Error Mappings <!-- omit in toc -->
+https://learn.microsoft.com/en-us/windows/win32/direct3ddxgi/dxgi-error
 ```
-NetConnection '{Steam 1945998476}' connection was denied. Message: 'Incorrect Password!' Version: 1 PlatformId: <VAR_PLAYER_STEAM_ID>
+d3d11: failed to create staging 2D texture w=320 h=320 d3dfmt=61 [887a0005]
+d3d11: failed to create staging 2D texture w=256 h=256 d3dfmt=61 [887a0005]
+d3d11: failed to create buffer (target 0x21 mode 0 size 17152) [0x887A0005]
+d3d11: failed to create buffer (target 0x200 mode 1 size 288) [0x887A0005]
+d3d11: failed to create buffer (target 0x200 mode 1 size 288) [0x887A0005]
 ```
-
-### Closed Connection
-```
-SteamLog [SDR k_ESteamNetworkingSocketsDebugOutputType_Msg] [#1945998476 UDP steamid:<VAR_PLAYER_STEAM_ID>@<VAR_PLAYER_PUBLIC_IP>:57886] closed by app, entering linger state (1017) Application closed connection
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-Stunlock.Network.Steam.Wrapper.SteamSocketNetworkingLogs:OnLog(LogSource, ESteamNetworkingSocketsDebugOutputType, IntPtr)
-Steamworks.NativeMethods:ISteamNetworkingSockets_CloseConnection(IntPtr, HSteamNetConnection, Int32, UTF8StringHandle, Boolean)
-Steamworks.SteamGameServerNetworkingSockets:CloseConnection(HSteamNetConnection, Int32, String, Boolean)
-Stunlock.Network.Steam.ServerSteamTransportLayer:CloseConnection(ConnectionData, ConnectionStatusChangeReason, Boolean, String)
-Stunlock.Network.Steam.ServerSteamTransportLayer:Disconnect(NetConnectionId, ConnectionStatusChangeReason, String)
-Stunlock.Network.ServerNetworkLayer:Deny(NetConnectionId, ConnectionStatusChangeReason, String)
-ProjectM.ServerBootstrapSystem:OnConnectionApproval(NetBufferIn&, NetConnectionId)
-ProjectM.Scripting.OnDeathDelegate:Invoke(ServerGameManager&, SelfServer&)
-Stunlock.Network.ServerNetworkLayer:OnDataReceived(NetBufferIn&, NetConnectionId)
-ProjectM.Scripting.OnDeathDelegate:Invoke(ServerGameManager&, SelfServer&)
-Stunlock.Network.Steam.ServerSteamTransportLayer:ProcessNewMessages()
-Stunlock.Network.Steam.ServerSteamTransportLayer:Update(Double)
-ProjectM.ServerBootstrapSystem:OnUpdate()
-Unity.Entities.SystemBase:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-ProjectM.ServerSimulationSystemGroup:OnUpdate()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
-```
-
-### User Login
-
-Relogin
-```
-SteamPlatformSystem - BeginAuthSession for SteamID: <VAR_PLAYER_STEAM_ID> Result: k_EBeginAuthSessionResultOK
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-ProjectM.Auth.SteamPlatformSystem:BeginAuthSession(Byte[], UInt16, UInt64)
-ProjectM.ServerBootstrapSystem:OnConnectionApproval(NetBufferIn&, NetConnectionId)
-ProjectM.Scripting.OnDeathDelegate:Invoke(ServerGameManager&, SelfServer&)
-Stunlock.Network.ServerNetworkLayer:OnDataReceived(NetBufferIn&, NetConnectionId)
-ProjectM.Scripting.OnDeathDelegate:Invoke(ServerGameManager&, SelfServer&)
-Stunlock.Network.Steam.ServerSteamTransportLayer:ProcessNewMessages()
-Stunlock.Network.Steam.ServerSteamTransportLayer:Update(Double)
-ProjectM.ServerBootstrapSystem:OnUpdate()
-Unity.Entities.SystemBase:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-ProjectM.ServerSimulationSystemGroup:OnUpdate()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
-
-NetEndPoint '{Steam 3600223286}' reconnect was approved. approvedUserIndex: 0 HasLocalCharacter: True Hail Message Size: 339 Version: 1 PlatformId: <VAR_PLAYER_STEAM_ID> UserIndex: 30 ShouldCreateCharacter: False IsAdmin: False Length: 339
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-ProjectM.ServerBootstrapSystem:ApproveClient(NetConnectionId, Int32, UInt64, Boolean, Boolean, User&, Entity, ConnectAddress, ConnectAddress)
-ProjectM.ServerBootstrapSystem:TryAuthenticate(NetConnectionId, Int32, UInt64)
-ProjectM.ServerBootstrapSystem:OnConnectionApproval(NetBufferIn&, NetConnectionId)
-ProjectM.Scripting.OnDeathDelegate:Invoke(ServerGameManager&, SelfServer&)
-Stunlock.Network.ServerNetworkLayer:ApproveWaitingClients()
-Stunlock.Network.ServerNetworkLayer:Update(Double)
-ProjectM.ServerBootstrapSystem:OnUpdate()
-Unity.Entities.SystemBase:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-ProjectM.ServerSimulationSystemGroup:OnUpdate()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
-
-SteamPlatformSystem - OnValidateAuthTicketResponse for SteamID: <VAR_PLAYER_STEAM_ID>, Response: k_EAuthSessionResponseOK
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-ProjectM.Auth.SteamPlatformSystem:OnValidateAuthTicketResponse(ValidateAuthTicketResponse_t)
-System.Action`1:Invoke(T)
-Steamworks.Callback`1:OnRunCallback(IntPtr)
-Steamworks.CallbackDispatcher:RunFrame(Boolean)
-ProjectM.Auth.SteamPlatformSystem:OnUpdate()
-Unity.Entities.SystemBase:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
-
-SteamPlatformSystem - UserHasLicenseForApp for SteamID: <VAR_PLAYER_STEAM_ID>, Result: k_EUserHasLicenseResultHasLicense, UserContentFlags: None
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-ProjectM.Auth.SteamPlatformSystem:OnValidateAuthTicketResponse(ValidateAuthTicketResponse_t)
-System.Action`1:Invoke(T)
-Steamworks.Callback`1:OnRunCallback(IntPtr)
-Steamworks.CallbackDispatcher:RunFrame(Boolean)
-ProjectM.Auth.SteamPlatformSystem:OnUpdate()
-Unity.Entities.SystemBase:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
-
-User '{Steam 3600223286}' '<VAR_PLAYER_STEAM_ID>', approvedUserIndex: 2, Character: 'Raven' connected as ID '0,1', Entity '94090,1'.
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-ProjectM.ServerBootstrapSystem:OnUserConnected(NetConnectionId)
-System.Xml.Schema.XdrBeginChildFunction:Invoke(XdrBuilder)
-Stunlock.Network.ServerNetworkLayer:OnDataReceived(NetBufferIn&, NetConnectionId)
-ProjectM.Scripting.OnDeathDelegate:Invoke(ServerGameManager&, SelfServer&)
-Stunlock.Network.Steam.ServerSteamTransportLayer:ProcessNewMessages()
-Stunlock.Network.Steam.ServerSteamTransportLayer:Update(Double)
-ProjectM.ServerBootstrapSystem:OnUpdate()
-Unity.Entities.SystemBase:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-ProjectM.ServerSimulationSystemGroup:OnUpdate()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
-```
-
-### Loading ServerHostSettings
-This object is loaded from `<VAR_SERVER_INSTALLATION_DIRECTORY>\save-data\Settings\ServerHostSettings.json`
-
-```
-Loaded ServerHostSettings:
-{
-  "Name": "My Cool Server",
-  "Description": "My\nCool\nDescription",
-  "Port": 9876,
-  "QueryPort": 9877,
-  "Address": null,
-  "MaxConnectedUsers": 10,
-  "MaxConnectedAdmins": 4,
-  "MinFreeSlotsNeededForNewUsers": 0,
-  "ServerFps": 30,
-  "AIUpdatesPerFrame": 200,
-  "Password": "",
-  "Secure": true,
-  "ListOnMasterServer": true,
-  "ServerBranch": "",
-  "GameSettingsPreset": "",
-  "SaveName": "world1",
-  "AutoSaveCount": 50,
-  "AutoSaveInterval": 600,
-  "PersistenceDebuggingEnabled": false,
-  "GiveStarterItems": false,
-  "LogAllNetworkEvents": false,
-  "LogAdminEvents": true,
-  "LogDebugEvents": true,
-  "AdminOnlyDebugEvents": true,
-  "EveryoneIsAdmin": false,
-  "DisableDebugEvents": false,
-  "EnableDangerousDebugEvents": false,
-  "TrackArchetypeCreationsOnStartup": false,
-  "ServerStartTimeOffset": 0.0,
-  "NetworkVersionOverride": -1,
-  "PersistenceVersionOverride": -1,
-  "UseTeleportPlayersOutOfCollisionFix": true,
-  "DiscoveryResponseLevel": 0,
-  "API": {
-    "Enabled": false,
-    "BindAddress": "*",
-    "BindPort": 9090,
-    "BasePath": "/",
-    "AccessList": ""
-  },
-  "Rcon": {
-    "Enabled": false,
-    "Port": 25575,
-    "Password": null,
-    "TimeoutSeconds": 300,
-    "MaxPasswordTries": 99,
-    "BanMinutes": 0,
-    "SendAuthImmediately": true,
-    "MaxConnectionsPerIp": 20,
-    "MaxConnections": 20
-  }
-}
-```
-
-### Loading ServerGameSettings
-
-This object is loaded from `<VAR_SERVER_INSTALLATION_DIRECTORY>\save-data\Settings\ServerGameSettings.json`
-
-```
-Loaded ServerGameSettings:
-{
-  "GameModeType": 0,
-  "CastleDamageMode": 0,
-  "SiegeWeaponHealth": 2,
-  "PlayerDamageMode": 0,
-  "CastleHeartDamageMode": 0,
-  "PvPProtectionMode": 3,
-  "DeathContainerPermission": 1,
-  "RelicSpawnType": 1,
-  "CanLootEnemyContainers": false,
-  "BloodBoundEquipment": true,
-  "TeleportBoundItems": false,
-  "AllowGlobalChat": true,
-  "AllWaypointsUnlocked": false,
-  "FreeCastleClaim": false,
-  "FreeCastleDestroy": true,
-  "InactivityKillEnabled": true,
-  "InactivityKillTimeMin": 3600,
-  "InactivityKillTimeMax": 604800,
-  "InactivityKillSafeTimeAddition": 172800,
-  "InactivityKillTimerMaxItemLevel": 84,
-  "DisableDisconnectedDeadEnabled": true,
-  "DisableDisconnectedDeadTimer": 60,
-  "InventoryStacksModifier": 2.0,
-  "DropTableModifier_General": 2.0,
-  "DropTableModifier_Missions": 2.0,
-  "MaterialYieldModifier_Global": 2.5,
-  "BloodEssenceYieldModifier": 2.0,
-  "JournalVBloodSourceUnitMaxDistance": 25.0,
-  "PvPVampireRespawnModifier": 1.0,
-  "CastleMinimumDistanceInFloors": 2,
-  "ClanSize": 4,
-  "BloodDrainModifier": 1.0,
-  "DurabilityDrainModifier": 1.0,
-  "GarlicAreaStrengthModifier": 1.0,
-  "HolyAreaStrengthModifier": 1.0,
-  "SilverStrengthModifier": 1.0,
-  "SunDamageModifier": 1.0,
-  "CastleDecayRateModifier": 1.0,
-  "CastleBloodEssenceDrainModifier": 1.0,
-  "CastleSiegeTimer": 420.0,
-  "CastleUnderAttackTimer": 60.0,
-  "AnnounceSiegeWeaponSpawn": true,
-  "ShowSiegeWeaponMapIcon": true,
-  "BuildCostModifier": 1.0,
-  "RecipeCostModifier": 1.0,
-  "CraftRateModifier": 1.0,
-  "ResearchCostModifier": 1.0,
-  "RefinementCostModifier": 1.0,
-  "RefinementRateModifier": 1.0,
-  "ResearchTimeModifier": 1.0,
-  "DismantleResourceModifier": 1.0,
-  "ServantConvertRateModifier": 1.0,
-  "RepairCostModifier": 1.0,
-  "Death_DurabilityFactorLoss": 0.25,
-  "Death_DurabilityLossFactorAsResources": 1.0,
-  "StarterEquipmentId": 0,
-  "StarterResourcesId": 0,
-  "VBloodUnitSettings": [],
-  "UnlockedAchievements": [],
-  "UnlockedResearchs": [],
-  "GameTimeModifiers": {
-    "DayDurationInSeconds": 1080.0,
-    "DayStartHour": 9,
-    "DayStartMinute": 0,
-    "DayEndHour": 17,
-    "DayEndMinute": 0,
-    "BloodMoonFrequency_Min": 10,
-    "BloodMoonFrequency_Max": 18,
-    "BloodMoonBuff": 0.2
-  },
-  "VampireStatModifiers": {
-    "MaxHealthModifier": 1.0,
-    "MaxEnergyModifier": 1.0,
-    "PhysicalPowerModifier": 1.0,
-    "SpellPowerModifier": 1.0,
-    "ResourcePowerModifier": 1.0,
-    "SiegePowerModifier": 1.0,
-    "DamageReceivedModifier": 1.0,
-    "ReviveCancelDelay": 5.0
-  },
-  "UnitStatModifiers_Global": {
-    "MaxHealthModifier": 1.0,
-    "PowerModifier": 1.0
-  },
-  "UnitStatModifiers_VBlood": {
-    "MaxHealthModifier": 1.0,
-    "PowerModifier": 1.0
-  },
-  "EquipmentStatModifiers_Global": {
-    "MaxEnergyModifier": 1.0,
-    "MaxHealthModifier": 1.0,
-    "ResourceYieldModifier": 1.0,
-    "PhysicalPowerModifier": 1.0,
-    "SpellPowerModifier": 1.0,
-    "SiegePowerModifier": 1.0,
-    "MovementSpeedModifier": 1.0
-  },
-  "CastleStatModifiers_Global": {
-    "TickPeriod": 5.0,
-    "DamageResistance": 0.0,
-    "SafetyBoxLimit": 1,
-    "TombLimit": 12,
-    "VerminNestLimit": 4,
-    "PylonPenalties": {
-      "Range1": {
-        "Percentage": 0.0,
-        "Lower": 0,
-        "Higher": 2
-      },
-      "Range2": {
-        "Percentage": 0.0,
-        "Lower": 3,
-        "Higher": 3
-      },
-      "Range3": {
-        "Percentage": 0.0,
-        "Lower": 4,
-        "Higher": 4
-      },
-      "Range4": {
-        "Percentage": 0.0,
-        "Lower": 5,
-        "Higher": 5
-      },
-      "Range5": {
-        "Percentage": 0.0,
-        "Lower": 6,
-        "Higher": 254
-      }
-    },
-    "FloorPenalties": {
-      "Range1": {
-        "Percentage": 0.0,
-        "Lower": 0,
-        "Higher": 20
-      },
-      "Range2": {
-        "Percentage": 0.0,
-        "Lower": 21,
-        "Higher": 50
-      },
-      "Range3": {
-        "Percentage": 0.0,
-        "Lower": 51,
-        "Higher": 80
-      },
-      "Range4": {
-        "Percentage": 0.0,
-        "Lower": 81,
-        "Higher": 160
-      },
-      "Range5": {
-        "Percentage": 0.0,
-        "Lower": 161,
-        "Higher": 254
-      }
-    },
-    "HeartLimits": {
-      "Level1": {
-        "Level": 1,
-        "FloorLimit": 30,
-        "ServantLimit": 3
-      },
-      "Level2": {
-        "Level": 2,
-        "FloorLimit": 80,
-        "ServantLimit": 5
-      },
-      "Level3": {
-        "Level": 3,
-        "FloorLimit": 150,
-        "ServantLimit": 7
-      },
-      "Level4": {
-        "Level": 4,
-        "FloorLimit": 250,
-        "ServantLimit": 9
-      }
-    },
-    "CastleLimit": 2
-  },
-  "PlayerInteractionSettings": {
-    "TimeZone": 0,
-    "VSPlayerWeekdayTime": {
-      "StartHour": 17,
-      "StartMinute": 0,
-      "EndHour": 23,
-      "EndMinute": 0
-    },
-    "VSPlayerWeekendTime": {
-      "StartHour": 17,
-      "StartMinute": 0,
-      "EndHour": 23,
-      "EndMinute": 0
-    },
-    "VSCastleWeekdayTime": {
-      "StartHour": 17,
-      "StartMinute": 0,
-      "EndHour": 23,
-      "EndMinute": 0
-    },
-    "VSCastleWeekendTime": {
-      "StartHour": 17,
-      "StartMinute": 0,
-      "EndHour": 23,
-      "EndMinute": 0
-    }
-  }
-}
-```
-
-### Loading adminlist
-```
-Loaded FileUserList from: <VAR_SERVER_INSTALLATION_DIRECTORY>\VRisingServer_Data\StreamingAssets\Settings\adminlist.txt. Content:<VAR_PLAYER_STEAM_ID>
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-ProjectM.FileUserList:Refresh()
-ProjectM.AdminAuthSystem:.ctor()
-System.Reflection.MonoCMethod:InternalInvoke(Object, Object[])
-System.Activator:CreateInstance(Type, Boolean)
-Unity.Entities.World:AllocateSystemInternal(Type)
-Unity.Entities.World:GetOrCreateSystemsAndLogException(IEnumerable`1, Int32)
-ProjectM.CustomWorldSpawning:AddSystemsToWorld(World, WorldType, Type[], Type, Type, Type, CustomWorld)
-ProjectM.CustomWorldSpawning:SetupWorldWithCustomRootGroups(World, World, WorldType, IEnumerable`1, Type, Type, Type)
-ProjectM.ServerWorldManager:BeginCreateServerWorld(ServerRuntimeSettings)
-ProjectM.GameBootstrap:Start()
-```
-
-### Loading Banlist
-```
-Loaded FileUserList from: <VAR_SERVER_INSTALLATION_DIRECTORY>\VRisingServer_Data\StreamingAssets\Settings\banlist.txt. Content:<VAR_PLAYER_STEAM_ID>
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-ProjectM.FileUserList:Refresh()
-ProjectM.KickBanSystem_Server:.ctor()
-System.Reflection.MonoCMethod:InternalInvoke(Object, Object[])
-System.Activator:CreateInstance(Type, Boolean)
-Unity.Entities.World:AllocateSystemInternal(Type)
-Unity.Entities.World:GetOrCreateSystemsAndLogException(IEnumerable`1, Int32)
-ProjectM.CustomWorldSpawning:AddSystemsToWorld(World, WorldType, Type[], Type, Type, Type, CustomWorld)
-ProjectM.CustomWorldSpawning:SetupWorldWithCustomRootGroups(World, World, WorldType, IEnumerable`1, Type, Type, Type)
-ProjectM.ServerWorldManager:BeginCreateServerWorld(ServerRuntimeSettings)
-ProjectM.GameBootstrap:Start()
-```
-
-### Update Master Server
-
-```
-Loaded Official Servers List: 1042
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-ProjectM.Auth.SteamPlatformSystem:UpdateOfficialServersList()
-ProjectM.Auth.SteamPlatformSystem:OnUpdate()
-Unity.Entities.SystemBase:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
-```
-
-### Broadcasting public IP
-```
-SteamPlatformSystem - OnPolicyResponse - Public IP: <VAR_PUBLIC_IP>
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-ProjectM.Auth.SteamPlatformSystem:OnPolicyResponse(GSPolicyResponse_t)
-Steamworks.DispatchDelegate:Invoke(T)
-Steamworks.Callback`1:OnRunCallback(IntPtr)
-Steamworks.CallbackDispatcher:RunFrame(Boolean)
-ProjectM.Auth.SteamPlatformSystem:OnUpdate()
-Unity.Entities.SystemBase:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
-```
-
-### Autosaves
-```
-Triggering AutoSave 292!
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-ProjectM.TriggerPersistenceSaveSystem:OnUpdate()
-Unity.Entities.SystemBase:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-ProjectM.ServerSimulationSystemGroup:OnUpdate()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
-
-Internal: JobTempAlloc has allocations that are more than 4 frames old - this is not allowed and likely a leak
-PersistenceV2 - Finished Saving to '.\save-data\Saves\v1\clever1\AutoSave_292'
-Total Persistent ChunkCount 8256. Total Save Size: 66380201 Bytes.
-
-Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
-Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
-Unity.Entities.ExecuteJobFunction:Invoke(JobChunkWrapper`1&, IntPtr, IntPtr, JobRanges&, Int32)
-
-[ line 1280309096]
-```
-
-If your autosave's version is mismatched, you may see a line like this. You must use a save file that is compatible with the server version.
-
-```
-PersistenceV2 - Not loading save file at '<VAR_SERVER_INSTALLATION_DIRECTORY>\save-data\Saves\v1\vae_victis\AutoSave_9222'. Saved PersistenceVersion (0) of SaveFile does not match current current PersistenceVersion (1)
-```
-
-### Granting admin permissions from the console
-
-```
-Admin Auth request from User: <VAR_PLAYER_STEAM_ID>, Character: Raven
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-ProjectM.<>c__DisplayClass_OnUpdate_LambdaJob0:OriginalLambdaBody(Entity, AdminAuthEvent&, FromCharacter&)
-ProjectM.<>c__DisplayClass_OnUpdate_LambdaJob0:PerformLambda(Void*, Void*, Entity)
-Unity.Entities.CodeGeneratedJobForEach.PerformLambdaDelegate:Invoke(Void*, Void*, Entity)
-Unity.Entities.CodeGeneratedJobForEach.StructuralChangeEntityProvider:IterateEntities(Void*, Void*, PerformLambdaDelegate)
-ProjectM.<>c__DisplayClass_OnUpdate_LambdaJob0:Execute(ComponentSystemBase, EntityQuery)
-ProjectM.AdminAuthSystem:OnUpdate()
-Unity.Entities.SystemBase:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-ProjectM.ServerSimulationSystemGroup:OnUpdate()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
-
-Saved FileUserList to: C:\servers\v_rising\VRisingServer_Data\StreamingAssets\Settings\adminlist.txt
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-ProjectM.FileUserList:Save()
-ProjectM.AdminAuthSystem:OnUpdate()
-Unity.Entities.SystemBase:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-ProjectM.ServerSimulationSystemGroup:OnUpdate()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
-```
-
-### Give Item Event
-```
-Got GiveDebugEvent debug event from user: 94090:1 (PlatformId: <VAR_PLAYER_STEAM_ID> CharacterName: Raven) Event: Entity(138972:174)  - Entity  - FromCharacter  - GiveDebugEvent  - HandleClientDebugEvent  - NetworkEventType  - ReceiveNetworkEventTag
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-ProjectM.<>c__DisplayClass_NetworkEventLogging:OriginalLambdaBody(Entity, NetworkEventType&, FromCharacter&)
-ProjectM.<>c__DisplayClass_NetworkEventLogging:IterateEntities(ArchetypeChunk&, Runtimes&)
-ProjectM.<>c__DisplayClass_NetworkEventLogging:Execute(ArchetypeChunk, Int32, Int32)
-Unity.Entities.JobChunkExtensions:RunWithoutJobs(T&, ArchetypeChunkIterator&)
-StunMetrics.Collections.RefActionDelegate`2:Invoke(TObj&, T1)
-Unity.Entities.InternalCompilerInterface:RunJobChunk(T&, EntityQuery, JobChunkRunWithoutJobSystemDelegate)
-ProjectM.ServerBootstrapSystem:NetworkEventLogging()
-ProjectM.ServerBootstrapSystem:OnUpdate()
-Unity.Entities.SystemBase:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-ProjectM.ServerSimulationSystemGroup:OnUpdate()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
-```
-
-### VOIP
-
-If it cannot find the file:
-
-```
-ProjectM.ServerVoipSettings - Error while trying to load settings from file. File not Found! (<VAR_SERVER_INSTALLATION_DIRECTORY>/VRisingServer_Data/StreamingAssets\Settings\ServerVoipSettings.json)
-```
-
-If it can:
-
-```
-
-```
-
-As it loads:
-
-```
-Vivox Request URI <VAR_VOIPAPIEndpoint>/viv_signin.php?userid=<VAR_VOIPAppUserId>&pwd=<VAR_VOIPAppUserPwd>
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-ProjectM.VivoxConnectionSystem:OnUpdate()
-Unity.Entities.SystemBase:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-ProjectM.ServerSimulationSystemGroup:OnUpdate()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
-```
-
-```
-Vivox - S2S Requested Auth Token
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-ProjectM.VivoxConnectionSystem:OnUpdate()
-Unity.Entities.SystemBase:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-ProjectM.ServerSimulationSystemGroup:OnUpdate()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
-```
-
-```
-Vivox - Req InProgress
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-ProjectM.VivoxConnectionSystem:OnUpdate()
-Unity.Entities.SystemBase:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-ProjectM.ServerSimulationSystemGroup:OnUpdate()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
-```
-
-```
-Vivox - XML Resp <VAR_VOIPAppUserId>:2345678901:fc12345b67890d123d123fff1234f1c1:10.22.3.233 | <VAR_VOIPAppUserId> | sip:<VAR_VOIPAppUserId>@<VAR_VOIPVivoxDomain> | sip:<VAR_VOIPAppUserId>@<VAR_VOIPVivoxDomain>
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-ProjectM.VivoxConnectionSystem:OnUpdate()
-Unity.Entities.SystemBase:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-ProjectM.ServerSimulationSystemGroup:OnUpdate()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
-```
-
-```
-Vivox - S2S Auth Token OK
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-ProjectM.VivoxConnectionSystem:OnUpdate()
-Unity.Entities.SystemBase:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-ProjectM.ServerSimulationSystemGroup:OnUpdate()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Entities.ComponentSystemGroup:UpdateAllSystems()
-Unity.Entities.ComponentSystem:Update()
-Unity.Jobs.LowLevel.Unsafe.PanicFunction_:Invoke()
-```
-
-### Crashes
-
-```
-Crash!!!
-
-SymInit: Symbol-SearchPath: '.;C:\Users\Administrator\Desktop\vrisingservers\duopvp\server;C:\Users\Administrator\Desktop\vrisingservers\duopvp\server;C:\Windows;C:\Windows\system32;SRV*C:\websymbols*http://msdl.microsoft.com/download/symbols;', symOptions: 534, UserName: 'Administrator'
-OS-Version: 10.0.0
-
-<snip>
-
-========== OUTPUTTING STACK TRACE ==================
-
-0x00007FFB3BEC7265 (UnityPlayer) UnityMain
-0x00007FFB3BEC687C (UnityPlayer) UnityMain
-0x00007FFB3B85D7C7 (UnityPlayer) UnityMain
-0x00007FFB3B98DBE7 (UnityPlayer) UnityMain
-0x00007FFB35D33415 (GameAssembly) WriteZStream
-0x00007FFB3296E93C (GameAssembly) WriteZStream
-0x00007FFB328D9B89 (GameAssembly) UnityPalGetTimeZoneDataForID
-0x00007FFB3B8A6028 (UnityPlayer) UnityMain
-0x00007FFB3B8A9092 (UnityPlayer) UnityMain
-0x00007FFB3B8C6F4F (UnityPlayer) UnityMain
-0x00007FFB3B8C6FDE (UnityPlayer) UnityMain
-0x00007FFB3B8C615A (UnityPlayer) UnityMain
-0x00007FFB3B627864 (UnityPlayer) UnityMain
-0x00007FFB3B7596CA (UnityPlayer) UnityMain
-0x00007FFB3B759770 (UnityPlayer) UnityMain
-0x00007FFB3B75DA08 (UnityPlayer) UnityMain
-  ERROR: SymGetSymFromAddr64, GetLastError: 'Attempt to access invalid address.' (Address: 00007FFB3B51DF8A)
-0x00007FFB3B51DF8A (UnityPlayer) (function-name not available)
-  ERROR: SymGetSymFromAddr64, GetLastError: 'Attempt to access invalid address.' (Address: 00007FFB3B51C44B)
-0x00007FFB3B51C44B (UnityPlayer) (function-name not available)
-  ERROR: SymGetSymFromAddr64, GetLastError: 'Attempt to access invalid address.' (Address: 00007FFB3B52143B)
-0x00007FFB3B52143B (UnityPlayer) (function-name not available)
-0x00007FFB3B52254B (UnityPlayer) UnityMain
-  ERROR: SymGetSymFromAddr64, GetLastError: 'Attempt to access invalid address.' (Address: 00007FF765B411F2)
-0x00007FF765B411F2 (VRisingServer) (function-name not available)
-0x00007FFB7BC57974 (KERNEL32) BaseThreadInitThunk
-0x00007FFB7EA6A2F1 (ntdll) RtlUserThreadStart
-
-========== END OF STACKTRACE ===========
-
-A crash has been intercepted by the crash handler. For call stack and other details, see the latest crash report generated in:
- * C:/Users/<USERNAME>/AppData/Local/Temp/2/Stunlock Studios/VRisingServer/Crashes
-
-```
-
-## Server Startup
-
-### Server Loading on 2020.3.31f1 (6b54b7616050)
-
-```
-Initialize engine version: 2020.3.31f1 (6b54b7616050)
-
-SLS_COLLECTIONS_CHECKS defined.
-
-System Information:
-
-Bootstrapping World: Default World
-
-ProjectM.InputSettings - Error while trying to load settings from file. File not Found! (<VAR_SERVER_INSTALLATION_DIRECTORY>/VRisingServer_Data/StreamingAssets\Settings\InputSettings.json)
-
-SteamPlatformSystem - Entering OnCreate!
-
-Loaded VersionDataSettings:
-
-PersistenceVersionOverride value found from VersionDataSettings: 1
-
-Persistence Version initialized as: 1
-
-Loading ServerHostSettings from: .\save-data\Saves\v1\clever1
-
-Commandline Parameter ServerName: "<VAR_SERVERNAME>"
-
-Loaded ServerHostSettings:
-
-Setting breakpad minidump AppID = 1604030
-
-SteamPlatformSystem -  Server App ID: 1604030
-
-SteamPlatformSystem - Steam GameServer Initialized!
-
-SteamLog [SDR k_ESteamNetworkingSocketsDebugOutputType_Msg] Got SDR network config.  Loaded revision 372 OK
-
-SteamLog [SDR k_ESteamNetworkingSocketsDebugOutputType_Msg] Performing ping measurement
-
-SteamLog [SDR k_ESteamNetworkingSocketsDebugOutputType_Msg] SDR RelayNetworkStatus:  avail=Attempting  config=OK  anyrelay=Attempting   (Performing ping measurement)
-
-SteamLog [SDR k_ESteamNetworkingSocketsDebugOutputType_Msg] Relay lim#81 (190.217.33.50:27049) is going offline in 315 seconds
-
-SteamLog [SDR k_ESteamNetworkingSocketsDebugOutputType_Msg] Gameserver logged on to Steam, assigned identity steamid:90111111101111111
-
-SteamLog [SDR k_ESteamNetworkingSocketsDebugOutputType_Msg] AuthStatus (steamid:90111111101111111):  Attempting  (Requesting cert)
-
-SteamLog [SDR k_ESteamNetworkingSocketsDebugOutputType_Msg] Set SteamNetworkingSockets P2P_STUN_ServerList to '162.254.192.87:3478' as per SteamNetworkingSocketsSerialized
-
-SteamPlatformSystem - Server connected to Steam successfully!
-
-SteamNetworking - Successfully logged in with the SteamGameServer API. SteamID: 90111111101111111
-
-ProjectM.ClientSettings - Error while trying to load settings from file. File not Found! (<VAR_SERVER_INSTALLATION_DIRECTORY>/VRisingServer_Data/StreamingAssets\Settings\ClientSettings.json)
-
-Loaded ClientSettings:
-
-SteamLog [SDR k_ESteamNetworkingSocketsDebugOutputType_Msg] AuthStatus (steamid:90111111101111111):  OK  (OK)
-
-SteamLog [SDR k_ESteamNetworkingSocketsDebugOutputType_Msg] Certificate expires in 48h00m at 1653976869 (current time 1653804069), will renew in 46h00m
-
-SteamPlatformSystem - OnPolicyResponse - Game server SteamID: 90111111101111111
-
-SteamPlatformSystem - OnPolicyResponse - Game Server VAC Secure!
-
-SteamPlatformSystem - OnPolicyResponse - Public IP: <VAR_PUBLIC_IP>
-
-ProjectM.GameDataSettings - Error while trying to load settings from file. File not Found! (<VAR_SERVER_INSTALLATION_DIRECTORY>/VRisingServer_Data/StreamingAssets\Settings\GameDataSettings.json)
-
-Check Host Server - HostServer: False, DedicatedServer: True
-
-BatchMode Host - CommandLine: VRisingServer.exe -persistentDataPath .\save-data -serverName "<VAR_SERVERNAME>" -saveName clever1 -logFile .\logs\VRisingServer.log
-
-Server Host - SaveName: clever1
-
-Attempting to load most recent save file for SaveDirectory: .\save-data\Saves\v1\clever1. SaveToLoad: <VAR_SERVER_INSTALLATION_DIRECTORY>\save-data\Saves\v1\clever1\AutoSave_633
-
-CreateAndHostServer - SaveDirectory:.\save-data\Saves\v1\clever1, Loaded Save:<VAR_SERVER_INSTALLATION_DIRECTORY>\save-data\Saves\v1\clever1\AutoSave_633
-
-Loaded FileUserList from: <VAR_SERVER_INSTALLATION_DIRECTORY>\VRisingServer_Data\StreamingAssets\Settings\adminlist.txt. Content:<VAR_PLAYER_STEAM_ID>
-
-Loaded FileUserList from: <VAR_SERVER_INSTALLATION_DIRECTORY>\VRisingServer_Data\StreamingAssets\Settings\banlist.txt. Content:
-
----- OnCreate: ServerDebugSettingsSystem
-
-ProjectM.ServerDebugSettings - Error while trying to load settings from file. File not Found! (<VAR_SERVER_INSTALLATION_DIRECTORY>/VRisingServer_Data/StreamingAssets\Settings\ServerDebugSettings.json)
-
-[Debug] ServerGameSettingsSystem - OnCreate
-
-[Debug] ServerGameSettingsSystem - OnCreate - Loading ServerGameSettings via Commandline Parameter (serverSaveName)!
-
-[Debug] Loading ServerGameSettings from: .\save-data\Saves\v1\clever1
-
-[Debug] ServerGameSettingsSystem - OnCreate - Loading ServerGameSettings via ServerRuntimeSettings settings!
-
-[Debug] Loading ServerGameSettings from: .\save-data\Saves\v1\.\save-data\Saves\v1\clever1
-
-ERROR: Shader GUI/Text Shader shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
-
-[rcon] Started listening on 0.0.0.0, Password is: "<VAR_RCON_PASSWORD>"
-
-[Server] LoadSceneAsync Request 'WorldAssetSingleton', WaitForSceneLoad: True, SceneEntity: 532:1
-
-Starting up ServerSteamTransportLayer. GameServer ID: 90111111101111111
-
-Opening SteamIPv4 socket on port: 9876. Socket: 131073
-
-Opening SteamSDR socket on virtual port: 0. Socket: 196610
-
-```
+DXGI_ERROR_DEVICE_REMOVED - 0x887A0005
+The video card has been physically removed from the system, or a driver upgrade for the video card has occurred. The application should destroy and recreate the device. For help debugging the problem, call ID3D10Device::GetDeviceRemovedReason.
+
+### Official Guide <!-- omit in toc -->
+  * https://github.com/StunlockStudios/vrising-dedicated-server-instructions
+
+### Offical Bug Tracker <!-- omit in toc -->
+  * https://bugs.playvrising.com/
+
+### Server Tester <!-- omit in toc -->
+  * https://portcheck.onrender.com/
+
+### BattleMetrics Server Listing <!-- omit in toc -->
+  * https://www.battlemetrics.com/servers/vrising
+
+### World Maps <!-- omit in toc -->
+  * https://vrising-map.com/
+
+### Game statistics <!-- omit in toc -->
+  * https://steamdb.info/app/1604030/graphs/
+
+# Patch Notes
+* https://store.steampowered.com/news/app/1604030
+* [Patch 0.5.42584 | Patch Notes | Hotfix 9 -- Server Version: v0.5.42600 (2022-07-08 08:30 UTC)](https://store.steampowered.com/news/app/1604030?emclan=103582791469988961&emgid=3320858336357099261)
+  * Disabled LowerFPSWhenEmpty due to unexpected side effects
+  * Fixed DLCs not working in LAN mode under certain conditions.
+* [Patch 0.5.42553 | Patch Notes | Hotfix 8 -- Server Version: v0.5.42562 (2022-07-06 10:15 UTC)](https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/4474904295776381022)
+  * Server Wipes
+    * Severs that support Scheduled Wipes will have an icon in the server list
+    * Server with Scheduled Wipes will display the number of days remaining until the next planned wipe.
+    * This appears to be set in `ServerHostSettings.json` using `ResetDaysInterval` which is a number of days to reset, and `DayOfReset` which can be `Any` , `Monday` , `Tuesday` , `Wednesday` , `Thursday` , `Friday` , `Saturday` or `Sunday`
+      * C/O Ersan : https://discord.com/channels/803241158054510612/976404273015431168/994194443961909381
+  * Added new ServerHostSettings for lowering FPS on servers when they are empty: `-LowerFPSWhenEmpty` and `-LowerFPSWhenEmptyValue`. The default is `true` and with a value of `1`.
+  * Official PvP Presets now uses `1.25` `BloodDrainModifier` instead of `1.0`
+  * DLCs now work in LAN Mode.
+  * The initial Server List request will now prioritize servers with players, to increase the speed at which servers are fetched.
+  * Replaced `Days Played` with `Days Running` in the Server Details.
+  * `Days Played` previously displayed the number of in-game days since server start, `Days Running` will now instead display the number of real-time days since server start.
+* [Patch 0.5.42405 | Patch Notes | Hotfix 7 -- Server Version: v0.5.42405 (2022-06-29 15:34 UTC)](https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/4474904295754340476)
+  * We added Steam Cloud support for Private Game saves. This allows playing your saves on different computers.
+  * All new Private Games hosted will now be saved on Steam Cloud by default.
+  * You can move saves to/from Steam Cloud Saving.
+* [Patch 0.5.42236 | Patch Notes | Hotfix 6 -- Server Version: v0.5.42236 (2022-06-22 17:00 UTC)](https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/4474904295728853576)
+  * Added a new admin command `decayusercastles <playername>` that puts all the castles owned by a target player in decay.
+  * The `adminlist.txt` and `banlist.txt` files are now loaded from both the default Settings folder as well as from the local override Settings folder. These files always save to the local override folder now.
+  * The RCON socket now binds to the bind address if specified. There is also a specific RCON Bind Address to override the default one.
+  * Lumber, Stone, and Plant Fibre no longer block players from using waygates or bat form.
+* [Patch 0.5.42050 / 2022-06-16 -- Server Version: v0.5.42023 (2022-06-15 00:18 UTC)](https://steamcommunity.com/games/1604030/announcements/detail/4822806821988384687)
+  * Players can now dismantle floors and borders that are next to walls/pillars without having to dismantle any wall/pillar first, as long as this does not leave any wall/pillar without a floor connection (#305517).
+  * Improved error handling and error feedback when the server saves the game world (related to #304262 and #304381 but is not expected to solve all reported cases).
+  * Added more validation and safety checks to catch more types of rare errors while saving.
+  * If the server fails to save, all active players on the server now get a chat notification containing basic information about the type of error that was encountered.
+  * The server no longer uses the Windows temp folder while saving the world. It instead saves the temporary files to a neighboring folder to the target save path.
+  * Fixed an issue where territory and buildings had a chance of not getting destroyed with their castle if they were constructed at a large enough distance from the Castle Heart (#306085, #305657).
+* [Patch 0.5.41821 / 2022-06-09 -- Server Version: v0.5.41821 (2022-06-09 01:17 UTC)](https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/4480532526716778038)
+  * Server optimizations for servers with long up times and/or a lot of players.
+  * Optimized the map and minimap on servers with a lot of castles.
+  * Updated the Social Panel: Now it displays all players connected to the server and their SteamID. We also added text chat muting functionality. Muting is persistent between sessions now. 
+  * The Blood Essence Drain Modifier setting should now work properly.
+* [Patch 0.5.41669 / 2022-05-31 -- Server Version: v0.5.41669 (2022-05-30 23:21 UTC)](https://steamcommunity.com/games/1604030/announcements/detail/3294958655399932646)
+  * Maximum clan size has been increased to 50
+  * `Server Details` will now show the amount of in-game days the server has been running for.
+  * Altering the ‘Refinement Cost’ and ‘Refinement Rate’ server settings no longer affects the blood essence consumption rate of the Castle Heart.
+  * Occurrences of multiple spawns of the same V Blood units will now be repaired upon server restart.
+  * Optimized server memory by removing data from disconnected users.
+* [Patch 0.5.41591 / 2022-05-30 -- Server Version: UNKNOWN](https://steamcommunity.com/games/1604030/announcements/detail/3294958655395719328)
+* [Patch 0.5.41448 / 2022-05-25 -- Server Version: v0.5.41471 (2022-05-25 08:56 UTC)](https://steamcommunity.com/games/1604030/announcements/detail/3294958655377836606)
+  * Added changehealthofclosesttomouse to console
+  * Added changedurability to console
+  * Added addtime to console
+  * Added LAN/Offline mode
+* [Patch 0.5.41237 / 2022-05-19 -- Server Version: v0.5.41258 (2022-05-19 12:26 UTC)](https://steamcommunity.com/games/1604030/announcements/detail/3218396837686301548)
