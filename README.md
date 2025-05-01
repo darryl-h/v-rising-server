@@ -153,10 +153,9 @@ Increase LogPollInterval or check your PowerShell execution policy.
 
 The app will auto-generate Host, Game & VOIP JSON on first open.
 
-# Server Management
-## File Locations
-### Dedicated Server
-#### Dedicated Server - Configuration <!-- omit in toc -->
+# File Locations
+## Dedicated Server
+### Dedicated Server - Configuration <!-- omit in toc -->
   - :stop_sign: These may get overwritten with each update (UNSAFE!)
     - **Startup .bat file:** `<VAR_SERVER_INSTALLATION_DIRECTORY>`\steamapps\common\VRisingDedicatedServer\start_server_example.bat
     - **ServerHostSettings:** `<VAR_SERVER_INSTALLATION_DIRECTORY>`\VRisingServer_Data\StreamingAssets\Settings\ServerHostSettings.json
@@ -167,16 +166,16 @@ The app will auto-generate Host, Game & VOIP JSON on first open.
     - **VOIP Configuration:** `.\vrisingserver\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerVoipSettings.json`
     - **AdminList:** `.\vrisingserver\steamapps\common\VRisingDedicatedServer\save-data\Settings\adminlist.txt`
     - **Banlist:** ``.\vrisingserver\steamapps\common\VRisingDedicatedServer\save-data\Settings\banlist.txt`
-#### Dedicated Server - Save Games <!-- omit in toc -->
+### Dedicated Server - Save Games <!-- omit in toc -->
   - These rely on the `-persistentDataPath` parameter being set to `.\save-data` when launching the game
   - These rely on the `-saveName` parameter being set to `world1` when launching the game
     - `.\vrisingserver\steamapps\common\VRisingDedicatedServer\save-data\Saves\v4\world1\AutoSave_NNNN.save.gz`
-#### Dedicated Server - Logs <!-- omit in toc -->
+### Dedicated Server - Logs <!-- omit in toc -->
   - These rely on the `-logFile` parameter being set to `.\logs\VRisingServer.log` when launching the game
     - `.\vrisingserver\steamapps\common\VRisingDedicatedServer\logs\VRisingServer.log`
 
-### Private Server
-#### Private Server - Configuration <!-- omit in toc -->
+## Private Server
+### Private Server - Configuration <!-- omit in toc -->
 * If you do not have cloud saves enabled, it should live in:
 `%USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Saves\v4\<GAME_UUID>`
 
@@ -185,7 +184,7 @@ The app will auto-generate Host, Game & VOIP JSON on first open.
   
 :spiral_notepad: You can see what's in your steam saves, by opening the following URL: https://store.steampowered.com/account/remotestorageapp/?appid=1604030
 
-#### Private Server - Save Games <!-- omit in toc -->
+### Private Server - Save Games <!-- omit in toc -->
 * If you do not have cloud saves enabled, it should live in:
 %USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Saves\v4\<GAME_UUID>\AutoSave_NNNN.save.gz
 
@@ -194,18 +193,19 @@ The app will auto-generate Host, Game & VOIP JSON on first open.
   
 :spiral_notepad: You can see what's in your steam saves, by opening the following URL: https://store.steampowered.com/account/remotestorageapp/?appid=1604030
 
-#### Private Server - Logs <!-- omit in toc -->
+### Private Server - Logs <!-- omit in toc -->
 - %USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player-server.log
 
-### Client
-#### Configuration <!-- omit in toc -->
+## Client
+### Configuration <!-- omit in toc -->
   - **Console Profile** : %USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\ConsoleProfile\`<VAR_MACHINE_NAME>`.prof
     * You should not modify this file directly!
-#### Client - Player Logs <!-- omit in toc -->
+### Client - Player Logs <!-- omit in toc -->
   * %USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Player.log
-#### Client - Settings <!-- omit in toc -->
+### Client - Settings <!-- omit in toc -->
   * %USERPROFILE%\AppData\LocalLow\Stunlock Studios\VRising\Settings\ClientSettings.json
 
+# Server Management
 ## Installing the dedicated server using SteamCMD
 This section is related, and specific to the Dedicated Server that you would start from outside the game client.
 
