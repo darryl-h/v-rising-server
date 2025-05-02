@@ -288,29 +288,36 @@ function InstallNewServer {
     Copy-Item "$InstallPath\steamapps\common\VRisingDedicatedServer\VRisingServer_Data\StreamingAssets\Settings\ServerGameSettings.json" -Destination $settingsDir
 
     # CONDITIONAL PORT OVERRIDES
-    $hostJson = Join-Path $settingsDir 'ServerHostSettings.json'
-    $host = Get-Content $hostJson | ConvertFrom-Json
+    $hostJson   = Join-Path $settingsDir 'ServerHostSettings.json'
+    $hostConfig = Get-Content   $hostJson | ConvertFrom-Json
 
-    if ($PSBoundParameters.ContainsKey('GamePort')) {
-        $host.Port = $GamePort
-        Write-Log -Message "INFO: Overriding game Port → $GamePort"
+    if ($GamePort   -ne $null) {
+        $hostConfig.Port       = $GamePort
+        Write-Log -Message "INFO: Overriding Game Port → $GamePort"
     }
-    if ($PSBoundParameters.ContainsKey('QueryPort')) {
-        $host.QueryPort = $QueryPort
-        Write-Log -Message "INFO: Overriding queryPort → $QueryPort"
+    if ($QueryPort  -ne $null) {
+        $hostConfig.QueryPort  = $QueryPort
+        Write-Log -Message "INFO: Overriding Query Port → $QueryPort"
     }
-    if ($PSBoundParameters.ContainsKey('RCONPort')) {
-        $host.Rcon.Port = $RCONPort
+    if ($RCONPort   -ne $null) {
+        $hostConfig.Rcon.Port  = $RCONPort
         Write-Log -Message "INFO: Overriding RCON Port → $RCONPort"
     }
 
-    $host | ConvertTo-Json -Depth 10 | Set-Content $hostJson
-    
-    # Configure RCON
-    # https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/set-content?view=powershell-7.2
+    # write it back
+    $hostConfig |
+      ConvertTo-Json -Depth 10 |
+      Set-Content  -Path $hostJson
+    # ————————
+
+    # now enable RCON & set password (unchanged)
     Write-Log -Message "`t* Enabling RCON with password: $RCONPassword"
-    (Get-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json") -Replace '"Enabled": false,', '"Enabled": true,' | Set-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json"
-    (Get-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json") -Replace '    "Password": ""', "    `"Password`": `"$RCONPassword`"" | Set-Content "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings\ServerHostSettings.json"
+    (Get-Content $hostJson) `
+      -Replace '"Enabled": false,', '"Enabled": true,' `
+      | Set-Content $hostJson
+    (Get-Content $hostJson) `
+      -Replace '"Password": ""', "\"Password\": \"$RCONPassword\"" `
+      | Set-Content $hostJson
 }
 function PostConfigureServer {
     # ToDo: Only run the update if there is an update.
