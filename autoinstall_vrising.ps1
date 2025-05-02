@@ -294,7 +294,7 @@ function InstallNewServer {
     Write-Log -Message "`t* Configuring ports"
     (Get-Content "$settingsDir\ServerHostSettings.json") -Replace '  "Port": 9876,', "  `"Port`": `"$GamePort`"`," | Set-Content "$settingsDir\ServerHostSettings.json"
     (Get-Content "$settingsDir\ServerHostSettings.json") -Replace '  "QueryPort": 9877,', "  `"QueryPort`": `"$QueryPort`"`," | Set-Content "$settingsDir\ServerHostSettings.json"
-    (Get-Content "$settingsDir\ServerHostSettings.json") -Replace '    "Port": 25575,', "    `"Port`": `"$QueryPort`"`," | Set-Content "$settingsDir\ServerHostSettings.json"
+    (Get-Content "$settingsDir\ServerHostSettings.json") -Replace '    "Port": 25575,', "    `"Port`": `"$RCONPort`"`," | Set-Content "$settingsDir\ServerHostSettings.json"
 
     # now enable RCON & set password (unchanged)
     Write-Log -Message "`t* Enabling RCON with password: $RCONPassword"
