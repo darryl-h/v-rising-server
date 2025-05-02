@@ -9,7 +9,7 @@
     this will also configure the windows firewall to allow the program to operate.
     The user input is expected to be the full path
 .NOTES
-    Version        : 2.000
+    Version        : 2.100
     File Name      : autoinstall_vrising.ps1
     Author         : Darryl H (https://github.com/darryl-h/)
     Credits        : Port and JSON handling from lordfiSh (https://github.com/lordfiSh/)
@@ -282,10 +282,30 @@ function InstallNewServer {
 
     # Create custom server settings files that won't get overwritten on update
     Write-Log -Message "`t* Configuring Game and Host Settings that won't get replaced on update"
-    New-Item -ItemType Directory -Force -Path "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings" | Out-Null 
-    Copy-Item "$InstallPath\steamapps\common\VRisingDedicatedServer\VRisingServer_Data\StreamingAssets\Settings\ServerGameSettings.json" -Destination "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings"
-    Copy-Item "$InstallPath\steamapps\common\VRisingDedicatedServer\VRisingServer_Data\StreamingAssets\Settings\ServerHostSettings.json" -Destination "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings"
+    $settingsDir = "$InstallPath\steamapps\common\VRisingDedicatedServer\save-data\Settings"
+    New-Item -ItemType Directory -Force -Path $settingsDir | Out-Null
+    Copy-Item "$InstallPath\steamapps\common\VRisingDedicatedServer\VRisingServer_Data\StreamingAssets\Settings\ServerHostSettings.json" -Destination $settingsDir
+    Copy-Item "$InstallPath\steamapps\common\VRisingDedicatedServer\VRisingServer_Data\StreamingAssets\Settings\ServerGameSettings.json" -Destination $settingsDir
 
+    # CONDITIONAL PORT OVERRIDES
+    $hostJson = Join-Path $settingsDir 'ServerHostSettings.json'
+    $host = Get-Content $hostJson | ConvertFrom-Json
+
+    if ($PSBoundParameters.ContainsKey('GamePort')) {
+        $host.Port = $GamePort
+        Write-Log -Message "INFO: Overriding game Port → $GamePort"
+    }
+    if ($PSBoundParameters.ContainsKey('QueryPort')) {
+        $host.QueryPort = $QueryPort
+        Write-Log -Message "INFO: Overriding queryPort → $QueryPort"
+    }
+    if ($PSBoundParameters.ContainsKey('RCONPort')) {
+        $host.Rcon.Port = $RCONPort
+        Write-Log -Message "INFO: Overriding RCON Port → $RCONPort"
+    }
+
+    $host | ConvertTo-Json -Depth 10 | Set-Content $hostJson
+    
     # Configure RCON
     # https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/set-content?view=powershell-7.2
     Write-Log -Message "`t* Enabling RCON with password: $RCONPassword"
