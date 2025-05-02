@@ -291,23 +291,20 @@ function InstallNewServer {
     Copy-Item "$InstalledSettingsDir\ServerGameSettings.json" -Destination $settingsDir
 
     # CONDITIONAL PORT OVERRIDES
-    $hostJson   = Join-Path $settingsDir 'ServerHostSettings.json'
-    $hostConfig = Get-Content   $hostJson | ConvertFrom-Json
-
     if ($GamePort -ne $null) {
         $hostConfig.Port       = $GamePort
         Write-Log -Message "INFO: Overriding Game Port → $GamePort"
-        (Get-Content "$settingsDir\ServerHostSettings.json") -Replace '  "Port": 9876,', "    `"Port`": `"$GamePort`"" | Set-Content "$settingsDir\ServerHostSettings.json"
+        (Get-Content "$settingsDir\ServerHostSettings.json") -Replace '  "Port": 9876,', "    `"Port`": `"$GamePort`"," | Set-Content "$settingsDir\ServerHostSettings.json"
     }
     if ($QueryPort -ne $null) {
         $hostConfig.QueryPort  = $QueryPort
         Write-Log -Message "INFO: Overriding Query Port → $QueryPort"
-        (Get-Content "$settingsDir\ServerHostSettings.json") -Replace '  "QueryPort": 9877,', "    `"QueryPort`": `"$QueryPort`"" | Set-Content "$settingsDir\ServerHostSettings.json"
+        (Get-Content "$settingsDir\ServerHostSettings.json") -Replace '  "QueryPort": 9877,', "    `"QueryPort`": `"$QueryPort`"," | Set-Content "$settingsDir\ServerHostSettings.json"
     }
     if ($RCONPort -ne $null) {
         $hostConfig.Rcon.Port  = $RCONPort
         Write-Log -Message "INFO: Overriding RCON Port → $RCONPort"
-        (Get-Content "$settingsDir\ServerHostSettings.json") -Replace '    "Port": 25575,', "    `"Port`": `"$QueryPort`"" | Set-Content "$settingsDir\ServerHostSettings.json"
+        (Get-Content "$settingsDir\ServerHostSettings.json") -Replace '    "Port": 25575,', "    `"Port`": `"$QueryPort`"," | Set-Content "$settingsDir\ServerHostSettings.json"
     }
 
     # now enable RCON & set password (unchanged)
