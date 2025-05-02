@@ -950,6 +950,9 @@ d3d11: failed to create buffer (target 0x200 mode 1 size 288) [0x887A0005]
 DXGI_ERROR_DEVICE_REMOVED - 0x887A0005
 The video card has been physically removed from the system, or a driver upgrade for the video card has occurred. The application should destroy and recreate the device. For help debugging the problem, call ID3D10Device::GetDeviceRemovedReason.
 
+## Prefab Listing
+  * https://wiki.vrisingmods.com/prefabs/All
+
 ### Official Guide <!-- omit in toc -->
   * https://github.com/StunlockStudios/vrising-dedicated-server-instructions
 
