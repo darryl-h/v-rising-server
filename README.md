@@ -717,20 +717,33 @@ Loaded ServerHostSettings:
 3) Check to ensure the server is listening on the expected ports:
   * With CMD
     * Find the PID of the `VRisingServer.exe` in `Task Manager` (`control` + `shift` + `esc`) in the `Details` tab
-    * Run `cmd`  
+    * Run Start -> Run -> `cmd`
+    * Type `tasklist /fi "imagename eq VRisingServer.exe"`
+      ```
+      > tasklist /fi "imagename eq VRisingServer.exe"
+      Image Name                     PID Session Name        Session#    Mem Usage
+      ========================= ======== ================ =========== ============
+      VRisingServer.exe            21744 Services                   0    810,836 K
+      ```
+      In the example above, we see that the PID is 21744, we will use that in the following command.
     * Type `netstat -aon | find "<PID>"` where \<PID\> is the PID of the server
     * You will see some additional ports, this is OK)
       ```
-        TCP    0.0.0.0:<Rcon/Port>    0.0.0.0:0                    LISTENING       <PID>
-        TCP    127.0.0.1:55997        127.0.0.1:55998              ESTABLISHED     <PID>
-        TCP    127.0.0.1:55998        127.0.0.1:55997              ESTABLISHED     <PID>
-        TCP    <Server_IP>:55988      <P2P_STUN_ServerList>:27019  ESTABLISHED     <PID>
-        TCP    <Server_IP>:56571      52.219.47.197:443            CLOSE_WAIT      <PID>
-        TCP    <Server_IP>:56572      52.219.47.197:443            CLOSE_WAIT      <PID>
-        UDP    0.0.0.0:<QueryPort>    *:*                                          <PID>
-        UDP    0.0.0.0:<Port>         *:*                                          <PID>
-        UDP    0.0.0.0:57628          *:*                                          <PID>
+      > netstat -aon | find "21744"
+      TCP    0.0.0.0:9090           0.0.0.0:0              LISTENING       21744
+      TCP    0.0.0.0:25575          0.0.0.0:0              LISTENING       21744
+      TCP    127.0.0.1:9090         127.0.0.1:25001        ESTABLISHED     21744
+      TCP    127.0.0.1:21525        0.0.0.0:0              LISTENING       21744
+      TCP    127.0.0.1:21539        127.0.0.1:21540        ESTABLISHED     21744
+      TCP    127.0.0.1:21540        127.0.0.1:21539        ESTABLISHED     21744
+      TCP    192.168.1.10:21531     162.254.193.103:27018  ESTABLISHED     21744
+      TCP    192.168.1.10:24984     34.149.140.203:443     ESTABLISHED     21744
+      UDP    0.0.0.0:9876           *:*                                    21744
+      UDP    0.0.0.0:9877           *:*                                    21744
+      UDP    0.0.0.0:63326          *:*                                    21744
       ```
+      In the example above, we see that the game is running on port 9876 and the query port is running on port 9877 (b/c UDP), we also see that RCON is running on 9090 (b/c TCP)
+
   * With PowerShell
     * run `cmd`
     * run `powershell`
