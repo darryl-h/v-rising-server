@@ -716,7 +716,6 @@ Loaded ServerHostSettings:
 ```
 3) Check to ensure the server is listening on the expected ports:
   * With CMD
-    * Find the PID of the `VRisingServer.exe` in `Task Manager` (`control` + `shift` + `esc`) in the `Details` tab
     * Run Start -> Run -> `cmd`
     * Type `tasklist /fi "imagename eq VRisingServer.exe"`
       ```
@@ -726,6 +725,7 @@ Loaded ServerHostSettings:
       VRisingServer.exe            21744 Services                   0    810,836 K
       ```
       In the example above, we see that the PID is 21744, we will use that in the following command.
+        * You can also find the PID of the `VRisingServer.exe` in `Task Manager` (`control` + `shift` + `esc`) in the `Details` tab
     * Type `netstat -aon | find "<PID>"` where \<PID\> is the PID of the server
     * You will see some additional ports, this is OK)
       ```
