@@ -247,7 +247,8 @@ function InstallNewServer {
 
     # Install NSSM
     #DownloadAndExtractFromWeb 'the Non Sucking Service Manager (NSSM)' 'https://nssm.cc/release/nssm-2.24.zip' 'nssm-2.24.zip'
-    DownloadAndExtractFromWeb -FriendlyName 'the Non Sucking Service Manager (NSSM)' -DownloadURL 'https://nssm.cc/ci/nssm-2.24-101-g897c7ad.zip' -DownloadFilename 'nssm-2.24-101-g897c7ad.zip'
+    #DownloadAndExtractFromWeb -FriendlyName 'the Non Sucking Service Manager (NSSM)' -DownloadURL 'https://nssm.cc/ci/nssm-2.24-101-g897c7ad.zip' -DownloadFilename 'nssm-2.24-101-g897c7ad.zip'
+    DownloadAndExtractFromWeb -FriendlyName 'the Non Sucking Service Manager (NSSM)' -DownloadURL 'https://github.com/darryl-h/v-rising-server/raw/refs/heads/main/nssm-2.24-101-g897c7ad.zip' -DownloadFilename 'nssm-2.24-101-g897c7ad.zip'
     Write-Log -Message "`t`t* Moving the 64 bit version of NSSM"
     $NSSMExecutable = Get-ChildItem -Path "$InstallPath\nssm-*\win64\" -Filter "nssm.exe" -Recurse | Select-Object -ExpandProperty FullName
     $NSSMArchive = Get-ChildItem -Path "$InstallPath\nssm-*" | Select-Object -ExpandProperty FullName
