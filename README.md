@@ -73,13 +73,14 @@ Head over to Releases -- https://github.com/darryl-h/v-rising-server/releases
 
 ## 📝 User Guide
 ### Main Window: <!-- omit in toc -->
-Within the Main UI, the main window is comprised of a server log viewer. This is a read-only, syntax-highlighted pane showing the last configurable N lines of the VRisingServer log file.
+Within the Main UI, the main window is comprised of a server log viewer. This is a read-only, syntax-highlighted pane showing the last configurable N lines of the `VRisingServer.log` file.
 
 These events are color coated:
 * Red colored lines are for JSON parsing errors, error or fatal events, SaveOnExit events, GameBootstrap events or unsuccessful setting loads.
 * Dark Orange colored lines are for warnings, ServerHostSettings, Final ServerGameSettings Values or bootstrap and server-creation events.
 * Purple colored lines are for boot time, create or host server calls, file-user list or networking info.
-* Cyan colored lines are for save related messages and Gray are for routine noise (PhysX, Entities, Debug, etc.)
+* Cyan colored lines are for save related messages.
+* Gray are for routine noise (PhysX, Entities, Debug, etc.)
 
 Just above the log viewer is a log filter where you can type any regular expression to filter the displayed logs within the log view. 
 
